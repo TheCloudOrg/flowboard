@@ -13,27 +13,38 @@ import {
 } from '@dnd-kit/core';
 import { arrayMove } from '@dnd-kit/sortable';
 import { motion } from 'framer-motion';
-import { Plus, Sparkles } from 'lucide-react';
+import { Plus, Sparkles, Loader2 } from 'lucide-react';
+import { UserButton, useOrganization, useUser, OrganizationSwitcher } from '@clerk/nextjs';
 import { Board, Card as CardType, Column as ColumnType } from '@/types';
+import { getBoard } from '@/lib/localStorage';
 import {
-  getBoard,
-  addCard as addCardToStorage,
-  updateCard,
-  deleteCard,
-  addColumn,
-  deleteColumn,
-  moveCard,
-  reorderCard,
-} from '@/lib/localStorage';
+  getBoardAction,
+  getBoardIdAction,
+  initializeBoardAction,
+  addCardAction,
+  updateCardAction,
+  deleteCardAction,
+  addColumnAction,
+  deleteColumnAction,
+  moveCardAction,
+} from '@/app/actions/board-actions';
 import Column from './Column';
 import Card from './Card';
 import CardModal from './CardModal';
 import AIPromptModal from './AIPromptModal';
 import ThemeToggle from './ThemeToggle';
+import { useTheme } from '@/contexts/ThemeContext';
 
 export default function KanbanBoard() {
+  const { organization } = useOrganization();
+  const { user } = useUser();
+  const { theme } = useTheme();
+
   const [board, setBoard] = useState<Board>({ columns: [], cards: {} });
+  const [boardId, setBoardId] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(true);
   const [activeCard, setActiveCard] = useState<CardType | null>(null);
+  const [draggedCardOriginalColumn, setDraggedCardOriginalColumn] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCard, setEditingCard] = useState<CardType | null>(null);
   const [currentColumnId, setCurrentColumnId] = useState<string>('');
@@ -47,6 +58,9 @@ export default function KanbanBoard() {
   const [aiError, setAiError] = useState<string | null>(null);
   const [currentAICard, setCurrentAICard] = useState<CardType | null>(null);
 
+  // Track intended drop position for database update
+  const [intendedDropPosition, setIntendedDropPosition] = useState<{ columnId: string; position: number } | null>(null);
+
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -55,15 +69,69 @@ export default function KanbanBoard() {
     })
   );
 
+  // Initialize board (migrate from localStorage if needed)
   useEffect(() => {
-    setBoard(getBoard());
-  }, []);
+    async function initializeBoard() {
+      if (!organization || !user) return;
+
+      setIsLoading(true);
+
+      try {
+        // Check if board already exists
+        const existingBoardId = await getBoardIdAction(organization.id);
+
+        if (existingBoardId) {
+          // Board already exists - just fetch it
+          setBoardId(existingBoardId);
+
+          const existingBoard = await getBoardAction(organization.id);
+          if (existingBoard) {
+            setBoard(existingBoard);
+          }
+        } else {
+          // No board in Supabase - check localStorage for migration
+          const localStorageData = getBoard();
+
+          const result = await initializeBoardAction(
+            organization.id,
+            localStorageData
+          );
+
+          if (result.success && result.boardId) {
+            setBoardId(result.boardId);
+
+            // Fetch the newly created board
+            const newBoard = await getBoardAction(organization.id);
+            if (newBoard) {
+              setBoard(newBoard);
+            }
+
+            console.log('✅ Board initialized:', result.stats);
+          } else {
+            console.error('Failed to initialize board:', result.error);
+          }
+        }
+      } catch (error) {
+        console.error('Error initializing board:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    initializeBoard();
+  }, [organization, user]);
 
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
     const card = board.cards[active.id as string];
     if (card) {
       setActiveCard(card);
+      // Store which column the card originally came from
+      const originalColumn = board.columns.find((col) =>
+        col.cardIds.includes(active.id as string)
+      );
+      setDraggedCardOriginalColumn(originalColumn?.id || null);
+      console.log('🎬 Drag started from column:', originalColumn?.title);
     }
   };
 
@@ -74,87 +142,127 @@ export default function KanbanBoard() {
     const activeId = active.id as string;
     const overId = over.id as string;
 
-    // Find which column the active card is in
+    // Find source and destination columns
     const activeColumn = board.columns.find((col) =>
       col.cardIds.includes(activeId)
     );
 
-    // Check if over is a column or a card
     const overColumn = board.columns.find(
       (col) => col.id === overId || col.cardIds.includes(overId)
     );
 
     if (!activeColumn || !overColumn) return;
-    if (activeColumn.id === overColumn.id) return;
+    if (activeColumn.id === overColumn.id) return; // Skip if same column
 
-    // Move card to new column
-    const activeIndex = activeColumn.cardIds.indexOf(activeId);
+    // Calculate the intended position BEFORE optimistic update
     const overIndex = overColumn.cardIds.includes(overId)
       ? overColumn.cardIds.indexOf(overId)
       : overColumn.cardIds.length;
 
-    setBoard((prev) => {
-      const newColumns = prev.columns.map((col) => {
+    // Save intended drop position for handleDragEnd
+    setIntendedDropPosition({ columnId: overColumn.id, position: overIndex });
+
+    // Optimistic update for smooth UX
+    setBoard((prevBoard) => {
+      const newColumns = prevBoard.columns.map((col) => {
+        // Remove card from source column
         if (col.id === activeColumn.id) {
           return {
             ...col,
             cardIds: col.cardIds.filter((id) => id !== activeId),
           };
         }
+        // Add card to destination column
         if (col.id === overColumn.id) {
           const newCardIds = [...col.cardIds];
           newCardIds.splice(overIndex, 0, activeId);
-          return {
-            ...col,
-            cardIds: newCardIds,
-          };
+          return { ...col, cardIds: newCardIds };
         }
         return col;
       });
 
-      return {
-        ...prev,
-        columns: newColumns,
-      };
+      return { ...prevBoard, columns: newColumns };
     });
   };
 
-  const handleDragEnd = (event: DragEndEvent) => {
+  const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
     setActiveCard(null);
 
-    if (!over) return;
+    if (!over) {
+      setDraggedCardOriginalColumn(null);
+      setIntendedDropPosition(null);
+      return;
+    }
 
     const activeId = active.id as string;
     const overId = over.id as string;
 
-    // Find columns
-    const activeColumn = board.columns.find((col) =>
-      col.cardIds.includes(activeId)
-    );
+    console.log('🎯 handleDragEnd:', { activeId, overId });
+
+    // Use the ORIGINAL column we saved at drag start (not current board state)
+    const activeColumn = board.columns.find((col) => col.id === draggedCardOriginalColumn);
 
     const overColumn = board.columns.find(
       (col) => col.id === overId || col.cardIds.includes(overId)
     );
 
-    if (!activeColumn || !overColumn) return;
-
-    const activeIndex = activeColumn.cardIds.indexOf(activeId);
-    const overIndex = overColumn.cardIds.includes(overId)
-      ? overColumn.cardIds.indexOf(overId)
-      : overColumn.cardIds.length;
-
-    if (activeColumn.id === overColumn.id) {
-      // Reordering within the same column
-      if (activeIndex !== overIndex) {
-        const newBoard = reorderCard(board, activeColumn.id, activeIndex, overIndex);
-        setBoard(newBoard);
-      }
-    } else {
-      // Moving to a different column
-      const newBoard = moveCard(board, activeId, activeColumn.id, overColumn.id, overIndex);
-      setBoard(newBoard);
+    if (!activeColumn || !overColumn) {
+      console.log('❌ Column not found');
+      setDraggedCardOriginalColumn(null);
+      setIntendedDropPosition(null);
+      return;
     }
+
+    // Determine the target position
+    let overIndex: number;
+
+    if (intendedDropPosition && intendedDropPosition.columnId === overColumn.id) {
+      // Use the pre-calculated position from handleDragOver (for cross-column moves)
+      overIndex = intendedDropPosition.position;
+      console.log('📍 Using intended drop position:', overIndex);
+    } else {
+      // Calculate position normally (for same-column moves or direct drops)
+      overIndex = overColumn.cardIds.includes(overId)
+        ? overColumn.cardIds.indexOf(overId)
+        : overColumn.cardIds.length;
+      console.log('📍 Calculated position:', overIndex);
+    }
+
+    console.log('📊 Positions:', {
+      activeColumn: activeColumn.title,
+      overColumn: overColumn.title,
+      overIndex,
+      originalColumnId: draggedCardOriginalColumn,
+    });
+
+    // Only update if position actually changed
+    if (activeColumn.id === overColumn.id) {
+      // Same column - check if position changed
+      // Need to find original position from database state
+      console.log('⏭️  Same column move - will let database handle position check');
+    }
+
+    console.log('🚀 Calling moveCardAction...');
+
+    // Persist to Supabase
+    const success = await moveCardAction(activeId, overColumn.id, overIndex);
+
+    console.log('✅ moveCardAction result:', success);
+
+    if (success && organization) {
+      // Refresh board from Supabase
+      console.log('🔄 Refreshing board from Supabase...');
+      const updatedBoard = await getBoardAction(organization.id);
+      if (updatedBoard) {
+        setBoard(updatedBoard);
+        console.log('✅ Board refreshed');
+      }
+    }
+
+    // Clear the tracked state
+    setDraggedCardOriginalColumn(null);
+    setIntendedDropPosition(null);
   };
 
   const handleAddCard = (columnId: string) => {
@@ -168,46 +276,78 @@ export default function KanbanBoard() {
     setIsModalOpen(true);
   };
 
-  const handleSaveCard = (cardData: Partial<CardType>) => {
+  const handleSaveCard = async (cardData: Partial<CardType>) => {
+    if (!boardId || !organization) return;
+
     if (editingCard) {
       // Update existing card
-      const newBoard = updateCard(board, editingCard.id, cardData);
-      setBoard(newBoard);
+      const success = await updateCardAction(editingCard.id, cardData);
+      if (success) {
+        const updatedBoard = await getBoardAction(organization.id);
+        if (updatedBoard) {
+          setBoard(updatedBoard);
+        }
+      }
     } else {
       // Add new card
-      const newBoard = addCardToStorage(board, currentColumnId, {
+      const newCard = await addCardAction(boardId, currentColumnId, {
         title: cardData.title || '',
         description: cardData.description,
         notes: cardData.notes,
       });
-      setBoard(newBoard);
+
+      if (newCard) {
+        const updatedBoard = await getBoardAction(organization.id);
+        if (updatedBoard) {
+          setBoard(updatedBoard);
+        }
+      }
     }
   };
 
-  const handleDeleteCard = (cardId: string) => {
+  const handleDeleteCard = async (cardId: string) => {
+    if (!organization) return;
+
     if (confirm('Are you sure you want to delete this card?')) {
-      const newBoard = deleteCard(board, cardId);
-      setBoard(newBoard);
+      const success = await deleteCardAction(cardId);
+      if (success) {
+        const updatedBoard = await getBoardAction(organization.id);
+        if (updatedBoard) {
+          setBoard(updatedBoard);
+        }
+      }
     }
   };
 
-  const handleDeleteColumn = (columnId: string) => {
+  const handleDeleteColumn = async (columnId: string) => {
+    if (!organization) return;
+
     if (confirm('Are you sure you want to delete this column and all its cards?')) {
-      const newBoard = deleteColumn(board, columnId);
-      setBoard(newBoard);
+      const success = await deleteColumnAction(columnId);
+      if (success) {
+        const updatedBoard = await getBoardAction(organization.id);
+        if (updatedBoard) {
+          setBoard(updatedBoard);
+        }
+      }
     }
   };
 
-  const handleAddColumn = () => {
-    if (!newColumnName.trim()) return;
+  const handleAddColumn = async () => {
+    if (!newColumnName.trim() || !boardId || !organization) return;
 
     const colors = ['#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#ec4899'];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
-    const newBoard = addColumn(board, newColumnName.trim(), randomColor);
-    setBoard(newBoard);
-    setNewColumnName('');
-    setShowColumnInput(false);
+    const newColumn = await addColumnAction(boardId, newColumnName.trim(), randomColor);
+    if (newColumn) {
+      const updatedBoard = await getBoardAction(organization.id);
+      if (updatedBoard) {
+        setBoard(updatedBoard);
+      }
+      setNewColumnName('');
+      setShowColumnInput(false);
+    }
   };
 
   const handleAIGenerate = async (card: CardType) => {
@@ -245,6 +385,18 @@ export default function KanbanBoard() {
     }
   };
 
+  // Show loading state while initializing
+  if (isLoading) {
+    return (
+      <div className="min-h-screen p-8 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-12 h-12 text-primary-400 animate-spin mx-auto mb-4" />
+          <p className="dark:text-gray-400 light:text-gray-600">Loading your board...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen p-8">
       {/* Header */}
@@ -256,14 +408,76 @@ export default function KanbanBoard() {
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-3">
             <Sparkles className="w-8 h-8 text-primary-400" />
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent">
-              Project Management
-            </h1>
+            <div>
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent">
+                Flow Board
+              </h1>
+              {organization && (
+                <p className="ml-1 mt-1 text-sm dark:text-gray-400 light:text-gray-600">
+                  {organization.name}
+                </p>
+              )}
+            </div>
           </div>
-          <ThemeToggle />
+          <div className="flex items-center gap-4">
+            <OrganizationSwitcher
+              appearance={{
+                baseTheme: theme === 'dark' ? undefined : undefined,
+                variables: {
+                  colorText: theme === 'dark' ? 'white' : 'rgb(17, 24, 39)',
+                  colorTextSecondary: theme === 'dark' ? 'rgb(209, 213, 219)' : 'rgb(75, 85, 99)',
+                  colorTextOnPrimaryBackground: theme === 'dark' ? 'white' : 'rgb(17, 24, 39)',
+                  colorBackground: theme === 'dark' ? 'rgb(31, 41, 55)' : 'rgba(255, 255, 255, 0.95)',
+                  colorInputBackground: theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'white',
+                  colorInputText: theme === 'dark' ? 'white' : 'rgb(17, 24, 39)',
+                  colorPrimary: theme === 'dark' ? '#8b5cf6' : '#7c3aed',
+                  colorDanger: theme === 'dark' ? '#ef4444' : '#dc2626',
+                  colorSuccess: theme === 'dark' ? '#10b981' : '#059669',
+                  colorWarning: theme === 'dark' ? '#f59e0b' : '#d97706',
+                  colorNeutral: theme === 'dark' ? 'white' : 'rgb(17, 24, 39)',
+                  colorAlphaShade: theme === 'dark' ? 'transparent' : 'rgba(0, 0, 0, 0.1)',
+                  fontSize: '0.875rem',
+                },
+                elements: {
+                  rootBox: "flex items-center",
+                  organizationSwitcherTrigger: "glass-effect px-4 py-2 rounded-xl border dark:border-white/10 light:border-gray-300 hover:border-primary-400/50 transition-all",
+                  organizationSwitcherTriggerIcon: "text-primary-400",
+                  organizationSwitcherPopoverCard: "glass-effect border dark:border-white/10 light:border-gray-300",
+                  organizationSwitcherPopoverActionButton: theme === 'dark' ? "bg-gray-800 hover:bg-white/10" : "bg-white hover:bg-gray-100",
+                  organizationPreviewMainIdentifier: theme === 'dark' ? "text-white" : "text-gray-900",
+                  organizationPreviewSecondaryIdentifier: theme === 'dark' ? "text-gray-400" : "text-gray-600",
+                }
+              }}
+            />
+            <UserButton
+              appearance={{
+                variables: {
+                  colorText: theme === 'dark' ? 'white' : 'rgb(17, 24, 39)',
+                  colorTextSecondary: theme === 'dark' ? 'rgb(209, 213, 219)' : 'rgb(75, 85, 99)',
+                  colorTextOnPrimaryBackground: theme === 'dark' ? 'white' : 'rgb(17, 24, 39)',
+                  colorBackground: theme === 'dark' ? 'rgb(31, 41, 55)' : 'rgba(255, 255, 255, 0.95)',
+                  colorInputBackground: theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'white',
+                  colorInputText: theme === 'dark' ? 'white' : 'rgb(17, 24, 39)',
+                  colorPrimary: theme === 'dark' ? '#8b5cf6' : '#7c3aed',
+                  colorDanger: theme === 'dark' ? '#ef4444' : '#dc2626',
+                  colorSuccess: theme === 'dark' ? '#10b981' : '#059669',
+                  colorWarning: theme === 'dark' ? '#f59e0b' : '#d97706',
+                  colorNeutral: theme === 'dark' ? 'white' : 'rgb(17, 24, 39)',
+                  colorAlphaShade: theme === 'dark' ? 'transparent' : 'rgba(0, 0, 0, 0.1)',
+                  fontSize: '0.875rem',
+                },
+                elements: {
+                  avatarBox: "w-10 h-10 ring-2 ring-primary-400/30 hover:ring-primary-400/50 transition-all",
+                  userButtonPopoverCard: "glass-effect border dark:border-white/10 light:border-gray-300",
+                  userButtonPopoverActionButton: theme === 'dark' ? "bg-gray-800 hover:bg-white/10" : "bg-white hover:bg-gray-100",
+                }
+              }}
+            />
+            <ThemeToggle />
+          </div>
         </div>
         <p className="ml-11 dark:text-gray-400 light:text-gray-600">
-          Organize your tasks with beautiful drag-and-drop Kanban boards
+          Organize and flow through your tasks with beautiful drag-and-drop boards
         </p>
       </motion.div>
 
