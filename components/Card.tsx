@@ -39,31 +39,31 @@ export default function Card({ card, onEdit, onDelete, onAIGenerate }: CardProps
       whileHover={{ scale: 1.02 }}
       className="group relative"
     >
-      <div className="glass-effect card-gradient rounded-2xl p-4 shadow-card hover:shadow-card-hover transition-all duration-300 border border-white/10 hover:border-primary-400/30">
+      <div className="glass-effect card-gradient rounded-2xl p-4 shadow-card hover:shadow-card-hover transition-all duration-300 hover:border-primary-400/30">
         {/* Drag Handle */}
         <div
           {...attributes}
           {...listeners}
           className="absolute top-2 right-2 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity"
         >
-          <Grip className="w-4 h-4 text-gray-400 hover:text-white" />
+          <Grip className="w-4 h-4 text-gray-400 dark:text-gray-400 light:text-gray-500 hover:text-white dark:hover:text-white light:hover:text-gray-900" />
         </div>
 
         {/* Card Content */}
         <div className="pr-8">
-          <h3 className="text-lg font-semibold text-white mb-2 line-clamp-2">
+          <h3 className="text-lg font-semibold text-white dark:text-white light:text-gray-900 mb-2 line-clamp-2">
             {card.title}
           </h3>
 
           {card.description && (
-            <p className="text-sm text-gray-300 mb-3 line-clamp-3">
+            <p className="text-sm text-gray-300 dark:text-gray-300 light:text-gray-700 mb-3 line-clamp-3">
               {card.description}
             </p>
           )}
 
           {card.notes && (
-            <div className="mt-3 pt-3 border-t border-white/10">
-              <p className="text-xs text-gray-400 line-clamp-2">
+            <div className="mt-3 pt-3 border-t border-white/10 dark:border-white/10 light:border-gray-200">
+              <p className="text-xs text-gray-400 dark:text-gray-400 light:text-gray-600 line-clamp-2">
                 {card.notes}
               </p>
             </div>
@@ -71,7 +71,7 @@ export default function Card({ card, onEdit, onDelete, onAIGenerate }: CardProps
 
           {/* Card Footer */}
           <div className="flex items-center justify-between mt-4">
-            <span className="text-xs text-gray-500">
+            <span className="text-xs text-gray-500 dark:text-gray-500 light:text-gray-500">
               {new Date(card.updatedAt).toLocaleDateString()}
             </span>
 
@@ -85,14 +85,14 @@ export default function Card({ card, onEdit, onDelete, onAIGenerate }: CardProps
               </button>
               <button
                 onClick={() => onEdit(card)}
-                className="p-1.5 rounded-lg bg-primary-500/20 hover:bg-primary-500/30 text-primary-300 hover:text-primary-200 transition-colors"
+                className="p-1.5 rounded-lg bg-primary-500/20 hover:bg-primary-500/30 text-primary-300 dark:text-primary-300 light:text-primary-600 hover:text-primary-200 dark:hover:text-primary-200 light:hover:text-primary-700 transition-colors"
                 aria-label="Edit card"
               >
                 <Edit className="w-4 h-4" />
               </button>
               <button
                 onClick={() => onDelete(card.id)}
-                className="p-1.5 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-300 hover:text-red-200 transition-colors"
+                className="p-1.5 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-300 dark:text-red-300 light:text-red-600 hover:text-red-200 dark:hover:text-red-200 light:hover:text-red-700 transition-colors"
                 aria-label="Delete card"
               >
                 <Trash2 className="w-4 h-4" />

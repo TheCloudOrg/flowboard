@@ -40,7 +40,7 @@ export default function Column({
       animate={{ opacity: 1, x: 0 }}
       className="flex flex-col h-full min-w-[320px] max-w-[320px]"
     >
-      <div className="glass-effect rounded-2xl p-4 flex flex-col h-full border border-white/10">
+      <div className="glass-effect rounded-2xl p-4 flex flex-col h-full">
         {/* Column Header */}
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
@@ -48,10 +48,10 @@ export default function Column({
               className="w-3 h-3 rounded-full"
               style={{ backgroundColor: column.color || '#8b5cf6' }}
             />
-            <h2 className="text-lg font-semibold text-white">
+            <h2 className="text-lg font-semibold text-white dark:text-white light:text-gray-900">
               {column.title}
             </h2>
-            <span className="text-sm text-gray-400 bg-white/5 px-2 py-0.5 rounded-full">
+            <span className="text-sm text-gray-400 dark:text-gray-400 light:text-gray-600 bg-white/5 dark:bg-white/5 light:bg-gray-100 px-2 py-0.5 rounded-full">
               {cards.length}
             </span>
           </div>
@@ -59,7 +59,7 @@ export default function Column({
           <div className="relative">
             <button
               onClick={() => setShowMenu(!showMenu)}
-              className="p-1 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
+              className="p-1 rounded-lg hover:bg-white/10 dark:hover:bg-white/10 light:hover:bg-gray-100 text-gray-400 dark:text-gray-400 light:text-gray-600 hover:text-white dark:hover:text-white light:hover:text-gray-900 transition-colors"
               aria-label="Column options"
             >
               <MoreVertical className="w-4 h-4" />
@@ -69,14 +69,14 @@ export default function Column({
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="absolute right-0 mt-2 w-48 glass-effect rounded-xl border border-white/10 shadow-lg z-10 overflow-hidden"
+                className="absolute right-0 mt-2 w-48 glass-effect rounded-xl shadow-lg z-10 overflow-hidden"
               >
                 <button
                   onClick={() => {
                     onDeleteColumn(column.id);
                     setShowMenu(false);
                   }}
-                  className="w-full px-4 py-2 text-left text-sm text-red-300 hover:bg-red-500/10 transition-colors flex items-center gap-2"
+                  className="w-full px-4 py-2 text-left text-sm text-red-300 dark:text-red-300 light:text-red-600 hover:bg-red-500/10 transition-colors flex items-center gap-2"
                 >
                   <Trash2 className="w-4 h-4" />
                   Delete Column
@@ -104,7 +104,7 @@ export default function Column({
           </SortableContext>
 
           {cards.length === 0 && (
-            <div className="flex items-center justify-center h-full text-gray-500 text-sm">
+            <div className="flex items-center justify-center h-full text-gray-500 dark:text-gray-500 light:text-gray-400 text-sm">
               Drop cards here
             </div>
           )}
@@ -113,7 +113,7 @@ export default function Column({
         {/* Add Card Button */}
         <button
           onClick={() => onAddCard(column.id)}
-          className="mt-4 w-full py-3 px-4 rounded-xl border-2 border-dashed border-white/20 hover:border-primary-400/50 hover:bg-primary-500/10 text-gray-400 hover:text-primary-300 transition-all duration-200 flex items-center justify-center gap-2 group"
+          className="mt-4 w-full py-3 px-4 rounded-xl border-2 border-dashed border-white/20 dark:border-white/20 light:border-gray-300 hover:border-primary-400/50 hover:bg-primary-500/10 text-gray-400 dark:text-gray-400 light:text-gray-600 hover:text-primary-300 dark:hover:text-primary-300 light:hover:text-primary-600 transition-all duration-200 flex items-center justify-center gap-2 group"
         >
           <Plus className="w-5 h-5 group-hover:scale-110 transition-transform" />
           <span className="font-medium">Add Card</span>
