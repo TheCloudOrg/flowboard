@@ -27,10 +27,11 @@ export async function getBoard(organizationId: string): Promise<Board | null> {
     return null
   }
 
-  const boardId = boards.id
+  const board = boards as DBBoard
+  const boardId = board.id
 
   // Get columns ordered by position
-  const { data: columns, error: columnsError } = await supabase
+  const { data: columnsData, error: columnsError } = await supabase
     .from('columns')
     .select('*')
     .eq('board_id', boardId)
@@ -41,8 +42,10 @@ export async function getBoard(organizationId: string): Promise<Board | null> {
     return null
   }
 
+  const columns = (columnsData || []) as DBColumn[]
+
   // Get all cards for this board
-  const { data: cards, error: cardsError } = await supabase
+  const { data: cardsData, error: cardsError } = await supabase
     .from('cards')
     .select('*')
     .eq('board_id', boardId)
@@ -53,9 +56,11 @@ export async function getBoard(organizationId: string): Promise<Board | null> {
     return null
   }
 
+  const cards = (cardsData || []) as DBCard[]
+
   // Transform to localStorage-compatible format
   const cardsMap: { [key: string]: Card } = {}
-  cards?.forEach((card) => {
+  cards.forEach((card) => {
     cardsMap[card.id] = {
       id: card.id,
       title: card.title,
@@ -67,15 +72,15 @@ export async function getBoard(organizationId: string): Promise<Board | null> {
   })
 
   const columnsArray: Column[] =
-    columns?.map((col) => ({
+    columns.map((col) => ({
       id: col.id,
       title: col.title,
       color: col.color || undefined,
       cardIds: cards
-        ?.filter((card) => card.column_id === col.id)
+        .filter((card) => card.column_id === col.id)
         .sort((a, b) => a.position - b.position)
-        .map((card) => card.id) || [],
-    })) || []
+        .map((card) => card.id),
+    }))
 
   return {
     columns: columnsArray,
@@ -100,7 +105,7 @@ export async function getBoardId(organizationId: string): Promise<string | null>
     return null
   }
 
-  return data.id
+  return (data as { id: string }).id
 }
 
 /**
