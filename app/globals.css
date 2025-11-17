@@ -4,16 +4,38 @@
 
 @layer base {
   body {
-    @apply bg-gradient-to-br from-dark-900 via-dark-800 to-primary-900 min-h-screen text-white;
+    @apply min-h-screen transition-colors duration-300;
+  }
+
+  /* Light mode */
+  .light body {
+    @apply bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 text-gray-900;
+  }
+
+  /* Dark mode */
+  .dark body {
+    @apply bg-gradient-to-br from-dark-900 via-dark-800 to-primary-900 text-white;
   }
 }
 
 @layer utilities {
-  .glass-effect {
+  /* Light mode glass effect */
+  .light .glass-effect {
+    @apply bg-white/70 backdrop-blur-lg border border-gray-200/50 shadow-sm;
+  }
+
+  /* Dark mode glass effect */
+  .dark .glass-effect {
     @apply bg-white/5 backdrop-blur-lg border border-white/10;
   }
 
-  .card-gradient {
+  /* Light mode card gradient */
+  .light .card-gradient {
+    @apply bg-gradient-to-br from-white/90 to-white/70;
+  }
+
+  /* Dark mode card gradient */
+  .dark .card-gradient {
     @apply bg-gradient-to-br from-white/10 to-white/5;
   }
 }
