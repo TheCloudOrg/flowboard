@@ -106,7 +106,7 @@ export default function KanbanBoard() {
               setBoard(newBoard);
             }
 
-            console.log('✅ Board initialized:', result.stats);
+            console.log('✅ Board initialized:', result.boardId);
           } else {
             console.error('Failed to initialize board:', result.error);
           }
