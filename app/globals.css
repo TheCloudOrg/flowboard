@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gradient-to-br from-dark-900 via-dark-800 to-primary-900 min-h-screen text-white;
+  }
+}
+
+@layer utilities {
+  .glass-effect {
+    @apply bg-white/5 backdrop-blur-lg border border-white/10;
+  }
+
+  .card-gradient {
+    @apply bg-gradient-to-br from-white/10 to-white/5;
+  }
+}
