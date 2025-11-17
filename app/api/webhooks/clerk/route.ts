@@ -2,10 +2,9 @@ import { Webhook } from 'svix'
 import { headers } from 'next/headers'
 import { WebhookEvent } from '@clerk/nextjs/server'
 import { createClient } from '@supabase/supabase-js'
-import { Database } from '@/lib/supabase/types'
 
 // Use service role key for admin operations (bypasses RLS)
-const supabaseAdmin = createClient<Database>(
+const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
   {
