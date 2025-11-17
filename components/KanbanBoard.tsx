@@ -435,7 +435,6 @@ export default function KanbanBoard() {
                   colorSuccess: theme === 'dark' ? '#10b981' : '#059669',
                   colorWarning: theme === 'dark' ? '#f59e0b' : '#d97706',
                   colorNeutral: theme === 'dark' ? 'white' : 'rgb(17, 24, 39)',
-                  colorAlphaShade: theme === 'dark' ? 'transparent' : 'rgba(0, 0, 0, 0.1)',
                   fontSize: '0.875rem',
                 },
                 elements: {
@@ -463,7 +462,6 @@ export default function KanbanBoard() {
                   colorSuccess: theme === 'dark' ? '#10b981' : '#059669',
                   colorWarning: theme === 'dark' ? '#f59e0b' : '#d97706',
                   colorNeutral: theme === 'dark' ? 'white' : 'rgb(17, 24, 39)',
-                  colorAlphaShade: theme === 'dark' ? 'transparent' : 'rgba(0, 0, 0, 0.1)',
                   fontSize: '0.875rem',
                 },
                 elements: {
