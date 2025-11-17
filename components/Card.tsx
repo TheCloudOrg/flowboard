@@ -3,16 +3,17 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { motion } from 'framer-motion';
-import { Grip, Trash2, Edit } from 'lucide-react';
+import { Grip, Trash2, Edit, Sparkles } from 'lucide-react';
 import { Card as CardType } from '@/types';
 
 interface CardProps {
   card: CardType;
   onEdit: (card: CardType) => void;
   onDelete: (cardId: string) => void;
+  onAIGenerate: (card: CardType) => void;
 }
 
-export default function Card({ card, onEdit, onDelete }: CardProps) {
+export default function Card({ card, onEdit, onDelete, onAIGenerate }: CardProps) {
   const {
     attributes,
     listeners,
@@ -75,6 +76,13 @@ export default function Card({ card, onEdit, onDelete }: CardProps) {
             </span>
 
             <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+              <button
+                onClick={() => onAIGenerate(card)}
+                className="p-1.5 rounded-lg bg-gradient-to-r from-primary-500/20 to-accent-500/20 hover:from-primary-500/30 hover:to-accent-500/30 text-accent-300 hover:text-accent-200 transition-all"
+                aria-label="Generate AI prompt"
+              >
+                <Sparkles className="w-4 h-4" />
+              </button>
               <button
                 onClick={() => onEdit(card)}
                 className="p-1.5 rounded-lg bg-primary-500/20 hover:bg-primary-500/30 text-primary-300 hover:text-primary-200 transition-colors"

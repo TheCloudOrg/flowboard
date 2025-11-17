@@ -28,6 +28,7 @@ import {
 import Column from './Column';
 import Card from './Card';
 import CardModal from './CardModal';
+import AIPromptModal from './AIPromptModal';
 
 export default function KanbanBoard() {
   const [board, setBoard] = useState<Board>({ columns: [], cards: {} });
@@ -37,6 +38,13 @@ export default function KanbanBoard() {
   const [currentColumnId, setCurrentColumnId] = useState<string>('');
   const [newColumnName, setNewColumnName] = useState('');
   const [showColumnInput, setShowColumnInput] = useState(false);
+
+  // AI Prompt Modal State
+  const [isAIModalOpen, setIsAIModalOpen] = useState(false);
+  const [aiPrompt, setAiPrompt] = useState<string | null>(null);
+  const [isLoadingAI, setIsLoadingAI] = useState(false);
+  const [aiError, setAiError] = useState<string | null>(null);
+  const [currentAICard, setCurrentAICard] = useState<CardType | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -201,6 +209,41 @@ export default function KanbanBoard() {
     setShowColumnInput(false);
   };
 
+  const handleAIGenerate = async (card: CardType) => {
+    setCurrentAICard(card);
+    setIsAIModalOpen(true);
+    setIsLoadingAI(true);
+    setAiError(null);
+    setAiPrompt(null);
+
+    try {
+      const response = await fetch('/api/generate-prompt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: card.title,
+          description: card.description,
+          notes: card.notes,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to generate prompt');
+      }
+
+      setAiPrompt(data.prompt);
+    } catch (error: any) {
+      console.error('Error generating AI prompt:', error);
+      setAiError(error.message || 'Failed to generate prompt. Please try again.');
+    } finally {
+      setIsLoadingAI(false);
+    }
+  };
+
   return (
     <div className="min-h-screen p-8">
       {/* Header */}
@@ -242,6 +285,7 @@ export default function KanbanBoard() {
                 onEditCard={handleEditCard}
                 onDeleteCard={handleDeleteCard}
                 onDeleteColumn={handleDeleteColumn}
+                onAIGenerate={handleAIGenerate}
               />
             );
           })}
@@ -307,6 +351,7 @@ export default function KanbanBoard() {
                 card={activeCard}
                 onEdit={() => {}}
                 onDelete={() => {}}
+                onAIGenerate={() => {}}
               />
             </div>
           ) : null}
@@ -323,6 +368,21 @@ export default function KanbanBoard() {
         onSave={handleSaveCard}
         card={editingCard}
         columnId={currentColumnId}
+      />
+
+      {/* AI Prompt Modal */}
+      <AIPromptModal
+        isOpen={isAIModalOpen}
+        onClose={() => {
+          setIsAIModalOpen(false);
+          setAiPrompt(null);
+          setAiError(null);
+          setCurrentAICard(null);
+        }}
+        prompt={aiPrompt}
+        isLoading={isLoadingAI}
+        error={aiError}
+        cardTitle={currentAICard?.title || ''}
       />
     </div>
   );

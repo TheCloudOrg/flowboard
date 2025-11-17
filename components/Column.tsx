@@ -15,6 +15,7 @@ interface ColumnProps {
   onEditCard: (card: CardType) => void;
   onDeleteCard: (cardId: string) => void;
   onDeleteColumn: (columnId: string) => void;
+  onAIGenerate: (card: CardType) => void;
 }
 
 export default function Column({
@@ -24,6 +25,7 @@ export default function Column({
   onEditCard,
   onDeleteCard,
   onDeleteColumn,
+  onAIGenerate,
 }: ColumnProps) {
   const [showMenu, setShowMenu] = useState(false);
   const { setNodeRef } = useDroppable({
@@ -96,6 +98,7 @@ export default function Column({
                 card={card}
                 onEdit={onEditCard}
                 onDelete={onDeleteCard}
+                onAIGenerate={onAIGenerate}
               />
             ))}
           </SortableContext>
