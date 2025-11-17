@@ -16,6 +16,7 @@ export default function ThemeToggle() {
       aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
     >
       <div className="relative w-6 h-6">
+        {/* Show Sun in dark mode (to switch to light) */}
         <motion.div
           initial={false}
           animate={{
@@ -26,8 +27,9 @@ export default function ThemeToggle() {
           transition={{ duration: 0.2 }}
           className="absolute inset-0"
         >
-          <Moon className="w-6 h-6 text-primary-400" />
+          <Sun className="w-6 h-6 text-amber-500" />
         </motion.div>
+        {/* Show Moon in light mode (to switch to dark) */}
         <motion.div
           initial={false}
           animate={{
@@ -38,7 +40,7 @@ export default function ThemeToggle() {
           transition={{ duration: 0.2 }}
           className="absolute inset-0"
         >
-          <Sun className="w-6 h-6 text-amber-500" />
+          <Moon className="w-6 h-6 text-slate-700" />
         </motion.div>
       </div>
     </motion.button>

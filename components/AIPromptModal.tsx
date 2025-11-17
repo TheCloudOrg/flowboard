@@ -69,17 +69,17 @@ export default function AIPromptModal({
                     <Sparkles className="w-6 h-6 text-primary-400" />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold text-white">
+                    <h2 className="text-2xl font-bold dark:text-white light:text-gray-900">
                       AI-Generated Prompt
                     </h2>
-                    <p className="text-sm text-gray-400 mt-1">
+                    <p className="text-sm dark:text-gray-400 light:text-gray-600 mt-1">
                       For: {cardTitle}
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={handleClose}
-                  className="p-2 rounded-xl hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
+                  className="p-2 rounded-xl dark:hover:bg-white/10 light:hover:bg-gray-100 dark:text-gray-400 light:text-gray-600 dark:hover:text-white light:hover:text-gray-900 transition-colors"
                   aria-label="Close modal"
                 >
                   <X className="w-5 h-5" />
@@ -91,10 +91,10 @@ export default function AIPromptModal({
                 {isLoading && (
                   <div className="flex-1 flex flex-col items-center justify-center gap-4">
                     <Loader2 className="w-12 h-12 text-primary-400 animate-spin" />
-                    <p className="text-gray-300 text-lg">
+                    <p className="dark:text-gray-300 light:text-gray-700 text-lg">
                       Generating your prompt...
                     </p>
-                    <p className="text-gray-500 text-sm">
+                    <p className="dark:text-gray-500 light:text-gray-500 text-sm">
                       This may take a few seconds
                     </p>
                   </div>
@@ -103,11 +103,11 @@ export default function AIPromptModal({
                 {error && (
                   <div className="flex-1 flex flex-col items-center justify-center gap-4">
                     <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-2xl">
-                      <p className="text-red-300 text-center">{error}</p>
+                      <p className="dark:text-red-300 light:text-red-600 text-center">{error}</p>
                     </div>
                     <button
                       onClick={handleClose}
-                      className="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white font-medium transition-all"
+                      className="px-6 py-3 dark:bg-white/5 light:bg-gray-100 dark:hover:bg-white/10 light:hover:bg-gray-200 border dark:border-white/10 light:border-gray-300 rounded-xl dark:text-white light:text-gray-900 font-medium transition-all"
                     >
                       Close
                     </button>
@@ -118,15 +118,15 @@ export default function AIPromptModal({
                   <>
                     {/* Prompt Display */}
                     <div className="flex-1 overflow-y-auto custom-scrollbar mb-4">
-                      <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-                        <pre className="whitespace-pre-wrap text-sm text-gray-200 font-mono leading-relaxed">
+                      <div className="dark:bg-white/5 light:bg-gray-50 border dark:border-white/10 light:border-gray-300 rounded-2xl p-6">
+                        <pre className="whitespace-pre-wrap text-sm dark:text-gray-200 light:text-gray-800 font-mono leading-relaxed">
                           {prompt}
                         </pre>
                       </div>
                     </div>
 
                     {/* Actions */}
-                    <div className="flex gap-3 pt-4 border-t border-white/10">
+                    <div className="flex gap-3 pt-4 border-t dark:border-white/10 light:border-gray-200">
                       <button
                         onClick={handleCopy}
                         className="flex-1 px-6 py-3 bg-gradient-to-r from-primary-500 to-accent-500 hover:from-primary-600 hover:to-accent-600 rounded-xl text-white font-medium shadow-lg hover:shadow-glow transition-all flex items-center justify-center gap-2"
@@ -145,7 +145,7 @@ export default function AIPromptModal({
                       </button>
                       <button
                         onClick={handleClose}
-                        className="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white font-medium transition-all"
+                        className="px-6 py-3 dark:bg-white/5 light:bg-gray-100 dark:hover:bg-white/10 light:hover:bg-gray-200 border dark:border-white/10 light:border-gray-300 rounded-xl dark:text-white light:text-gray-900 font-medium transition-all"
                       >
                         Close
                       </button>
