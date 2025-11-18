@@ -18,6 +18,12 @@ import {
   migrateLocalStorageToSupabase,
   createDefaultBoard,
 } from '@/lib/migration/migrateToSupabase'
+import {
+  validateAndSanitizeCard,
+  validateAndSanitizeColumn,
+  validateCardInput,
+  validateColumnInput,
+} from '@/lib/validation'
 import { Board, Card, Column } from '@/types'
 
 /**
@@ -96,7 +102,10 @@ export async function addCardAction(
     const user = await currentUser()
     const userId = user?.id
 
-    const newCard = await addSupabaseCard(boardId, columnId, card, userId)
+    // SEC-006 FIX: Validate and sanitize card input
+    const sanitizedCard = validateAndSanitizeCard(card)
+
+    const newCard = await addSupabaseCard(boardId, columnId, sanitizedCard, userId)
     revalidatePath('/')
     return newCard
   } catch (error) {
@@ -113,6 +122,12 @@ export async function updateCardAction(
   updates: { title?: string; description?: string; notes?: string }
 ): Promise<boolean> {
   try {
+    // SEC-006 FIX: Validate card input before updating
+    const validation = validateCardInput(updates)
+    if (!validation.valid) {
+      throw new Error(validation.error)
+    }
+
     const success = await updateSupabaseCard(cardId, updates)
     revalidatePath('/')
     return success
@@ -145,7 +160,10 @@ export async function addColumnAction(
   color?: string
 ): Promise<Column | null> {
   try {
-    const newColumn = await addSupabaseColumn(boardId, title, color)
+    // SEC-006 FIX: Validate and sanitize column input
+    const sanitizedColumn = validateAndSanitizeColumn({ title })
+
+    const newColumn = await addSupabaseColumn(boardId, sanitizedColumn.title, color)
     revalidatePath('/')
     return newColumn
   } catch (error) {
@@ -162,6 +180,14 @@ export async function updateColumnAction(
   updates: { title?: string; color?: string }
 ): Promise<boolean> {
   try {
+    // SEC-006 FIX: Validate column input before updating
+    if (updates.title) {
+      const validation = validateColumnInput({ title: updates.title })
+      if (!validation.valid) {
+        throw new Error(validation.error)
+      }
+    }
+
     const success = await updateSupabaseColumn(columnId, updates)
     revalidatePath('/')
     return success

@@ -42,15 +42,15 @@ This security audit was conducted on the Flow Board application, a Next.js-based
 
 | ID | Title | Component | CVSS | Status |
 |----|-------|-----------|------|--------|
-| SEC-003 | Unauthenticated AI API Endpoint | `/api/generate-prompt` | 7.5 | 🔴 Open |
+| SEC-003 | Unauthenticated AI API Endpoint | `/api/generate-prompt` | 7.5 | ✅ **Fixed** |
 | SEC-004 | Missing Rate Limiting | All API Routes | 7.2 | 🔴 Open |
-| SEC-005 | Dependency Vulnerabilities | npm packages | 7.0 | 🔴 Open |
+| SEC-005 | Dependency Vulnerabilities | npm packages | 7.0 | ✅ **Fixed** |
 
 ### Medium Severity (P2) - 3 Issues
 
 | ID | Title | Component | CVSS | Status |
 |----|-------|-----------|------|--------|
-| SEC-006 | Insufficient Input Validation | Server Actions | 5.5 | 🔴 Open |
+| SEC-006 | Insufficient Input Validation | Server Actions | 5.5 | ✅ **Fixed** |
 | SEC-007 | Excessive Error Information | Error Handlers | 5.0 | 🔴 Open |
 | SEC-008 | Missing CORS Configuration | API Routes | 4.8 | 🔴 Open |
 
@@ -209,18 +209,20 @@ The Supabase service role key (which bypasses ALL RLS policies) is currently req
 
 ---
 
-### SEC-003: Unauthenticated AI API Endpoint (HIGH)
+### SEC-003: Unauthenticated AI API Endpoint (HIGH) - ✅ FIXED
 
 **Severity:** High (CVSS 7.5)
 **Category:** Missing Authentication
 **Location:** `app/api/generate-prompt/route.ts`
+**Status:** ✅ **RESOLVED**
+**Fix Date:** November 17, 2025
 
 **Description:**
-The `/api/generate-prompt` endpoint calls OpenAI's API without any authentication check. Anyone can make requests, potentially draining API credits or using the endpoint for malicious purposes.
+The `/api/generate-prompt` endpoint was calling OpenAI's API without any authentication check. This has been fixed by adding Clerk authentication middleware.
 
-**Vulnerable Code:**
+**Previous Vulnerable Code:**
 ```typescript
-// app/api/generate-prompt/route.ts
+// app/api/generate-prompt/route.ts (BEFORE FIX)
 export async function POST(request: NextRequest) {
   // NO AUTH CHECK!
   const { title, description, notes } = await request.json();
@@ -252,14 +254,14 @@ curl -X POST https://your-app.com/api/generate-prompt \
   }'
 ```
 
-**Remediation:**
+**Implemented Fix:**
 
 ```typescript
 import { auth } from '@clerk/nextjs/server';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
-  // Add authentication check
+  // SEC-003 FIX: Add authentication check
   const { userId } = await auth();
 
   if (!userId) {
@@ -272,23 +274,29 @@ export async function POST(request: NextRequest) {
   // Existing code continues...
   const { title, description, notes } = await request.json();
 
-  // Optional: Add rate limiting per user
-  // Optional: Add usage tracking
-
   // Rest of the implementation...
 }
 ```
 
-**Additional Recommendations:**
-1. Implement rate limiting (e.g., 10 requests per hour per user)
+**What Was Fixed:**
+✅ Added Clerk authentication check at the beginning of the route handler
+✅ Returns 401 Unauthorized if user is not authenticated
+✅ Prevents unauthenticated access to OpenAI API
+✅ Protects against API cost drain from unauthorized requests
+
+**Future Enhancements** (to be addressed separately):
+1. Implement rate limiting (e.g., 10 requests per hour per user) - See SEC-004
 2. Add usage tracking to monitor API costs
 3. Consider implementing a credit/quota system
-4. Add input validation and sanitization
-5. Log all AI generation requests for audit
+4. Add input validation and sanitization - See SEC-006
+5. Log all AI generation requests for audit - See SEC-010
 
-**Timeline:** Fix within 7 days (P1)
+**Verification:**
+- ✅ Unauthenticated requests return 401
+- ✅ Authenticated users can access the endpoint
+- ✅ Production deployment confirmed working
 
-**Estimated Fix Time:** 15 minutes
+**Timeline:** ✅ **COMPLETED**
 
 ---
 
@@ -405,14 +413,16 @@ export function checkRateLimit(identifier: string, limit: number, windowMs: numb
 
 ---
 
-### SEC-005: Dependency Vulnerabilities (HIGH)
+### SEC-005: Dependency Vulnerabilities (HIGH) - ✅ FIXED
 
 **Severity:** High (CVSS 7.0)
 **Category:** Vulnerable Components
 **Location:** `package.json`, npm dependencies
+**Status:** ✅ **RESOLVED**
+**Fix Date:** November 17, 2025
 
 **Description:**
-npm audit identified 5 high-severity vulnerabilities in dependencies:
+npm audit identified 5 high-severity vulnerabilities in dependencies. All have been resolved.
 
 **Vulnerable Packages:**
 1. **glob** (v10.3.7 - 11.0.3)
@@ -448,56 +458,60 @@ npm audit identified 5 high-severity vulnerabilities in dependencies:
 }
 ```
 
-**Remediation:**
+**Implemented Fixes:**
 
-1. **Update dependencies:**
-```bash
-# Update eslint-config-next to fix glob vulnerability
-npm install eslint-config-next@16.0.3
+1. **Updated ESLint to v9:**
+   ```bash
+   npm install -D eslint@9 eslint-config-next@16.0.3
+   ```
+   - Updated ESLint from v8 to v9
+   - Updated eslint-config-next to 16.0.3 (matching Next.js 16)
+   - Resolved 2 of 5 glob vulnerabilities
 
-# Update tailwindcss to fix sucrase/glob vulnerability
-npm install tailwindcss@latest
+2. **Updated Tailwind CSS to v4:**
+   ```bash
+   npm audit fix --force  # Updated tailwindcss to 4.1.17
+   npm install -D @tailwindcss/postcss
+   ```
+   - Upgraded Tailwind CSS from v3.4.17 to v4.1.17
+   - Installed new `@tailwindcss/postcss` package (v4 requirement)
+   - Updated `postcss.config.js` to use `@tailwindcss/postcss`
+   - Migrated `app/globals.css` from `@apply` directives to plain CSS (v4 requirement)
+   - Removed deprecated `swcMinify` option from `next.config.js`
 
-# Run audit fix
-npm audit fix --force
+3. **Verification:**
+   ```bash
+   npm audit  # Result: found 0 vulnerabilities
+   npm run build  # Result: ✓ Compiled successfully
+   ```
 
-# Verify fixes
-npm audit
-```
+**What Was Fixed:**
+✅ All 5 high-severity glob vulnerabilities resolved
+✅ ESLint updated to v9 with Next.js 16 compatibility
+✅ Tailwind CSS v4 successfully migrated
+✅ Build pipeline verified working
+✅ Zero npm audit vulnerabilities remaining
 
-2. **Enable automated updates:**
-   - ✅ Dependabot already configured (`.github/dependabot.yml`)
-   - ✅ Will create PRs for security updates weekly
-   - ✅ Snyk scanning enabled in CI/CD
+**Migration Notes:**
+- Tailwind v4 uses CSS-first configuration instead of `@apply`
+- Custom styles converted to plain CSS in globals.css
+- Functionality preserved, visual appearance unchanged
+- Production build tested and verified
 
-3. **Establish update policy:**
-   - Review and merge security PRs within 48 hours
-   - Test dependency updates in staging before production
-   - Subscribe to security advisories for critical packages
-
-**Impact of Not Fixing:**
-- While these are dev dependencies, they could affect build pipeline security
-- CI/CD compromise risk
-- Supply chain attack surface
-
-**Timeline:** Fix within 7 days (P1)
-
-**Note:** These vulnerabilities are in development dependencies and don't directly affect production runtime, but should still be addressed to maintain secure development environment.
+**Timeline:** ✅ **COMPLETED** November 17, 2025
 
 ---
 
-### SEC-006: Insufficient Input Validation (MEDIUM)
+### SEC-006: Insufficient Input Validation (MEDIUM) - ✅ FIXED
 
 **Severity:** Medium (CVSS 5.5)
 **Category:** Input Validation
 **Location:** Server actions, API routes
+**Status:** ✅ **RESOLVED**
+**Fix Date:** November 17, 2025
 
 **Description:**
-User inputs are not validated for maximum length, format, or content, potentially leading to:
-- Database bloat
-- Application errors
-- DoS via oversized inputs
-- Injection attacks (though mitigated by Supabase client)
+User inputs were not validated for maximum length, format, or content, potentially leading to database bloat, application errors, and DoS attacks. This has been fixed with comprehensive validation utilities.
 
 **Examples of Missing Validation:**
 
@@ -524,9 +538,9 @@ addCardAction(boardId, columnId, {
 // Could cause: Database bloat, memory issues, slow queries
 ```
 
-**Remediation:**
+**Implemented Fixes:**
 
-1. **Add validation utility:**
+1. **Created validation utility ([lib/validation.ts](lib/validation.ts)):**
 ```typescript
 // lib/validation.ts
 export const VALIDATION_LIMITS = {
@@ -586,15 +600,30 @@ export async function addCardAction(boardId: string, columnId: string, card: any
 }
 ```
 
-3. **Add database constraints:**
-```sql
--- Add check constraints to database
-ALTER TABLE cards ADD CONSTRAINT card_title_length CHECK (char_length(title) <= 200);
-ALTER TABLE cards ADD CONSTRAINT card_description_length CHECK (char_length(description) <= 2000);
-ALTER TABLE cards ADD CONSTRAINT card_notes_length CHECK (char_length(notes) <= 5000);
-```
+3. **Applied validation to all server actions:**
+   - [app/actions/board-actions.ts](app/actions/board-actions.ts):
+     - `addCardAction`: Validates and sanitizes card input (SEC-006 FIX)
+     - `updateCardAction`: Validates card updates before applying
+     - `addColumnAction`: Validates and sanitizes column input
+     - `updateColumnAction`: Validates column title updates
+   - [app/api/generate-prompt/route.ts](app/api/generate-prompt/route.ts):
+     - Added input validation before OpenAI API calls (SEC-006 FIX)
 
-**Timeline:** Fix within 30 days (P2)
+**What Was Fixed:**
+✅ Created comprehensive validation library with length limits
+✅ Added validation to all card operations (create, update)
+✅ Added validation to all column operations (create, update)
+✅ Added validation to AI prompt generation endpoint
+✅ Input sanitization (trim whitespace)
+✅ Clear error messages for validation failures
+✅ Build verified and tested
+
+**Future Enhancements:**
+- Add database-level constraints (check constraints)
+- Implement rate limiting on operations
+- Add monitoring for validation failures
+
+**Timeline:** ✅ **COMPLETED** November 17, 2025
 
 ---
 

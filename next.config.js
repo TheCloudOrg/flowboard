@@ -65,9 +65,6 @@ const nextConfig = {
 
   // Compress responses
   compress: true,
-
-  // Production optimizations
-  swcMinify: true,
 }
 
 module.exports = nextConfig

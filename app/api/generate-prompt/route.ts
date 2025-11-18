@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import OpenAI from 'openai';
+import { validateCardInput } from '@/lib/validation';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -20,9 +21,11 @@ export async function POST(request: NextRequest) {
   try {
     const { title, description, notes } = await request.json();
 
-    if (!title) {
+    // SEC-006 FIX: Validate input before processing
+    const validation = validateCardInput({ title, description, notes });
+    if (!validation.valid) {
       return NextResponse.json(
-        { error: 'Card title is required' },
+        { error: validation.error },
         { status: 400 }
       );
     }
