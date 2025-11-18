@@ -1,0 +1,114 @@
+name: PR Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  code-review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run linter and capture output
+      id: lint
+      run: |
+        echo "Running ESLint..."
+        npm run lint > lint-results.txt 2>&1 || true
+        cat lint-results.txt
+      continue-on-error: true
+
+    - name: Run type check and capture output
+      id: typecheck
+      run: |
+        echo "Running TypeScript type check..."
+        npm run type-check > typecheck-results.txt 2>&1 || true
+        cat typecheck-results.txt
+      continue-on-error: true
+
+    - name: Add PR comment with results
+      if: always()
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+
+          let comment = '## 🔍 Automated Code Review Results\n\n';
+
+          // ESLint results
+          comment += '### ESLint Check\n';
+          try {
+            const lintResults = fs.readFileSync('lint-results.txt', 'utf8');
+            if (lintResults.includes('error') || lintResults.includes('warning')) {
+              comment += '⚠️ Issues found:\n```\n' + lintResults.slice(0, 2000) + '\n```\n\n';
+            } else {
+              comment += '✅ No issues found\n\n';
+            }
+          } catch (e) {
+            comment += '✅ No issues found\n\n';
+          }
+
+          // TypeScript results
+          comment += '### TypeScript Type Check\n';
+          try {
+            const typecheckResults = fs.readFileSync('typecheck-results.txt', 'utf8');
+            if (typecheckResults.includes('error') || typecheckResults.includes('TS')) {
+              comment += '⚠️ Type errors found:\n```\n' + typecheckResults.slice(0, 2000) + '\n```\n\n';
+            } else {
+              comment += '✅ No type errors\n\n';
+            }
+          } catch (e) {
+            comment += '✅ No type errors\n\n';
+          }
+
+          comment += '\n---\n*Automated review by GitHub Actions*';
+
+          // Post comment
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });
+
+  size-check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build and check bundle size
+      run: npm run build
+      env:
+        SKIP_ENV_VALIDATION: true
+
+    - name: Analyze bundle
+      run: |
+        echo "Build completed successfully!"
+        du -sh .next/ || true
