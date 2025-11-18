@@ -1,0 +1,25 @@
+# Snyk (https://snyk.io) policy file
+
+version: v1.25.0
+
+# Ignore specific vulnerabilities
+ignore: {}
+
+# Patch specific vulnerabilities
+patch: {}
+
+# Language settings
+language-settings:
+  javascript:
+    ignore-dev-dependencies: false
+
+# Severity threshold for failing builds
+failThreshold: high
+
+# Exclude directories from scanning
+exclude:
+  - .next/
+  - node_modules/
+  - out/
+  - build/
+  - dist/

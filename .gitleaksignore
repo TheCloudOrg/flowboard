@@ -1,0 +1,25 @@
+# Gitleaks ignore file
+# Patterns that are safe to ignore (example files, documentation, etc.)
+
+# Example environment files with placeholder values
+.env.local.example:*
+.env.example:*
+
+# Documentation and setup guides with example secrets
+WEBHOOK_SETUP_GUIDE.md:*
+SETUP_GUIDE.md:*
+README.md:*
+
+# Test fixtures and mock data
+**/*test*.ts:*
+**/*mock*.ts:*
+**/__tests__/**:*
+**/__mocks__/**:*
+
+# Allow placeholder/example patterns
+*:pk_test_xxxx
+*:sk_test_xxxx
+*:whsec_xxxx
+*:your-actual-key
+*:your-api-key
+*:YOUR_API_KEY

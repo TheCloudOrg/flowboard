@@ -1,0 +1,59 @@
+version: 2
+updates:
+  # Enable version updates for npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 10
+
+    # Group dependency updates
+    groups:
+      # Group all minor and patch updates together
+      development-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+
+      production-dependencies:
+        dependency-type: "production"
+        update-types:
+          - "patch"
+
+    # Automatically merge security updates
+    labels:
+      - "dependencies"
+      - "security"
+
+    # Set reviewers for dependency updates
+    reviewers:
+      - "YashShelar007"
+
+    # Commit message preferences
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+
+    # Target branch for pull requests
+    target-branch: "develop"
+
+    # Allow both direct and indirect dependencies
+    versioning-strategy: "increase"
+
+  # Monitor GitHub Actions workflows
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "UTC"
+    labels:
+      - "github-actions"
+      - "security"
+    commit-message:
+      prefix: "chore(ci)"

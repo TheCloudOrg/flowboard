@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
 import OpenAI from 'openai';
 
 const openai = new OpenAI({
@@ -6,6 +7,16 @@ const openai = new OpenAI({
 });
 
 export async function POST(request: NextRequest) {
+  // SEC-003 FIX: Add authentication check
+  const { userId } = await auth();
+
+  if (!userId) {
+    return NextResponse.json(
+      { error: 'Unauthorized. Please sign in to use AI features.' },
+      { status: 401 }
+    );
+  }
+
   try {
     const { title, description, notes } = await request.json();
 
