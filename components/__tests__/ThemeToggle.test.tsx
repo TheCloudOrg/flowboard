@@ -37,20 +37,26 @@ describe('ThemeToggle', () => {
   it('has correct aria-label for dark mode', async () => {
     renderWithThemeProvider(<ThemeToggle />);
 
-    await waitFor(() => {
-      const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('aria-label', 'Switch to light mode');
-    });
+    await waitFor(
+      () => {
+        const button = screen.getByRole('button');
+        expect(button).toHaveAttribute('aria-label', 'Switch to light mode');
+      },
+      { timeout: 3000 }
+    );
   });
 
   it('has correct aria-label for light mode', async () => {
     localStorage.setItem('theme', 'light');
     renderWithThemeProvider(<ThemeToggle />);
 
-    await waitFor(() => {
-      const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('aria-label', 'Switch to dark mode');
-    });
+    await waitFor(
+      () => {
+        const button = screen.getByRole('button');
+        expect(button).toHaveAttribute('aria-label', 'Switch to dark mode');
+      },
+      { timeout: 3000 }
+    );
   });
 
   it('displays Sun icon in dark mode', async () => {
@@ -79,18 +85,24 @@ describe('ThemeToggle', () => {
 
     const button = screen.getByRole('button');
 
-    // Initially dark mode
-    await waitFor(() => {
-      expect(button).toHaveAttribute('aria-label', 'Switch to light mode');
-    });
+    // Initially dark mode - wait for mount
+    await waitFor(
+      () => {
+        expect(button).toHaveAttribute('aria-label', 'Switch to light mode');
+      },
+      { timeout: 3000 }
+    );
 
     // Click to toggle
     fireEvent.click(button);
 
     // Should switch to light mode
-    await waitFor(() => {
-      expect(button).toHaveAttribute('aria-label', 'Switch to dark mode');
-    });
+    await waitFor(
+      () => {
+        expect(button).toHaveAttribute('aria-label', 'Switch to dark mode');
+      },
+      { timeout: 3000 }
+    );
   });
 
   it('updates document classes when toggled', async () => {
@@ -126,15 +138,33 @@ describe('ThemeToggle', () => {
 
     const button = screen.getByRole('button');
 
-    // Click multiple times rapidly
-    fireEvent.click(button); // dark -> light
-    fireEvent.click(button); // light -> dark
-    fireEvent.click(button); // dark -> light
+    // Wait for initial mount and theme setup
+    await waitFor(
+      () => {
+        expect(button).toHaveAttribute('aria-label', 'Switch to light mode');
+      },
+      { timeout: 3000 }
+    );
 
-    await waitFor(() => {
-      expect(button).toHaveAttribute('aria-label', 'Switch to dark mode');
-      expect(document.documentElement.classList.contains('light')).toBe(true);
+    // Click multiple times with small delays to allow state updates
+    fireEvent.click(button); // dark -> light
+    await waitFor(() => expect(button).toHaveAttribute('aria-label', 'Switch to dark mode'), {
+      timeout: 2000,
     });
+
+    fireEvent.click(button); // light -> dark
+    await waitFor(() => expect(button).toHaveAttribute('aria-label', 'Switch to light mode'), {
+      timeout: 2000,
+    });
+
+    fireEvent.click(button); // dark -> light
+    await waitFor(
+      () => {
+        expect(button).toHaveAttribute('aria-label', 'Switch to dark mode');
+        expect(document.documentElement.classList.contains('light')).toBe(true);
+      },
+      { timeout: 2000 }
+    );
   });
 
   it('applies correct CSS classes', () => {

@@ -10,6 +10,19 @@ jest.mock('framer-motion', () => ({
   },
 }));
 
+// Mock @dnd-kit modules
+jest.mock('@dnd-kit/core', () => ({
+  useDroppable: () => ({
+    setNodeRef: jest.fn(),
+    isOver: false,
+  }),
+}));
+
+jest.mock('@dnd-kit/sortable', () => ({
+  SortableContext: ({ children }: any) => <div>{children}</div>,
+  verticalListSortingStrategy: {},
+}));
+
 // Mock Card component to simplify testing
 jest.mock('../Card', () => {
   return function MockCard({ card, onEdit, onDelete, onAIGenerate }: any) {
@@ -25,20 +38,20 @@ jest.mock('../Card', () => {
 });
 
 describe('Column Component', () => {
-  const mockCards: { [key: string]: CardType } = {
-    card_1: {
+  const mockCards: CardType[] = [
+    {
       id: 'card_1',
       title: 'Card 1',
       createdAt: '2024-01-01',
       updatedAt: '2024-01-01',
     },
-    card_2: {
+    {
       id: 'card_2',
       title: 'Card 2',
       createdAt: '2024-01-02',
       updatedAt: '2024-01-02',
     },
-  };
+  ];
 
   const mockColumn: ColumnType = {
     id: 'col_1',
@@ -126,8 +139,9 @@ describe('Column Component', () => {
       />
     );
 
-    // Look for text showing the count (exact format may vary)
-    expect(screen.getByText(/2/)).toBeInTheDocument();
+    // Check for the card count badge - should show 2 cards
+    const cardCountBadge = screen.getByText('TODO').parentElement?.querySelector('span');
+    expect(cardCountBadge).toHaveTextContent('2');
   });
 
   it('renders empty column correctly', () => {
@@ -136,7 +150,7 @@ describe('Column Component', () => {
     render(
       <Column
         column={emptyColumn}
-        cards={mockCards}
+        cards={[]}
         onAddCard={mockOnAddCard}
         onEditCard={mockOnEditCard}
         onDeleteCard={mockOnDeleteCard}
@@ -147,7 +161,7 @@ describe('Column Component', () => {
     );
 
     expect(screen.getByText('TODO')).toBeInTheDocument();
-    expect(screen.queryByTestId(/^card-/)).not.toBeInTheDocument();
+    expect(screen.queryAllByTestId(/^card-/)).toHaveLength(0);
   });
 
   it('calls onAddCard when add button is clicked', () => {
@@ -196,7 +210,7 @@ describe('Column Component', () => {
     const editButtons = screen.getAllByText('Edit');
     fireEvent.click(editButtons[0]);
 
-    expect(mockOnEditCard).toHaveBeenCalledWith(mockCards.card_1);
+    expect(mockOnEditCard).toHaveBeenCalledWith(mockCards[0]);
   });
 
   it('passes delete handler to cards', () => {

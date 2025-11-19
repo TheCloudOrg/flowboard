@@ -13,7 +13,7 @@ if (typeof window !== 'undefined') {
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
     value: jest.fn().mockImplementation((query) => ({
-      matches: false,
+      matches: query === '(prefers-color-scheme: dark)', // Return true for dark mode preference
       media: query,
       onchange: null,
       addListener: jest.fn(), // deprecated
