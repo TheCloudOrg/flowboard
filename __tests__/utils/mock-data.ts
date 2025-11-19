@@ -1,4 +1,4 @@
-import { Card, Column, Board } from '@/types'
+import { Card, Column, Board } from '@/types';
 
 // Mock user
 export const mockUser = {
@@ -8,7 +8,7 @@ export const mockUser = {
   avatar_url: 'https://example.com/avatar.jpg',
   created_at: new Date('2024-01-01').toISOString(),
   updated_at: new Date('2024-01-01').toISOString(),
-}
+};
 
 // Mock organization
 export const mockOrganization = {
@@ -18,7 +18,7 @@ export const mockOrganization = {
   created_by: mockUser.id,
   created_at: new Date('2024-01-01').toISOString(),
   updated_at: new Date('2024-01-01').toISOString(),
-}
+};
 
 // Mock board
 export const mockBoard: Board = {
@@ -30,7 +30,7 @@ export const mockBoard: Board = {
   created_at: new Date('2024-01-01').toISOString(),
   updated_at: new Date('2024-01-01').toISOString(),
   columns: [],
-}
+};
 
 // Mock columns
 export const mockColumns: Column[] = [
@@ -64,7 +64,7 @@ export const mockColumns: Column[] = [
     created_at: new Date('2024-01-01').toISOString(),
     updated_at: new Date('2024-01-01').toISOString(),
   },
-]
+];
 
 // Mock cards
 export const mockCards: Card[] = [
@@ -104,15 +104,15 @@ export const mockCards: Card[] = [
     created_at: new Date('2024-01-03').toISOString(),
     updated_at: new Date('2024-01-03').toISOString(),
   },
-]
+];
 
 // Populate columns with cards
-mockColumns[0].cards = [mockCards[0], mockCards[1]]
-mockColumns[1].cards = [mockCards[2]]
-mockColumns[2].cards = []
+mockColumns[0].cards = [mockCards[0], mockCards[1]];
+mockColumns[1].cards = [mockCards[2]];
+mockColumns[2].cards = [];
 
 // Populate board with columns
-mockBoard.columns = mockColumns
+mockBoard.columns = mockColumns;
 
 // Helper function to create a mock card
 export const createMockCard = (overrides?: Partial<Card>): Card => ({
@@ -127,7 +127,7 @@ export const createMockCard = (overrides?: Partial<Card>): Card => ({
   created_at: new Date().toISOString(),
   updated_at: new Date().toISOString(),
   ...overrides,
-})
+});
 
 // Helper function to create a mock column
 export const createMockColumn = (overrides?: Partial<Column>): Column => ({
@@ -140,7 +140,7 @@ export const createMockColumn = (overrides?: Partial<Column>): Column => ({
   created_at: new Date().toISOString(),
   updated_at: new Date().toISOString(),
   ...overrides,
-})
+});
 
 // Helper function to create a mock board
 export const createMockBoard = (overrides?: Partial<Board>): Board => ({
@@ -153,4 +153,4 @@ export const createMockBoard = (overrides?: Partial<Board>): Board => ({
   updated_at: new Date().toISOString(),
   columns: [],
   ...overrides,
-})
+});

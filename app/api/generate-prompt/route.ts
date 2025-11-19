@@ -24,17 +24,11 @@ export async function POST(request: NextRequest) {
     // SEC-006 FIX: Validate input before processing
     const validation = validateCardInput({ title, description, notes });
     if (!validation.valid) {
-      return NextResponse.json(
-        { error: validation.error },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: validation.error }, { status: 400 });
     }
 
     if (!process.env.OPENAI_API_KEY) {
-      return NextResponse.json(
-        { error: 'OpenAI API key not configured' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: 'OpenAI API key not configured' }, { status: 500 });
     }
 
     // Create a detailed system prompt for generating Claude Code prompts
@@ -68,10 +62,7 @@ Generate a detailed prompt for Claude Code to implement this feature.`;
     const generatedPrompt = completion.choices[0]?.message?.content;
 
     if (!generatedPrompt) {
-      return NextResponse.json(
-        { error: 'Failed to generate prompt' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: 'Failed to generate prompt' }, { status: 500 });
     }
 
     return NextResponse.json({
@@ -82,10 +73,7 @@ Generate a detailed prompt for Claude Code to implement this feature.`;
     console.error('Error generating prompt:', error);
 
     if (error?.status === 401) {
-      return NextResponse.json(
-        { error: 'Invalid OpenAI API key' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Invalid OpenAI API key' }, { status: 401 });
     }
 
     return NextResponse.json(

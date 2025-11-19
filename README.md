@@ -27,6 +27,7 @@ A beautiful, modern project management application with drag-and-drop Kanban boa
 ## Getting Started
 
 1. **Install dependencies:**
+
    ```bash
    npm install
    ```
@@ -41,6 +42,7 @@ A beautiful, modern project management application with drag-and-drop Kanban boa
    - **Note**: The AI feature will not work without a valid API key. All other features work without it.
 
 3. **Run the development server:**
+
    ```bash
    npm run dev
    ```
@@ -51,26 +53,31 @@ A beautiful, modern project management application with drag-and-drop Kanban boa
 ## Usage
 
 ### Creating Cards
+
 - Click the "Add Card" button at the bottom of any column
 - Fill in the card title (required), description, and notes
 - Click "Create" to add the card
 
 ### Editing Cards
+
 - Hover over a card and click the edit icon
 - Update the card details
 - Click "Update" to save changes
 
 ### Dragging Cards
+
 - Click and hold on a card
 - Drag it to a new position within the same column or to a different column
 - Release to drop the card in its new location
 
 ### Managing Columns
+
 - Click "Add Column" to create a new custom column
 - Click the three dots on a column header to delete it
 - Deleting a column will also delete all cards within it
 
 ### AI Prompt Generation
+
 - Hover over any card and click the sparkles icon (⭐) to generate an AI prompt
 - The AI will analyze your card title, description, and notes
 - It generates a detailed, actionable prompt for implementing that feature
@@ -78,6 +85,7 @@ A beautiful, modern project management application with drag-and-drop Kanban boa
 - Perfect for turning high-level ideas into specific technical requirements
 
 ### Data Persistence
+
 All your boards, columns, and cards are automatically saved to your browser's local storage. Your data will persist even after closing the browser.
 
 ## Project Structure
@@ -116,15 +124,19 @@ npm start
 ## Customization
 
 ### Colors
+
 Edit the color scheme in `tailwind.config.ts`:
+
 - `primary`: Purple tones
 - `accent`: Blue tones
 - `dark`: Background tones
 
 ### Animations
+
 Modify animation settings in `tailwind.config.ts` under `animation` and `keyframes`.
 
 ### Default Columns
+
 Change default columns in `lib/localStorage.ts` by editing the `DEFAULT_BOARD` constant.
 
 ## License

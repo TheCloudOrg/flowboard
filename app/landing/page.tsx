@@ -145,19 +145,22 @@ Expected Deliverables:
     {
       icon: Brain,
       title: 'AI Prompt Generation',
-      description: 'Transform any task into a detailed, AI-ready prompt optimized for Claude Code, Cursor, and GitHub Copilot.',
+      description:
+        'Transform any task into a detailed, AI-ready prompt optimized for Claude Code, Cursor, and GitHub Copilot.',
       gradient: 'from-purple-500 to-pink-500',
     },
     {
       icon: Sparkles,
       title: 'Beautiful Glassmorphic UI',
-      description: 'A stunning interface with smooth 60fps animations that developers actually enjoy using every day.',
+      description:
+        'A stunning interface with smooth 60fps animations that developers actually enjoy using every day.',
       gradient: 'from-blue-500 to-cyan-500',
     },
     {
       icon: Users,
       title: 'Team Collaboration',
-      description: 'Organization workspaces with real-time updates. Built for teams that ship fast.',
+      description:
+        'Organization workspaces with real-time updates. Built for teams that ship fast.',
       gradient: 'from-green-500 to-emerald-500',
     },
     {
@@ -169,13 +172,15 @@ Expected Deliverables:
     {
       icon: Lock,
       title: 'Secure & Reliable',
-      description: 'Clerk authentication with OAuth. Supabase backend with Row-Level Security. Your data is safe.',
+      description:
+        'Clerk authentication with OAuth. Supabase backend with Row-Level Security. Your data is safe.',
       gradient: 'from-red-500 to-pink-500',
     },
     {
       icon: Code2,
       title: 'Developer-First',
-      description: 'Keyboard shortcuts, dark mode, GitHub integration. Built by developers, for developers.',
+      description:
+        'Keyboard shortcuts, dark mode, GitHub integration. Built by developers, for developers.',
       gradient: 'from-indigo-500 to-purple-500',
     },
   ];
@@ -184,25 +189,29 @@ Expected Deliverables:
     {
       icon: Terminal,
       title: 'Solo Developers',
-      description: 'Track features, generate AI prompts, and build faster with your AI coding assistant.',
+      description:
+        'Track features, generate AI prompts, and build faster with your AI coding assistant.',
       columns: 'Backlog → In Progress → Review → Done',
     },
     {
       icon: Rocket,
       title: 'Startup Teams',
-      description: 'Collaborate on roadmaps, convert specs into AI-ready tasks, and ship features at speed.',
+      description:
+        'Collaborate on roadmaps, convert specs into AI-ready tasks, and ship features at speed.',
       columns: 'Ideas → Planning → Building → Launched',
     },
     {
       icon: Layers,
       title: 'Dev Teams',
-      description: 'Agile workflows with AI. Share AI-generated specs and maintain consistent prompt quality.',
+      description:
+        'Agile workflows with AI. Share AI-generated specs and maintain consistent prompt quality.',
       columns: 'Sprint Planning → Development → QA → Production',
     },
     {
       icon: MessageSquare,
       title: 'Students',
-      description: 'Organize coding projects, generate learning prompts, and understand implementation paths.',
+      description:
+        'Organize coding projects, generate learning prompts, and understand implementation paths.',
       columns: 'To Learn → Practicing → Building → Completed',
     },
   ];
@@ -416,8 +425,8 @@ Expected Deliverables:
                               idx === 0
                                 ? 'bg-purple-400'
                                 : idx === 1
-                                ? 'bg-blue-400'
-                                : 'bg-green-400'
+                                  ? 'bg-blue-400'
+                                  : 'bg-green-400'
                             }`}
                           />
                           <span className="font-semibold text-sm">{col}</span>
@@ -976,7 +985,9 @@ Expected Deliverables:
                   </li>
                   <li className="flex items-start gap-3 text-gray-300">
                     <CheckCircle className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
-                    <span><strong>Unlimited</strong> boards & cards</span>
+                    <span>
+                      <strong>Unlimited</strong> boards & cards
+                    </span>
                   </li>
                   <li className="flex items-start gap-3 text-gray-300">
                     <CheckCircle className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
@@ -1040,7 +1051,9 @@ Expected Deliverables:
                   </li>
                   <li className="flex items-start gap-3 text-gray-300">
                     <CheckCircle className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
-                    <span><strong>Everything in Pro</strong></span>
+                    <span>
+                      <strong>Everything in Pro</strong>
+                    </span>
                   </li>
                   <li className="flex items-start gap-3 text-gray-300">
                     <CheckCircle className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />

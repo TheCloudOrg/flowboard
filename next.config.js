@@ -9,31 +9,31 @@ const nextConfig = {
         headers: [
           {
             key: 'X-DNS-Prefetch-Control',
-            value: 'on'
+            value: 'on',
           },
           {
             key: 'Strict-Transport-Security',
-            value: 'max-age=63072000; includeSubDomains; preload'
+            value: 'max-age=63072000; includeSubDomains; preload',
           },
           {
             key: 'X-Frame-Options',
-            value: 'SAMEORIGIN'
+            value: 'SAMEORIGIN',
           },
           {
             key: 'X-Content-Type-Options',
-            value: 'nosniff'
+            value: 'nosniff',
           },
           {
             key: 'X-XSS-Protection',
-            value: '1; mode=block'
+            value: '1; mode=block',
           },
           {
             key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin'
+            value: 'origin-when-cross-origin',
           },
           {
             key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=()'
+            value: 'camera=(), microphone=(), geolocation=()',
           },
           {
             key: 'Content-Security-Policy',
@@ -50,11 +50,13 @@ const nextConfig = {
               form-action 'self';
               frame-ancestors 'none';
               upgrade-insecure-requests;
-            `.replace(/\s{2,}/g, ' ').trim()
-          }
+            `
+              .replace(/\s{2,}/g, ' ')
+              .trim(),
+          },
         ],
       },
-    ]
+    ];
   },
 
   // Disable X-Powered-By header
@@ -65,6 +67,6 @@ const nextConfig = {
 
   // Compress responses
   compress: true,
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

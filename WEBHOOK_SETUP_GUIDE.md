@@ -3,6 +3,7 @@
 ## What Are Webhooks?
 
 Webhooks automatically sync data between Clerk (authentication) and Supabase (database). When someone:
+
 - Signs up → Creates user in Supabase
 - Updates profile → Updates user in Supabase
 - Creates organization → Creates organization in Supabase
@@ -146,6 +147,7 @@ When webhooks fire, you'll see console logs:
 ```
 
 If you see errors, check:
+
 - Is `SUPABASE_SERVICE_ROLE_KEY` correct in `.env.local`?
 - Is `CLERK_WEBHOOK_SECRET` correct?
 - Did you restart the dev server after adding keys?
@@ -159,6 +161,7 @@ When deploying to production (Vercel, Railway, etc.):
 ### 1. Add Environment Variables
 
 Add these to your hosting platform:
+
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`
@@ -187,35 +190,43 @@ Add these to your hosting platform:
 ## Troubleshooting
 
 ### Webhook returns 400 error
+
 **Problem**: Webhook signature verification failed
 
 **Solutions**:
+
 - Verify `CLERK_WEBHOOK_SECRET` in `.env.local` matches Clerk dashboard
 - Make sure you restarted the dev server after adding the secret
 - Check you're using the correct signing secret (not API keys)
 
 ### Webhook returns 500 error
+
 **Problem**: Error creating/updating data in Supabase
 
 **Solutions**:
+
 - Check `SUPABASE_SERVICE_ROLE_KEY` is correct (should start with `sb_secret_`)
 - Verify Supabase tables exist (run migration if not)
 - Check terminal logs for specific error messages
 - Ensure Supabase project URL is correct
 
 ### User created in Clerk but not in Supabase
+
 **Problem**: Webhook not firing or failing silently
 
 **Solutions**:
+
 - Check Clerk Dashboard → Webhooks → Logs for delivery status
 - Verify webhook URL is correct (should end with `/api/webhooks/clerk`)
 - For ngrok: Make sure ngrok is running and URL is up to date
 - Check webhook events are subscribed (user.created, etc.)
 
 ### "Missing signing secret" error
+
 **Problem**: `CLERK_WEBHOOK_SECRET` not set
 
 **Solutions**:
+
 - Add `CLERK_WEBHOOK_SECRET=whsec_...` to `.env.local`
 - Restart dev server
 - Get secret from Clerk Dashboard → Webhooks → Your endpoint
@@ -225,6 +236,7 @@ Add these to your hosting platform:
 ## Next Steps
 
 Once webhooks are working:
+
 - ✅ Users automatically sync to Supabase
 - ✅ Organizations automatically sync
 - ✅ Team memberships automatically sync

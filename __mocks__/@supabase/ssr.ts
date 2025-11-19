@@ -32,10 +32,10 @@ const mockSupabaseClient = {
     signOut: jest.fn().mockResolvedValue({ error: null }),
   },
   rpc: jest.fn().mockResolvedValue({ data: null, error: null }),
-}
+};
 
-export const createServerClient = jest.fn(() => mockSupabaseClient)
-export const createBrowserClient = jest.fn(() => mockSupabaseClient)
+export const createServerClient = jest.fn(() => mockSupabaseClient);
+export const createBrowserClient = jest.fn(() => mockSupabaseClient);
 
 // Export mock client for tests
-export const mockClient = mockSupabaseClient
+export const mockClient = mockSupabaseClient;

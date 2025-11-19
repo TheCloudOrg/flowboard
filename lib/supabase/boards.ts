@@ -1,19 +1,19 @@
-'use server'
+'use server';
 
-import { createClient } from './server'
-import { Database } from './types'
-import { Board, Card, Column } from '@/types'
+import { createClient } from './server';
+import { Database } from './types';
+import { Board, Card, Column } from '@/types';
 
-type DBCard = Database['public']['Tables']['cards']['Row']
-type DBColumn = Database['public']['Tables']['columns']['Row']
-type DBBoard = Database['public']['Tables']['boards']['Row']
+type DBCard = Database['public']['Tables']['cards']['Row'];
+type DBColumn = Database['public']['Tables']['columns']['Row'];
+type DBBoard = Database['public']['Tables']['boards']['Row'];
 
 /**
  * Get board with all columns and cards for an organization
  * Returns same structure as localStorage for compatibility
  */
 export async function getBoard(organizationId: string): Promise<Board | null> {
-  const supabase = await createClient()
+  const supabase = await createClient();
 
   // Get board for organization
   const { data: boards, error: boardError } = await supabase
@@ -21,45 +21,45 @@ export async function getBoard(organizationId: string): Promise<Board | null> {
     .select('*')
     .eq('organization_id', organizationId)
     .limit(1)
-    .single()
+    .single();
 
   if (boardError || !boards) {
-    return null
+    return null;
   }
 
-  const board = boards as DBBoard
-  const boardId = board.id
+  const board = boards as DBBoard;
+  const boardId = board.id;
 
   // Get columns ordered by position
   const { data: columnsData, error: columnsError } = await supabase
     .from('columns')
     .select('*')
     .eq('board_id', boardId)
-    .order('position', { ascending: true })
+    .order('position', { ascending: true });
 
   if (columnsError) {
-    console.error('Error fetching columns:', columnsError)
-    return null
+    console.error('Error fetching columns:', columnsError);
+    return null;
   }
 
-  const columns = (columnsData || []) as DBColumn[]
+  const columns = (columnsData || []) as DBColumn[];
 
   // Get all cards for this board
   const { data: cardsData, error: cardsError } = await supabase
     .from('cards')
     .select('*')
     .eq('board_id', boardId)
-    .order('position', { ascending: true })
+    .order('position', { ascending: true });
 
   if (cardsError) {
-    console.error('Error fetching cards:', cardsError)
-    return null
+    console.error('Error fetching cards:', cardsError);
+    return null;
   }
 
-  const cards = (cardsData || []) as DBCard[]
+  const cards = (cardsData || []) as DBCard[];
 
   // Transform to localStorage-compatible format
-  const cardsMap: { [key: string]: Card } = {}
+  const cardsMap: { [key: string]: Card } = {};
   cards.forEach((card) => {
     cardsMap[card.id] = {
       id: card.id,
@@ -68,44 +68,43 @@ export async function getBoard(organizationId: string): Promise<Board | null> {
       notes: card.notes || undefined,
       createdAt: card.created_at,
       updatedAt: card.updated_at,
-    }
-  })
+    };
+  });
 
-  const columnsArray: Column[] =
-    columns.map((col) => ({
-      id: col.id,
-      title: col.title,
-      color: col.color || undefined,
-      cardIds: cards
-        .filter((card) => card.column_id === col.id)
-        .sort((a, b) => a.position - b.position)
-        .map((card) => card.id),
-    }))
+  const columnsArray: Column[] = columns.map((col) => ({
+    id: col.id,
+    title: col.title,
+    color: col.color || undefined,
+    cardIds: cards
+      .filter((card) => card.column_id === col.id)
+      .sort((a, b) => a.position - b.position)
+      .map((card) => card.id),
+  }));
 
   return {
     columns: columnsArray,
     cards: cardsMap,
-  }
+  };
 }
 
 /**
  * Get board ID for organization (helper function)
  */
 export async function getBoardId(organizationId: string): Promise<string | null> {
-  const supabase = await createClient()
+  const supabase = await createClient();
 
   const { data, error } = await supabase
     .from('boards')
     .select('id')
     .eq('organization_id', organizationId)
     .limit(1)
-    .single()
+    .single();
 
   if (error || !data) {
-    return null
+    return null;
   }
 
-  return (data as { id: string }).id
+  return (data as { id: string }).id;
 }
 
 /**
@@ -116,7 +115,7 @@ export async function createBoard(
   name: string,
   createdBy: string
 ): Promise<string | null> {
-  const supabase = await createClient()
+  const supabase = await createClient();
 
   const { data, error } = await supabase
     .from('boards')
@@ -126,14 +125,14 @@ export async function createBoard(
       created_by: createdBy,
     })
     .select()
-    .single()
+    .single();
 
   if (error) {
-    console.error('Error creating board:', error)
-    return null
+    console.error('Error creating board:', error);
+    return null;
   }
 
-  return data.id
+  return data.id;
 }
 
 /**
@@ -145,7 +144,7 @@ export async function addCard(
   card: { title: string; description?: string; notes?: string },
   createdBy?: string
 ): Promise<Card | null> {
-  const supabase = await createClient()
+  const supabase = await createClient();
 
   // Get max position in column
   const { data: maxData } = await supabase
@@ -154,9 +153,9 @@ export async function addCard(
     .eq('column_id', columnId)
     .order('position', { ascending: false })
     .limit(1)
-    .single()
+    .single();
 
-  const newPosition = (maxData?.position ?? -1) + 1
+  const newPosition = (maxData?.position ?? -1) + 1;
 
   // Insert card
   const { data, error } = await supabase
@@ -171,11 +170,11 @@ export async function addCard(
       created_by: createdBy || null,
     })
     .select()
-    .single()
+    .single();
 
   if (error) {
-    console.error('Error adding card:', error)
-    return null
+    console.error('Error adding card:', error);
+    return null;
   }
 
   return {
@@ -185,7 +184,7 @@ export async function addCard(
     notes: data.notes || undefined,
     createdAt: data.created_at,
     updatedAt: data.updated_at,
-  }
+  };
 }
 
 /**
@@ -195,7 +194,7 @@ export async function updateCard(
   cardId: string,
   updates: { title?: string; description?: string; notes?: string }
 ): Promise<boolean> {
-  const supabase = await createClient()
+  const supabase = await createClient();
 
   const { error } = await supabase
     .from('cards')
@@ -203,30 +202,30 @@ export async function updateCard(
       ...updates,
       updated_at: new Date().toISOString(),
     })
-    .eq('id', cardId)
+    .eq('id', cardId);
 
   if (error) {
-    console.error('Error updating card:', error)
-    return false
+    console.error('Error updating card:', error);
+    return false;
   }
 
-  return true
+  return true;
 }
 
 /**
  * Delete a card
  */
 export async function deleteCard(cardId: string): Promise<boolean> {
-  const supabase = await createClient()
+  const supabase = await createClient();
 
-  const { error } = await supabase.from('cards').delete().eq('id', cardId)
+  const { error } = await supabase.from('cards').delete().eq('id', cardId);
 
   if (error) {
-    console.error('Error deleting card:', error)
-    return false
+    console.error('Error deleting card:', error);
+    return false;
   }
 
-  return true
+  return true;
 }
 
 /**
@@ -237,7 +236,7 @@ export async function addColumn(
   title: string,
   color?: string
 ): Promise<Column | null> {
-  const supabase = await createClient()
+  const supabase = await createClient();
 
   // Get max position
   const { data: maxData } = await supabase
@@ -246,9 +245,9 @@ export async function addColumn(
     .eq('board_id', boardId)
     .order('position', { ascending: false })
     .limit(1)
-    .single()
+    .single();
 
-  const newPosition = (maxData?.position ?? -1) + 1
+  const newPosition = (maxData?.position ?? -1) + 1;
 
   // Insert column
   const { data, error } = await supabase
@@ -260,11 +259,11 @@ export async function addColumn(
       position: newPosition,
     })
     .select()
-    .single()
+    .single();
 
   if (error) {
-    console.error('Error adding column:', error)
-    return null
+    console.error('Error adding column:', error);
+    return null;
   }
 
   return {
@@ -272,7 +271,7 @@ export async function addColumn(
     title: data.title,
     color: data.color || undefined,
     cardIds: [],
-  }
+  };
 }
 
 /**
@@ -282,36 +281,33 @@ export async function updateColumn(
   columnId: string,
   updates: { title?: string; color?: string }
 ): Promise<boolean> {
-  const supabase = await createClient()
+  const supabase = await createClient();
 
-  const { error } = await supabase
-    .from('columns')
-    .update(updates)
-    .eq('id', columnId)
+  const { error } = await supabase.from('columns').update(updates).eq('id', columnId);
 
   if (error) {
-    console.error('Error updating column:', error)
-    return false
+    console.error('Error updating column:', error);
+    return false;
   }
 
-  return true
+  return true;
 }
 
 /**
  * Delete a column and all its cards
  */
 export async function deleteColumn(columnId: string): Promise<boolean> {
-  const supabase = await createClient()
+  const supabase = await createClient();
 
   // Cards will be deleted automatically via CASCADE
-  const { error } = await supabase.from('columns').delete().eq('id', columnId)
+  const { error } = await supabase.from('columns').delete().eq('id', columnId);
 
   if (error) {
-    console.error('Error deleting column:', error)
-    return false
+    console.error('Error deleting column:', error);
+    return false;
   }
 
-  return true
+  return true;
 }
 
 /**
@@ -322,44 +318,44 @@ export async function moveCard(
   newColumnId: string,
   newPosition: number
 ): Promise<boolean> {
-  const supabase = await createClient()
+  const supabase = await createClient();
 
-  console.log('🔄 moveCard called:', { cardId, newColumnId, newPosition })
+  console.log('🔄 moveCard called:', { cardId, newColumnId, newPosition });
 
   // Get current card info
   const { data: card, error: fetchError } = await supabase
     .from('cards')
     .select('column_id, position, board_id')
     .eq('id', cardId)
-    .single()
+    .single();
 
   if (fetchError) {
-    console.error('❌ Error fetching card:', fetchError)
-    return false
+    console.error('❌ Error fetching card:', fetchError);
+    return false;
   }
 
   if (!card) {
-    console.error('❌ Card not found:', cardId)
-    return false
+    console.error('❌ Card not found:', cardId);
+    return false;
   }
 
-  const oldColumnId = card.column_id
-  const oldPosition = card.position
+  const oldColumnId = card.column_id;
+  const oldPosition = card.position;
 
-  console.log('📍 Current position:', { oldColumnId, oldPosition })
+  console.log('📍 Current position:', { oldColumnId, oldPosition });
 
   if (oldColumnId === newColumnId) {
     // Reordering within same column
-    if (oldPosition === newPosition) return true
+    if (oldPosition === newPosition) return true;
 
     // Fetch all cards in the column
     const { data: allCards } = await supabase
       .from('cards')
       .select('id, position')
       .eq('column_id', oldColumnId)
-      .order('position', { ascending: true })
+      .order('position', { ascending: true });
 
-    if (!allCards) return false
+    if (!allCards) return false;
 
     // Update positions for affected cards
     if (oldPosition < newPosition) {
@@ -369,7 +365,7 @@ export async function moveCard(
           await supabase
             .from('cards')
             .update({ position: c.position - 1 })
-            .eq('id', c.id)
+            .eq('id', c.id);
         }
       }
     } else {
@@ -379,7 +375,7 @@ export async function moveCard(
           await supabase
             .from('cards')
             .update({ position: c.position + 1 })
-            .eq('id', c.id)
+            .eq('id', c.id);
         }
       }
     }
@@ -388,11 +384,11 @@ export async function moveCard(
     const { error } = await supabase
       .from('cards')
       .update({ position: newPosition })
-      .eq('id', cardId)
+      .eq('id', cardId);
 
     if (error) {
-      console.error('Error reordering card:', error)
-      return false
+      console.error('Error reordering card:', error);
+      return false;
     }
   } else {
     // Moving to different column
@@ -402,7 +398,7 @@ export async function moveCard(
       .from('cards')
       .select('id, position')
       .eq('column_id', oldColumnId)
-      .gt('position', oldPosition)
+      .gt('position', oldPosition);
 
     // Shift cards in old column up
     if (oldColumnCards) {
@@ -410,7 +406,7 @@ export async function moveCard(
         await supabase
           .from('cards')
           .update({ position: c.position - 1 })
-          .eq('id', c.id)
+          .eq('id', c.id);
       }
     }
 
@@ -419,7 +415,7 @@ export async function moveCard(
       .from('cards')
       .select('id, position')
       .eq('column_id', newColumnId)
-      .gte('position', newPosition)
+      .gte('position', newPosition);
 
     // Shift cards in new column down
     if (newColumnCards) {
@@ -427,7 +423,7 @@ export async function moveCard(
         await supabase
           .from('cards')
           .update({ position: c.position + 1 })
-          .eq('id', c.id)
+          .eq('id', c.id);
       }
     }
 
@@ -438,16 +434,16 @@ export async function moveCard(
         column_id: newColumnId,
         position: newPosition,
       })
-      .eq('id', cardId)
+      .eq('id', cardId);
 
     if (error) {
-      console.error('❌ Error moving card:', error)
-      return false
+      console.error('❌ Error moving card:', error);
+      return false;
     }
 
-    console.log('✅ Card moved successfully to new column')
+    console.log('✅ Card moved successfully to new column');
   }
 
-  console.log('✅ moveCard completed successfully')
-  return true
+  console.log('✅ moveCard completed successfully');
+  return true;
 }

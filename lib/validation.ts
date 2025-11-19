@@ -110,9 +110,7 @@ export function validateBoardInput(board: {
 /**
  * Validate column input
  */
-export function validateColumnInput(column: {
-  title?: string;
-}): ValidationResult {
+export function validateColumnInput(column: { title?: string }): ValidationResult {
   // Title is required
   if (!column.title || column.title.trim().length === 0) {
     return { valid: false, error: 'Column title is required' };
@@ -132,9 +130,7 @@ export function validateColumnInput(column: {
 /**
  * Validate organization input
  */
-export function validateOrganizationInput(org: {
-  name?: string;
-}): ValidationResult {
+export function validateOrganizationInput(org: { name?: string }): ValidationResult {
   // Name is required
   if (!org.name || org.name.trim().length === 0) {
     return { valid: false, error: 'Organization name is required' };
@@ -193,10 +189,7 @@ export function validateAndSanitizeCard(card: {
  * Validate and sanitize board input
  * Returns sanitized board or throws error
  */
-export function validateAndSanitizeBoard(board: {
-  name: string;
-  description?: string | null;
-}): {
+export function validateAndSanitizeBoard(board: { name: string; description?: string | null }): {
   name: string;
   description: string | null;
 } {
@@ -215,9 +208,7 @@ export function validateAndSanitizeBoard(board: {
  * Validate and sanitize column input
  * Returns sanitized column or throws error
  */
-export function validateAndSanitizeColumn(column: {
-  title: string;
-}): {
+export function validateAndSanitizeColumn(column: { title: string }): {
   title: string;
 } {
   const validation = validateColumnInput(column);

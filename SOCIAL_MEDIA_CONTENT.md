@@ -3,6 +3,7 @@
 ## Twitter/X Launch Thread
 
 ### Main Launch Tweet
+
 ```
 I just launched a beautiful Kanban board that you can start using RIGHT NOW.
 
@@ -20,6 +21,7 @@ Try it: [URL]
 ### Thread Continuation (Reply to main tweet)
 
 **Tweet 2 - Privacy Focus**
+
 ```
 Why no signup?
 
@@ -32,6 +34,7 @@ Your tasks are YOURS. They never leave your browser.
 ```
 
 **Tweet 3 - Features**
+
 ```
 What you get:
 
@@ -47,6 +50,7 @@ What you get:
 ```
 
 **Tweet 4 - Tech Stack**
+
 ```
 Built with modern web tech:
 
@@ -62,6 +66,7 @@ Perfect for learning or self-hosting!
 ```
 
 **Tweet 5 - Call to Action**
+
 ```
 If you've ever felt overwhelmed by Trello, Notion, or Monday.com...
 
@@ -83,6 +88,7 @@ RT to help others discover it!
 ### Product Showcase Tweets
 
 **Tweet #1 - Drag & Drop Demo**
+
 ```
 Watch how smooth this drag & drop is 😮‍💨
 
@@ -98,6 +104,7 @@ Try it yourself: [URL]
 ```
 
 **Tweet #2 - Custom Columns**
+
 ```
 Need more than just "To Do", "Doing", "Done"?
 
@@ -112,6 +119,7 @@ Perfect for:
 ```
 
 **Tweet #3 - Zero Friction**
+
 ```
 Time to productivity:
 
@@ -127,6 +135,7 @@ That's it.
 ```
 
 **Tweet #4 - Mobile Responsive**
+
 ```
 Manage your tasks on any device 📱💻
 
@@ -141,6 +150,7 @@ Your workflow, everywhere.
 ```
 
 **Tweet #5 - Local Storage**
+
 ```
 "Where's my data stored?"
 
@@ -157,6 +167,7 @@ Your data = Your control 🔒
 ### Educational/Value Tweets
 
 **Tweet #6 - Productivity Tip**
+
 ```
 Pro tip: Use the Kanban method for ANYTHING
 
@@ -173,6 +184,7 @@ One board. Infinite possibilities.
 ```
 
 **Tweet #7 - Comparison**
+
 ```
 I compared project management tools.
 
@@ -190,6 +202,7 @@ And no feature limits.
 ```
 
 **Tweet #8 - Development Story**
+
 ```
 Why I built this:
 
@@ -209,6 +222,7 @@ Now you can use it too 🎉
 ```
 
 **Tweet #9 - Tech Deep Dive**
+
 ```
 How we made drag & drop feel this smooth:
 
@@ -222,6 +236,7 @@ Technical breakdown 🧵👇
 ```
 
 **Tweet #10 - Use Case**
+
 ```
 How I use this as a solo developer:
 
@@ -239,6 +254,7 @@ What's your workflow? 👇
 ### Community Engagement Tweets
 
 **Tweet #11 - Ask for Feedback**
+
 ```
 Question for productivity nerds:
 
@@ -250,6 +266,7 @@ Drop your thoughts below 👇
 ```
 
 **Tweet #12 - Feature Request**
+
 ```
 Most requested feature this week:
 
@@ -264,6 +281,7 @@ Or just reply here 👇
 ```
 
 **Tweet #13 - User Testimonial**
+
 ```
 Just received this message:
 
@@ -279,6 +297,7 @@ Have a success story? Share it! 👇
 ### Launch Week Daily Posts
 
 **Monday - Problem/Solution**
+
 ```
 Monday motivation:
 
@@ -293,6 +312,7 @@ No signup. Just productivity.
 ```
 
 **Tuesday - Feature Highlight**
+
 ```
 Tuesday tip:
 
@@ -307,6 +327,7 @@ Keep all your context in one place.
 ```
 
 **Wednesday - Comparison**
+
 ```
 Wednesday wisdom:
 
@@ -324,6 +345,7 @@ You need:
 ```
 
 **Thursday - Community**
+
 ```
 Thursday shoutout:
 
@@ -339,6 +361,7 @@ Every star = more visibility = helping more people
 ```
 
 **Friday - Weekend Workflow**
+
 ```
 Friday feeling:
 
@@ -359,6 +382,7 @@ Make the most of your time off 🚀
 ## LinkedIn Posts
 
 ### LinkedIn Post #1 - Professional Launch
+
 ```
 Excited to share our latest project: a modern Kanban board built for simplicity.
 
@@ -382,6 +406,7 @@ What's your biggest pain point with current project management tools?
 ```
 
 ### LinkedIn Post #2 - Technical Deep Dive
+
 ```
 How we built smooth drag-and-drop with modern React:
 
@@ -410,6 +435,7 @@ Building in public. Happy to answer technical questions! 👇
 ```
 
 ### LinkedIn Post #3 - Startup/Team Use Case
+
 ```
 Unpopular opinion:
 
@@ -440,6 +466,7 @@ Sometimes the best tool is the simplest one.
 **Title:** I built a beautiful Kanban board with no signup required
 
 **Post:**
+
 ```
 Hey everyone!
 
@@ -481,6 +508,7 @@ Would love your feedback! What features would make this more useful for you?
 **Title:** Free Kanban board that respects your privacy (no signup needed)
 
 **Post:**
+
 ```
 I built a Kanban board for people who want to get organized without the hassle of signing up for yet another service.
 
@@ -508,6 +536,7 @@ Let me know what you think or if you have feature suggestions!
 **Title:** Show r/webdev: Built a Kanban board with Next.js 14 & smooth DnD
 
 **Post:**
+
 ```
 Hey webdev!
 
@@ -539,11 +568,13 @@ Open to code reviews and suggestions! What would you do differently?
 ## Product Hunt Launch
 
 ### Tagline
+
 ```
 Beautiful Kanban boards. No signup required.
 ```
 
 ### Description
+
 ```
 A modern project management app that respects your time and privacy.
 
@@ -559,6 +590,7 @@ Built with Next.js 14, TypeScript, and modern web technologies.
 ```
 
 ### First Comment (From Maker)
+
 ```
 Hey Product Hunt! 👋
 
@@ -601,6 +633,7 @@ What features would make this more useful for you?
 ## Instagram Posts (Visual-focused)
 
 ### Post #1 - Before/After
+
 ```
 Caption:
 Before: 5 project management subscriptions, still disorganized 😅
@@ -616,6 +649,7 @@ Link in bio 🔗
 ```
 
 ### Post #2 - Feature Carousel
+
 ```
 Caption:
 5 reasons you'll love this Kanban board 💜
@@ -638,6 +672,7 @@ Try it: link in bio 🔗
 ## Hashtag Strategy
 
 ### Primary Hashtags (Use consistently)
+
 - #KanbanBoard
 - #ProjectManagement
 - #ProductivityTools
@@ -645,6 +680,7 @@ Try it: link in bio 🔗
 - #WebDev
 
 ### Secondary Hashtags (Rotate)
+
 - #NextJS
 - #React
 - #TypeScript
@@ -662,6 +698,7 @@ Try it: link in bio 🔗
 - #SelfHosted
 
 ### Platform-Specific
+
 **Twitter:** Max 3-5 hashtags per tweet
 **LinkedIn:** 5-8 hashtags per post
 **Instagram:** 15-30 hashtags per post
@@ -671,6 +708,7 @@ Try it: link in bio 🔗
 ## Content Calendar (First 30 Days)
 
 **Week 1: Launch Awareness**
+
 - Day 1: Launch thread (Twitter)
 - Day 2: LinkedIn announcement
 - Day 3: Reddit r/SideProject
@@ -680,6 +718,7 @@ Try it: link in bio 🔗
 - Day 7: Weekend use case
 
 **Week 2: Education & Engagement**
+
 - Day 8: Tutorial thread
 - Day 9: Comparison tweet (vs. paid tools)
 - Day 10: Ask for feedback
@@ -689,6 +728,7 @@ Try it: link in bio 🔗
 - Day 14: Weekly recap
 
 **Week 3: Community Building**
+
 - Day 15: Feature request poll
 - Day 16: Development behind-the-scenes
 - Day 17: Productivity tips
@@ -698,6 +738,7 @@ Try it: link in bio 🔗
 - Day 21: Community highlights
 
 **Week 4: Growth & Iteration**
+
 - Day 22: New feature announcement
 - Day 23: Integration ideas
 - Day 24: Comparison with specific tool
@@ -711,26 +752,31 @@ Try it: link in bio 🔗
 ## Engagement Responses (Templates)
 
 ### Positive Feedback
+
 ```
 Thank you so much! 🙏 Would love to hear what features would make it even better for you!
 ```
 
 ### Feature Requests
+
 ```
 Great idea! I've added it to the roadmap. Feel free to upvote or add details here: [GitHub Issues URL]
 ```
 
 ### Bug Reports
+
 ```
 Thanks for catching this! Could you share which browser/OS you're using? I'll get this fixed ASAP.
 ```
 
 ### Comparisons to Other Tools
+
 ```
 I love [Tool X] too! This is built for people who want something simpler and privacy-focused. Different tools for different needs! 🎯
 ```
 
 ### Technical Questions
+
 ```
 Great question! [Answer]. The full code is open source if you want to dive deeper: [GitHub URL]
 ```

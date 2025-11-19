@@ -5,6 +5,7 @@
 This checklist MUST be completed before deploying to production to prevent the app from breaking.
 
 ### 1. Build Verification
+
 - [ ] Run `npm run build` successfully
 - [ ] No TypeScript errors
 - [ ] No build warnings related to missing dependencies or configurations
@@ -13,6 +14,7 @@ This checklist MUST be completed before deploying to production to prevent the a
 ### 2. Functionality Testing (Both Modes)
 
 #### Dark Mode Testing
+
 - [ ] Column titles are visible and properly styled
 - [ ] Card titles and descriptions are readable
 - [ ] All buttons and inputs are styled correctly
@@ -20,6 +22,7 @@ This checklist MUST be completed before deploying to production to prevent the a
 - [ ] AI features work (if applicable)
 
 #### Light Mode Testing
+
 - [ ] Column titles are visible and properly styled
 - [ ] Card titles and descriptions are readable
 - [ ] All buttons and inputs are styled correctly
@@ -28,6 +31,7 @@ This checklist MUST be completed before deploying to production to prevent the a
 - [ ] **Verify all `light:` prefixed Tailwind classes are applying**
 
 ### 3. Core Features Testing
+
 - [ ] Can create new cards
 - [ ] Can edit existing cards
 - [ ] Can delete cards
@@ -38,6 +42,7 @@ This checklist MUST be completed before deploying to production to prevent the a
 - [ ] User authentication works
 
 ### 4. Landing Page Testing (if changed)
+
 - [ ] Landing page loads correctly
 - [ ] All sections render properly
 - [ ] Links and CTAs work
@@ -45,6 +50,7 @@ This checklist MUST be completed before deploying to production to prevent the a
 - [ ] Pricing section displays correctly
 
 ### 5. Style/Theme Testing
+
 - [ ] Theme toggle switches between light and dark modes
 - [ ] No flash of unstyled content (FOUC)
 - [ ] Custom Tailwind variants work (e.g., `light:`, `dark:`)
@@ -52,12 +58,14 @@ This checklist MUST be completed before deploying to production to prevent the a
 - [ ] Glass effects and backdrop blur work
 
 ### 6. Browser Testing
+
 - [ ] Test in Chrome/Chromium
 - [ ] Test in Firefox
 - [ ] Test in Safari (if on macOS)
 - [ ] Test responsive layout on mobile viewport
 
 ### 7. Performance
+
 - [ ] Page loads in reasonable time
 - [ ] No console errors in browser
 - [ ] No excessive re-renders or janky animations
@@ -72,9 +80,9 @@ Before merging feature branches that modify UI or styling:
      ```typescript
      plugins: [
        function ({ addVariant }: any) {
-         addVariant('light', ':not(.dark) &')
-       }
-     ]
+         addVariant('light', ':not(.dark) &');
+       },
+     ];
      ```
 
 2. **Check Global Styles**
@@ -98,6 +106,7 @@ If production breaks after deployment:
 ## Lessons Learned
 
 ### Issue: Main App Broken After Landing Page Merge (2025-11-18)
+
 - **Root Cause**: Components used `light:` Tailwind variant that wasn't configured
 - **Fix**: Added custom `light` variant plugin to `tailwind.config.ts`
 - **Prevention**: Always test both light and dark modes before deployment

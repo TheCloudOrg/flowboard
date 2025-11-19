@@ -66,6 +66,7 @@ projectManagementApp/
 #### jest.config.ts
 
 Configures Jest for Next.js with:
+
 - JSdom test environment for browser APIs
 - TypeScript support
 - Module path mapping
@@ -74,6 +75,7 @@ Configures Jest for Next.js with:
 #### jest.setup.ts
 
 Sets up:
+
 - Testing Library matchers
 - Environment variable mocks
 - Browser API mocks (matchMedia, IntersectionObserver, localStorage)
@@ -81,6 +83,7 @@ Sets up:
 #### playwright.config.ts
 
 Configures Playwright with:
+
 - Multiple browser targets (Chromium, Firefox, WebKit)
 - Mobile viewport testing
 - Local development server integration
@@ -126,6 +129,7 @@ npm test && npm run test:e2e
 ### Component Tests
 
 Located in `components/__tests__/`, these tests verify:
+
 - Component rendering
 - User interactions
 - Props handling
@@ -159,6 +163,7 @@ test('calls onDelete when delete button is clicked', () => {
 ### Context Tests
 
 Located in `contexts/__tests__/`, these tests verify:
+
 - Context provider functionality
 - Hook behavior
 - State management
@@ -167,27 +172,28 @@ Located in `contexts/__tests__/`, these tests verify:
 **Example: ThemeContext Test**
 
 ```typescript
-import { renderHook, act } from '@testing-library/react'
-import { ThemeProvider, useTheme } from '../ThemeContext'
+import { renderHook, act } from '@testing-library/react';
+import { ThemeProvider, useTheme } from '../ThemeContext';
 
 test('toggles theme from dark to light', async () => {
   const { result } = renderHook(() => useTheme(), {
     wrapper: ThemeProvider,
-  })
+  });
 
   act(() => {
-    result.current.toggleTheme()
-  })
+    result.current.toggleTheme();
+  });
 
   await waitFor(() => {
-    expect(result.current.theme).toBe('light')
-  })
-})
+    expect(result.current.theme).toBe('light');
+  });
+});
 ```
 
 ### Server Action Tests
 
 Located in `lib/supabase/__tests__/`, these tests verify:
+
 - Database operations
 - Data transformation
 - Error handling
@@ -196,17 +202,17 @@ Located in `lib/supabase/__tests__/`, these tests verify:
 **Example: Board Actions Test**
 
 ```typescript
-import { getBoard } from '../boards'
+import { getBoard } from '../boards';
 
 test('retrieves board with columns and cards', async () => {
   // Setup mock data
-  mockSupabaseClient.from.mockImplementation(/* ... */)
+  mockSupabaseClient.from.mockImplementation(/* ... */);
 
-  const result = await getBoard('org_1')
+  const result = await getBoard('org_1');
 
-  expect(result).not.toBeNull()
-  expect(result?.columns).toHaveLength(2)
-})
+  expect(result).not.toBeNull();
+  expect(result?.columns).toHaveLength(2);
+});
 ```
 
 ### Test Utilities
@@ -229,12 +235,12 @@ test('renders with theme provider', () => {
 Use helpers from `__tests__/utils/mock-data.ts`:
 
 ```typescript
-import { createMockCard, mockBoard } from '@/__tests__/utils/mock-data'
+import { createMockCard, mockBoard } from '@/__tests__/utils/mock-data';
 
 const testCard = createMockCard({
   title: 'Custom Title',
   position: 5,
-})
+});
 ```
 
 ## E2E Tests
@@ -242,6 +248,7 @@ const testCard = createMockCard({
 ### Authentication Tests (`e2e/auth.spec.ts`)
 
 Tests user authentication flows:
+
 - Sign-in page display
 - Sign-up page display
 - Authentication redirects
@@ -252,6 +259,7 @@ Tests user authentication flows:
 ### Theme Toggle Tests (`e2e/theme-toggle.spec.ts`)
 
 Tests dark/light mode functionality:
+
 - Theme toggle button presence
 - Theme switching
 - Theme persistence
@@ -261,22 +269,23 @@ Tests dark/light mode functionality:
 
 ```typescript
 test('should toggle between light and dark mode', async ({ page }) => {
-  await page.goto('/landing')
+  await page.goto('/landing');
 
-  const htmlElement = page.locator('html')
-  const initialClass = await htmlElement.getAttribute('class')
+  const htmlElement = page.locator('html');
+  const initialClass = await htmlElement.getAttribute('class');
 
-  const themeButton = page.locator('button[aria-label*="mode"]').first()
-  await themeButton.click()
+  const themeButton = page.locator('button[aria-label*="mode"]').first();
+  await themeButton.click();
 
-  const newClass = await htmlElement.getAttribute('class')
-  expect(newClass).not.toBe(initialClass)
-})
+  const newClass = await htmlElement.getAttribute('class');
+  expect(newClass).not.toBe(initialClass);
+});
 ```
 
 ### Card Operations Tests (`e2e/card-operations.spec.ts`)
 
 Tests CRUD operations for cards:
+
 - Creating new cards
 - Editing existing cards
 - Deleting cards
@@ -287,6 +296,7 @@ Tests CRUD operations for cards:
 ### Drag-and-Drop Tests (`e2e/drag-and-drop.spec.ts`)
 
 Tests drag-and-drop functionality:
+
 - Dragging within same column
 - Dragging to different columns
 - Position persistence
@@ -295,6 +305,7 @@ Tests drag-and-drop functionality:
 ### Organization Switching Tests (`e2e/organization-switching.spec.ts`)
 
 Tests multi-organization support:
+
 - Organization switcher display
 - Switching between organizations
 - Board data loading per organization
@@ -335,6 +346,7 @@ To identify untested code:
 ### GitHub Actions Workflow
 
 The `.github/workflows/test.yml` workflow runs on:
+
 - Push to `main` or `develop` branches
 - Pull requests to `main` or `develop` branches
 
@@ -371,37 +383,40 @@ Settings → Secrets and variables → Actions → New repository secret
 ### Unit Test Guidelines
 
 1. **Test behavior, not implementation**
+
    ```typescript
    // Good: Tests behavior
-   expect(screen.getByText('Card Title')).toBeVisible()
+   expect(screen.getByText('Card Title')).toBeVisible();
 
    // Avoid: Tests implementation details
-   expect(component.state.title).toBe('Card Title')
+   expect(component.state.title).toBe('Card Title');
    ```
 
 2. **Use descriptive test names**
+
    ```typescript
-   test('calls onEdit when edit button is clicked')
-   test('displays validation error for empty title')
+   test('calls onEdit when edit button is clicked');
+   test('displays validation error for empty title');
    ```
 
 3. **Arrange-Act-Assert pattern**
+
    ```typescript
    test('example test', () => {
      // Arrange: Set up test data
-     const mockData = createMockCard()
+     const mockData = createMockCard();
 
      // Act: Perform the action
-     const result = processCard(mockData)
+     const result = processCard(mockData);
 
      // Assert: Verify the result
-     expect(result).toBe(expected)
-   })
+     expect(result).toBe(expected);
+   });
    ```
 
 4. **Mock external dependencies**
    ```typescript
-   jest.mock('@/lib/supabase/client')
+   jest.mock('@/lib/supabase/client');
    ```
 
 ### E2E Test Guidelines
@@ -410,22 +425,24 @@ Settings → Secrets and variables → Actions → New repository secret
    - Focus on what users do, not how the code works
 
 2. **Use data-testid for stable selectors**
+
    ```typescript
    <div data-testid="card-123">
    page.getByTestId('card-123')
    ```
 
 3. **Wait for elements properly**
+
    ```typescript
-   await page.waitForSelector('text=Card Title')
-   await expect(page.locator('text=Success')).toBeVisible()
+   await page.waitForSelector('text=Card Title');
+   await expect(page.locator('text=Success')).toBeVisible();
    ```
 
 4. **Clean up test data**
    ```typescript
    test.afterEach(async () => {
      // Delete test cards, reset state, etc.
-   })
+   });
    ```
 
 ### Testing Checklist
@@ -455,6 +472,7 @@ When adding a new feature, ensure:
 #### Playwright: Tests timeout
 
 **Solutions**:
+
 - Increase timeout in `playwright.config.ts`
 - Check if dev server is running
 - Verify network conditions
@@ -462,6 +480,7 @@ When adding a new feature, ensure:
 #### Playwright: "Element not found"
 
 **Solutions**:
+
 - Add `await page.waitForSelector()`
 - Increase wait times
 - Check if element actually exists in UI
@@ -470,6 +489,7 @@ When adding a new feature, ensure:
 #### CI: Tests pass locally but fail in CI
 
 **Solutions**:
+
 - Check environment variables
 - Verify secrets are configured
 - Ensure consistent Node.js version
@@ -551,6 +571,7 @@ npx playwright test e2e/auth.spec.ts --debug
 ### Coverage Goals
 
 Aim for high coverage in critical areas:
+
 - Authentication logic: 90%+
 - Data mutations: 85%+
 - Core UI components: 80%+
@@ -559,6 +580,7 @@ Aim for high coverage in critical areas:
 ### Performance Monitoring
 
 Track test suite performance:
+
 - Monitor test execution time
 - Identify slow tests
 - Optimize or split slow tests

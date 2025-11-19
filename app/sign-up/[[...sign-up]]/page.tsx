@@ -1,4 +1,4 @@
-import { SignUp } from '@clerk/nextjs'
+import { SignUp } from '@clerk/nextjs';
 
 export default function SignUpPage() {
   return (
@@ -6,11 +6,11 @@ export default function SignUpPage() {
       <SignUp
         appearance={{
           elements: {
-            rootBox: "mx-auto",
-            card: "glass-effect shadow-2xl",
-          }
+            rootBox: 'mx-auto',
+            card: 'glass-effect shadow-2xl',
+          },
         }}
       />
     </div>
-  )
+  );
 }
