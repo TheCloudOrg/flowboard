@@ -73,6 +73,10 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addVariant }: any) {
+      addVariant('light', ':not(.dark) &')
+    }
+  ],
 }
 export default config
