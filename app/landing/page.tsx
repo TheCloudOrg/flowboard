@@ -7,24 +7,18 @@ import {
   Sparkles,
   Zap,
   Lock,
-  Palette,
   Code2,
   Users,
   ArrowRight,
-  Github,
-  Star,
-  Globe,
   CheckCircle,
   Copy,
   Brain,
   Rocket,
-  Shield,
-  Smartphone,
   Terminal,
   Layers,
-  TrendingUp,
   MessageSquare,
   X,
+  Github,
 } from 'lucide-react';
 
 // Floating orb component for background effects
@@ -873,41 +867,217 @@ Expected Deliverables:
         </div>
       </AnimatedSection>
 
-      {/* Social Proof */}
-      <AnimatedSection className="py-32 px-6 relative">
+      {/* Pricing Section */}
+      <AnimatedSection id="pricing" className="py-32 px-6 relative">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
-              Loved by developers worldwide
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+              Simple, transparent pricing
             </h2>
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+              Start free. Upgrade as you grow. No hidden fees.
+            </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
-            {[
-              { icon: Users, label: '15K+', sublabel: 'Developers' },
-              { icon: Star, label: '1.2K+', sublabel: 'GitHub Stars' },
-              { icon: Globe, label: '50+', sublabel: 'Countries' },
-              { icon: TrendingUp, label: '98%', sublabel: 'Satisfaction' },
-            ].map((stat, idx) => {
-              const Icon = stat.icon;
-              return (
-                <Card3D key={idx}>
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: idx * 0.1 }}
-                    className="glass-effect rounded-2xl p-8 border border-white/10 text-center backdrop-blur-xl hover:border-yellow-400/30 transition-all"
-                  >
-                    <Icon className="w-10 h-10 text-yellow-400 mx-auto mb-4" />
-                    <div className="text-4xl font-bold mb-2 bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
-                      {stat.label}
-                    </div>
-                    <div className="text-gray-400">{stat.sublabel}</div>
-                  </motion.div>
-                </Card3D>
-              );
-            })}
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {/* Free Tier */}
+            <Card3D>
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="glass-effect rounded-2xl p-8 border border-white/10 backdrop-blur-xl h-full flex flex-col"
+              >
+                <div className="mb-6">
+                  <h3 className="text-2xl font-bold text-white mb-2">Free</h3>
+                  <p className="text-gray-400">Perfect for trying out</p>
+                </div>
+
+                <div className="mb-8">
+                  <div className="text-5xl font-bold text-white mb-2">$0</div>
+                  <div className="text-gray-400">Forever free</div>
+                </div>
+
+                <Link
+                  href="/sign-up"
+                  className="w-full py-3 px-6 glass-effect border border-white/20 hover:border-purple-400/50 rounded-xl font-semibold text-center transition-all mb-8"
+                >
+                  Get Started
+                </Link>
+
+                <ul className="space-y-3 flex-1">
+                  <li className="flex items-start gap-3 text-gray-300">
+                    <CheckCircle className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
+                    <span>Up to 3 users</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-gray-300">
+                    <CheckCircle className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
+                    <span>2 boards per organization</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-gray-300">
+                    <CheckCircle className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
+                    <span>50 cards per board</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-gray-300">
+                    <CheckCircle className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
+                    <span>10 AI prompts/month</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-gray-300">
+                    <CheckCircle className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
+                    <span>Beautiful glassmorphic UI</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-gray-300">
+                    <CheckCircle className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
+                    <span>Dark/light mode</span>
+                  </li>
+                </ul>
+              </motion.div>
+            </Card3D>
+
+            {/* Pro Tier - Popular */}
+            <Card3D>
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+                className="glass-effect rounded-2xl p-8 border-2 border-purple-500/50 backdrop-blur-xl h-full flex flex-col relative"
+              >
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                  <span className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-1 rounded-full text-sm font-bold">
+                    Most Popular
+                  </span>
+                </div>
+
+                <div className="mb-6">
+                  <h3 className="text-2xl font-bold text-white mb-2">Pro</h3>
+                  <p className="text-gray-400">For small teams & power users</p>
+                </div>
+
+                <div className="mb-8">
+                  <div className="text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
+                    $8
+                  </div>
+                  <div className="text-gray-400">per user/month, billed annually</div>
+                  <div className="text-sm text-gray-500 mt-1">or $10/month billed monthly</div>
+                </div>
+
+                <Link
+                  href="/sign-up"
+                  className="w-full py-3 px-6 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-xl font-semibold text-center transition-all mb-8 shadow-lg shadow-purple-500/50"
+                >
+                  Start Pro Trial
+                </Link>
+
+                <ul className="space-y-3 flex-1">
+                  <li className="flex items-start gap-3 text-gray-300">
+                    <CheckCircle className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                    <span>Up to 10 users</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-gray-300">
+                    <CheckCircle className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                    <span><strong>Unlimited</strong> boards & cards</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-gray-300">
+                    <CheckCircle className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                    <span>100 AI prompts/month</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-gray-300">
+                    <CheckCircle className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                    <span>Real-time collaboration</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-gray-300">
+                    <CheckCircle className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                    <span>File attachments</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-gray-300">
+                    <CheckCircle className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                    <span>API access & webhooks</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-gray-300">
+                    <CheckCircle className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                    <span>Slack & GitHub integration</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-gray-300">
+                    <CheckCircle className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                    <span>5 GB storage</span>
+                  </li>
+                </ul>
+              </motion.div>
+            </Card3D>
+
+            {/* Business Tier */}
+            <Card3D>
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="glass-effect rounded-2xl p-8 border border-white/10 backdrop-blur-xl h-full flex flex-col"
+              >
+                <div className="mb-6">
+                  <h3 className="text-2xl font-bold text-white mb-2">Business</h3>
+                  <p className="text-gray-400">For growing teams</p>
+                </div>
+
+                <div className="mb-8">
+                  <div className="text-5xl font-bold text-white mb-2">$16</div>
+                  <div className="text-gray-400">per user/month, billed annually</div>
+                  <div className="text-sm text-gray-500 mt-1">or $20/month billed monthly</div>
+                </div>
+
+                <Link
+                  href="/sign-up"
+                  className="w-full py-3 px-6 glass-effect border border-white/20 hover:border-cyan-400/50 rounded-xl font-semibold text-center transition-all mb-8"
+                >
+                  Contact Sales
+                </Link>
+
+                <ul className="space-y-3 flex-1">
+                  <li className="flex items-start gap-3 text-gray-300">
+                    <CheckCircle className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
+                    <span>Up to 50 users</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-gray-300">
+                    <CheckCircle className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
+                    <span><strong>Everything in Pro</strong></span>
+                  </li>
+                  <li className="flex items-start gap-3 text-gray-300">
+                    <CheckCircle className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
+                    <span>500 AI prompts/month</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-gray-300">
+                    <CheckCircle className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
+                    <span>Advanced analytics & reporting</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-gray-300">
+                    <CheckCircle className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
+                    <span>Unlimited automation rules</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-gray-300">
+                    <CheckCircle className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
+                    <span>Choice of AI models (GPT-4o/Claude)</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-gray-300">
+                    <CheckCircle className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
+                    <span>50 GB storage</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-gray-300">
+                    <CheckCircle className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
+                    <span>Priority support</span>
+                  </li>
+                </ul>
+              </motion.div>
+            </Card3D>
+          </div>
+
+          <div className="text-center mt-12">
+            <p className="text-gray-400">
+              Need more than 50 users?{' '}
+              <a href="#" className="text-purple-400 hover:text-purple-300 underline">
+                Contact us for Enterprise pricing
+              </a>
+            </p>
           </div>
         </div>
       </AnimatedSection>
