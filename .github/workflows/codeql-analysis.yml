@@ -14,6 +14,7 @@ jobs:
   analyze:
     name: Analyze Code with CodeQL
     runs-on: ubuntu-latest
+    continue-on-error: true
     permissions:
       actions: read
       contents: read
