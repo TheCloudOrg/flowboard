@@ -3,13 +3,12 @@ import { test, expect } from '@playwright/test'
 /**
  * E2E Tests for Drag-and-Drop Functionality
  *
- * Note: These tests require authentication and test data setup.
- * They are marked as .skip by default.
+ * Tests drag and drop operations for cards within and between columns.
  */
 
-test.describe.skip('Drag and Drop', () => {
+test.describe('Drag and Drop', () => {
   test.beforeEach(async ({ page }) => {
-    // Assume user is authenticated and board has test data
+    // Navigate to the main board
     await page.goto('/')
     await page.waitForLoadState('networkidle')
 
@@ -277,11 +276,7 @@ test.describe.skip('Drag and Drop', () => {
 })
 
 /**
- * Setup instructions:
- *
- * 1. Remove .skip from test.describe.skip
- * 2. Implement authentication helper
- * 3. Ensure test board has sufficient cards (at least 2-3 per column)
- * 4. Adjust selectors to match your component structure
- * 5. Test data should be predictable and isolated
+ * Note: These tests assume the user is authenticated and the board has cards.
+ * Some tests may skip if there aren't enough cards to perform drag operations.
+ * In CI/CD, ensure test data is set up with sufficient cards for testing.
  */

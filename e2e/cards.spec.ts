@@ -3,16 +3,15 @@ import { test, expect } from '@playwright/test'
 /**
  * E2E Tests for Card CRUD Operations
  *
- * Note: These tests require authentication to be set up.
- * They are marked as .skip by default - remove .skip when you have auth configured.
+ * Tests creating, reading, updating, and deleting cards in the Kanban board.
  */
 
-test.describe.skip('Card CRUD Operations', () => {
+test.describe('Card CRUD Operations', () => {
   test.beforeEach(async ({ page }) => {
-    // Assume user is already authenticated
-    // You'll need to implement authentication helper or use Clerk's test utilities
+    // Navigate to the main board
     await page.goto('/')
     await page.waitForLoadState('networkidle')
+    await page.waitForTimeout(1000)
   })
 
   test('should create a new card', async ({ page }) => {
@@ -188,11 +187,7 @@ test.describe.skip('Card CRUD Operations', () => {
 })
 
 /**
- * Setup instructions:
- *
- * 1. Remove .skip from test.describe.skip
- * 2. Implement authentication helper in beforeEach
- * 3. Ensure test database is properly set up and isolated
- * 4. Adjust selectors based on your actual component structure
- * 5. Consider adding test data cleanup in afterEach
+ * Note: These tests assume the user is authenticated.
+ * In CI/CD, you may need to set up Clerk test mode or mock authentication.
+ * Adjust selectors based on your actual component structure.
  */
