@@ -25,20 +25,20 @@ jest.mock('../Card', () => {
 })
 
 describe('Column Component', () => {
-  const mockCards: { [key: string]: CardType } = {
-    card_1: {
+  const mockCardsArray: CardType[] = [
+    {
       id: 'card_1',
       title: 'Card 1',
       createdAt: '2024-01-01',
       updatedAt: '2024-01-01',
     },
-    card_2: {
+    {
       id: 'card_2',
       title: 'Card 2',
       createdAt: '2024-01-02',
       updatedAt: '2024-01-02',
     },
-  }
+  ]
 
   const mockColumn: ColumnType = {
     id: 'col_1',
@@ -50,7 +50,6 @@ describe('Column Component', () => {
   const mockOnAddCard = jest.fn()
   const mockOnEditCard = jest.fn()
   const mockOnDeleteCard = jest.fn()
-  const mockOnEditColumn = jest.fn()
   const mockOnDeleteColumn = jest.fn()
   const mockOnAIGenerate = jest.fn()
 
@@ -62,11 +61,10 @@ describe('Column Component', () => {
     render(
       <Column
         column={mockColumn}
-        cards={mockCards}
+        cards={mockCardsArray}
         onAddCard={mockOnAddCard}
         onEditCard={mockOnEditCard}
         onDeleteCard={mockOnDeleteCard}
-        onEditColumn={mockOnEditColumn}
         onDeleteColumn={mockOnDeleteColumn}
         onAIGenerate={mockOnAIGenerate}
       />
@@ -79,11 +77,10 @@ describe('Column Component', () => {
     render(
       <Column
         column={mockColumn}
-        cards={mockCards}
+        cards={mockCardsArray}
         onAddCard={mockOnAddCard}
         onEditCard={mockOnEditCard}
         onDeleteCard={mockOnDeleteCard}
-        onEditColumn={mockOnEditColumn}
         onDeleteColumn={mockOnDeleteColumn}
         onAIGenerate={mockOnAIGenerate}
       />
@@ -97,11 +94,10 @@ describe('Column Component', () => {
     render(
       <Column
         column={mockColumn}
-        cards={mockCards}
+        cards={mockCardsArray}
         onAddCard={mockOnAddCard}
         onEditCard={mockOnEditCard}
         onDeleteCard={mockOnDeleteCard}
-        onEditColumn={mockOnEditColumn}
         onDeleteColumn={mockOnDeleteColumn}
         onAIGenerate={mockOnAIGenerate}
       />
@@ -116,18 +112,18 @@ describe('Column Component', () => {
     render(
       <Column
         column={mockColumn}
-        cards={mockCards}
+        cards={mockCardsArray}
         onAddCard={mockOnAddCard}
         onEditCard={mockOnEditCard}
         onDeleteCard={mockOnDeleteCard}
-        onEditColumn={mockOnEditColumn}
         onDeleteColumn={mockOnDeleteColumn}
         onAIGenerate={mockOnAIGenerate}
       />
     )
 
-    // Look for text showing the count (exact format may vary)
-    expect(screen.getByText(/2/)).toBeInTheDocument()
+    // Look for the card count badge - it should show "2"
+    const countBadge = screen.getAllByText(/^2$/)[0]
+    expect(countBadge).toBeInTheDocument()
   })
 
   it('renders empty column correctly', () => {
@@ -136,11 +132,10 @@ describe('Column Component', () => {
     render(
       <Column
         column={emptyColumn}
-        cards={mockCards}
+        cards={[]}
         onAddCard={mockOnAddCard}
         onEditCard={mockOnEditCard}
         onDeleteCard={mockOnDeleteCard}
-        onEditColumn={mockOnEditColumn}
         onDeleteColumn={mockOnDeleteColumn}
         onAIGenerate={mockOnAIGenerate}
       />
@@ -154,11 +149,10 @@ describe('Column Component', () => {
     render(
       <Column
         column={mockColumn}
-        cards={mockCards}
+        cards={mockCardsArray}
         onAddCard={mockOnAddCard}
         onEditCard={mockOnEditCard}
         onDeleteCard={mockOnDeleteCard}
-        onEditColumn={mockOnEditColumn}
         onDeleteColumn={mockOnDeleteColumn}
         onAIGenerate={mockOnAIGenerate}
       />
@@ -183,11 +177,10 @@ describe('Column Component', () => {
     render(
       <Column
         column={mockColumn}
-        cards={mockCards}
+        cards={mockCardsArray}
         onAddCard={mockOnAddCard}
         onEditCard={mockOnEditCard}
         onDeleteCard={mockOnDeleteCard}
-        onEditColumn={mockOnEditColumn}
         onDeleteColumn={mockOnDeleteColumn}
         onAIGenerate={mockOnAIGenerate}
       />
@@ -196,18 +189,17 @@ describe('Column Component', () => {
     const editButtons = screen.getAllByText('Edit')
     fireEvent.click(editButtons[0])
 
-    expect(mockOnEditCard).toHaveBeenCalledWith(mockCards.card_1)
+    expect(mockOnEditCard).toHaveBeenCalledWith(mockCardsArray[0])
   })
 
   it('passes delete handler to cards', () => {
     render(
       <Column
         column={mockColumn}
-        cards={mockCards}
+        cards={mockCardsArray}
         onAddCard={mockOnAddCard}
         onEditCard={mockOnEditCard}
         onDeleteCard={mockOnDeleteCard}
-        onEditColumn={mockOnEditColumn}
         onDeleteColumn={mockOnDeleteColumn}
         onAIGenerate={mockOnAIGenerate}
       />
@@ -223,11 +215,10 @@ describe('Column Component', () => {
     const { container } = render(
       <Column
         column={mockColumn}
-        cards={mockCards}
+        cards={mockCardsArray}
         onAddCard={mockOnAddCard}
         onEditCard={mockOnEditCard}
         onDeleteCard={mockOnDeleteCard}
-        onEditColumn={mockOnEditColumn}
         onDeleteColumn={mockOnDeleteColumn}
         onAIGenerate={mockOnAIGenerate}
       />
@@ -238,28 +229,27 @@ describe('Column Component', () => {
     expect(container.querySelector('[style*="color"]') || container.querySelector('[class*="border"]')).toBeTruthy()
   })
 
-  it('handles missing cards gracefully', () => {
-    const columnWithMissingCards = {
-      ...mockColumn,
-      cardIds: ['card_1', 'card_missing', 'card_2'],
-    }
-
+  it('calls onDeleteColumn when delete column button is clicked', () => {
     render(
       <Column
-        column={columnWithMissingCards}
-        cards={mockCards}
+        column={mockColumn}
+        cards={mockCardsArray}
         onAddCard={mockOnAddCard}
         onEditCard={mockOnEditCard}
         onDeleteCard={mockOnDeleteCard}
-        onEditColumn={mockOnEditColumn}
         onDeleteColumn={mockOnDeleteColumn}
         onAIGenerate={mockOnAIGenerate}
       />
     )
 
-    // Should only render cards that exist in the cards object
-    expect(screen.getByTestId('card-card_1')).toBeInTheDocument()
-    expect(screen.getByTestId('card-card_2')).toBeInTheDocument()
-    expect(screen.queryByTestId('card-card_missing')).not.toBeInTheDocument()
+    // Click the menu button to show delete option
+    const menuButton = screen.getByLabelText('Column options')
+    fireEvent.click(menuButton)
+
+    // Find and click delete column button
+    const deleteColumnButton = screen.getByText('Delete Column')
+    fireEvent.click(deleteColumnButton)
+
+    expect(mockOnDeleteColumn).toHaveBeenCalledWith(mockColumn.id)
   })
 })
