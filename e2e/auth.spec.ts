@@ -1,17 +1,19 @@
 import { test, expect } from '@playwright/test'
 
 /**
- * E2E Tests for Authentication Flow
+ * E2E Tests for Authentication Flow with Clerk
  *
- * Note: These tests require a test Clerk account and proper environment setup.
- * For CI/CD, you'll need to set up Clerk test mode or use mock authentication.
+ * Tests the Clerk-based authentication system including sign-in, sign-up,
+ * and session management.
+ *
+ * Note: For CI/CD, set up Clerk test mode or environment variables for test users.
  */
 
 test.describe('Authentication Flow', () => {
   test.describe.configure({ mode: 'serial' })
 
   test.beforeEach(async ({ page }) => {
-    // Clear any existing session
+    // Clear any existing session to ensure clean state
     await page.context().clearCookies()
     await page.context().clearPermissions()
   })
