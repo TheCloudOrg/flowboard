@@ -5,18 +5,21 @@ This project is deployed using **Vercel** with automatic deployments configured 
 ## Deployment Environments
 
 ### 1. Production
+
 - **Branch**: `main`
 - **URL**: https://flow-board.vercel.app (or your custom domain)
 - **Trigger**: Automatic on merge to `main`
 - **Environment Variables**: Production credentials
 
 ### 2. Staging
+
 - **Branch**: `develop`
 - **URL**: https://flow-board-staging.vercel.app (or generated URL)
 - **Trigger**: Automatic on push to `develop`
 - **Environment Variables**: Staging credentials (or same as production with caution)
 
 ### 3. Preview
+
 - **Branch**: Feature branches (`feature/*`, `claude/*`)
 - **URL**: Auto-generated unique URL per PR
 - **Trigger**: Automatic on PR creation/update
@@ -46,12 +49,14 @@ feature/my-feature  →  PR to develop  →  Preview Deployment
 Add these in Vercel Dashboard → Settings → Environment Variables:
 
 #### Clerk Authentication
+
 ```bash
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_...
 CLERK_SECRET_KEY=sk_...
 ```
 
 #### Supabase Database
+
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJh...
@@ -59,6 +64,7 @@ SUPABASE_SERVICE_ROLE_KEY=eyJh...
 ```
 
 #### OpenAI API (for AI features)
+
 ```bash
 OPENAI_API_KEY=sk-...
 ```
@@ -98,6 +104,7 @@ vercel --prod
 ### Deploy via GitHub
 
 Deployments are automatic when:
+
 - Push to `main` → Production
 - Push to `develop` → Staging
 - Create/update PR → Preview
@@ -125,6 +132,7 @@ Located at project root:
 ```
 
 This configuration:
+
 - Enables automatic deployment for `main` and `develop` branches
 - Cancels outdated deployments when new commits are pushed
 
@@ -196,6 +204,7 @@ vercel alias [deployment-url] your-domain.com
 ### GitHub Actions Integration
 
 Every deployment creates a comment on the PR with:
+
 - ✅ Deployment status
 - 🔗 Preview URL
 - 📊 Build time
@@ -247,9 +256,11 @@ vercel promote [previous-deployment-url]
 3. Configure DNS records:
 
 **Option A: Nameservers (Recommended)**
+
 - Update your domain nameservers to Vercel's
 
 **Option B: A/CNAME Records**
+
 ```
 Type    Name    Value
 A       @       76.76.21.21
@@ -266,6 +277,7 @@ staging.yourdomain.com  →  CNAME  cname.vercel-dns.com
 ```
 
 Then in Vercel:
+
 - Go to Settings → Domains
 - Add `staging.yourdomain.com`
 - Connect to `develop` branch
@@ -277,6 +289,7 @@ Then in Vercel:
 ### Vercel Analytics
 
 Enable in Vercel Dashboard:
+
 - Go to Analytics tab
 - View Core Web Vitals
 - Monitor page load times

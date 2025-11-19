@@ -41,6 +41,7 @@ This project follows **Git Flow** for branch management and deployment.
 ### Creating a New Feature
 
 1. **Start from develop**
+
    ```bash
    git checkout develop
    git pull origin develop
@@ -48,12 +49,14 @@ This project follows **Git Flow** for branch management and deployment.
    ```
 
 2. **Make changes and commit regularly**
+
    ```bash
    git add .
    git commit -m "feat: Add your feature description"
    ```
 
 3. **Push to GitHub**
+
    ```bash
    git push -u origin feature/your-feature-name
    ```
@@ -75,10 +78,12 @@ This project follows **Git Flow** for branch management and deployment.
 ### Releasing to Production
 
 1. **Create release PR**
+
    ```bash
    git checkout develop
    git pull origin develop
    ```
+
    - Create PR from `develop` → `main`
    - Title: "Release: v1.x.x - Brief description"
 
@@ -99,6 +104,7 @@ This project follows **Git Flow** for branch management and deployment.
 ### Hotfix Process (Emergency Fixes)
 
 1. **Branch from main**
+
    ```bash
    git checkout main
    git pull origin main
@@ -106,6 +112,7 @@ This project follows **Git Flow** for branch management and deployment.
    ```
 
 2. **Fix the issue**
+
    ```bash
    git add .
    git commit -m "fix: Critical issue description"
@@ -132,17 +139,20 @@ This project follows **Git Flow** for branch management and deployment.
 All PRs must pass these checks before merging:
 
 ### Code Quality Checks
+
 - ✅ Prettier formatting
 - ✅ ESLint (no errors)
 - ✅ TypeScript type checking
 - ✅ Build verification
 
 ### Testing Suite
+
 - ✅ Unit tests (Jest)
 - ✅ E2E tests (Playwright)
 - ✅ Test coverage report
 
 ### Security Scans
+
 - ✅ CodeQL analysis
 - ✅ npm audit (dependency vulnerabilities)
 - ✅ Gitleaks (secret scanning)
@@ -243,6 +253,7 @@ chore: Upgrade Next.js to v16.0.3
 ## Branch Protection Rules
 
 ### Main Branch
+
 - ✅ Require pull request reviews (1 approver)
 - ✅ Require status checks to pass
 - ✅ Require branches to be up to date
@@ -251,6 +262,7 @@ chore: Upgrade Next.js to v16.0.3
 - ❌ No deletions allowed
 
 ### Develop Branch
+
 - ✅ Require pull request reviews (1 approver)
 - ✅ Require status checks to pass
 - ✅ Require branches to be up to date

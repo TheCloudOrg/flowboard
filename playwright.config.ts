@@ -1,4 +1,4 @@
-import { defineConfig, devices } from '@playwright/test'
+import { defineConfig, devices } from '@playwright/test';
 
 /**
  * Playwright configuration for E2E testing
@@ -20,11 +20,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
 
   /* Reporter to use */
-  reporter: [
-    ['html'],
-    ['list'],
-    ...(process.env.CI ? [['github']] : []),
-  ],
+  reporter: [['html'], ['list'], ...(process.env.CI ? [['github'] as ['github']] : [])],
 
   /* Shared settings for all the projects below */
   use: {
@@ -78,4 +74,4 @@ export default defineConfig({
     stdout: 'ignore',
     stderr: 'pipe',
   },
-})
+});
