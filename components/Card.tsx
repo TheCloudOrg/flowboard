@@ -46,24 +46,24 @@ export default function Card({ card, onEdit, onDelete, onAIGenerate }: CardProps
           {...listeners}
           className="absolute top-2 right-2 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity"
         >
-          <Grip className="w-4 h-4 dark:text-gray-400 light:text-gray-500 dark:hover:text-white light:hover:text-gray-900" />
+          <Grip className="w-4 h-4 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white" />
         </div>
 
         {/* Card Content */}
         <div className="pr-8">
-          <h3 className="text-lg font-semibold dark:text-white light:text-gray-900 mb-2 line-clamp-2">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">
             {card.title}
           </h3>
 
           {card.description && (
-            <p className="text-sm dark:text-gray-300 light:text-gray-700 mb-3 line-clamp-3">
+            <p className="text-sm text-gray-700 dark:text-gray-300 mb-3 line-clamp-3">
               {card.description}
             </p>
           )}
 
           {card.notes && (
-            <div className="mt-3 pt-3 border-t dark:border-white/10 light:border-gray-200">
-              <p className="text-xs dark:text-gray-400 light:text-gray-600 line-clamp-2">
+            <div className="mt-3 pt-3 border-t border-gray-200 dark:border-white/10">
+              <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">
                 {card.notes}
               </p>
             </div>
@@ -71,7 +71,7 @@ export default function Card({ card, onEdit, onDelete, onAIGenerate }: CardProps
 
           {/* Card Footer */}
           <div className="flex items-center justify-between mt-4">
-            <span className="text-xs dark:text-gray-500 light:text-gray-500">
+            <span className="text-xs text-gray-500 dark:text-gray-500">
               {new Date(card.updatedAt).toLocaleDateString()}
             </span>
 
@@ -85,14 +85,14 @@ export default function Card({ card, onEdit, onDelete, onAIGenerate }: CardProps
               </button>
               <button
                 onClick={() => onEdit(card)}
-                className="p-1.5 rounded-lg bg-primary-500/20 hover:bg-primary-500/30 dark:text-primary-300 light:text-primary-600 dark:hover:text-primary-200 light:hover:text-primary-700 transition-colors"
+                className="p-1.5 rounded-lg bg-primary-500/20 hover:bg-primary-500/30 text-primary-600 dark:text-primary-300 hover:text-primary-700 dark:hover:text-primary-200 transition-colors"
                 aria-label="Edit card"
               >
                 <Edit className="w-4 h-4" />
               </button>
               <button
                 onClick={() => onDelete(card.id)}
-                className="p-1.5 rounded-lg bg-red-500/20 hover:bg-red-500/30 dark:text-red-300 light:text-red-600 dark:hover:text-red-200 light:hover:text-red-700 transition-colors"
+                className="p-1.5 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-600 dark:text-red-300 hover:text-red-700 dark:hover:text-red-200 transition-colors"
                 aria-label="Delete card"
               >
                 <Trash2 className="w-4 h-4" />

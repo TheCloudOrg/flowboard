@@ -391,7 +391,7 @@ export default function KanbanBoard() {
       <div className="min-h-screen p-8 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-primary-400 animate-spin mx-auto mb-4" />
-          <p className="dark:text-gray-400 light:text-gray-600">Loading your board...</p>
+          <p className="text-gray-600 dark:text-gray-400">Loading your board...</p>
         </div>
       </div>
     );
@@ -413,7 +413,7 @@ export default function KanbanBoard() {
                 Flow Board
               </h1>
               {organization && (
-                <p className="ml-1 mt-1 text-sm dark:text-gray-400 light:text-gray-600">
+                <p className="ml-1 mt-1 text-sm text-gray-600 dark:text-gray-400">
                   {organization.name}
                 </p>
               )}
@@ -439,9 +439,9 @@ export default function KanbanBoard() {
                 },
                 elements: {
                   rootBox: "flex items-center",
-                  organizationSwitcherTrigger: "glass-effect px-4 py-2 rounded-xl border dark:border-white/10 light:border-gray-300 hover:border-primary-400/50 transition-all",
+                  organizationSwitcherTrigger: "glass-effect px-4 py-2 rounded-xl border border-gray-300 dark:border-white/10 hover:border-primary-400/50 transition-all",
                   organizationSwitcherTriggerIcon: "text-primary-400",
-                  organizationSwitcherPopoverCard: "glass-effect border dark:border-white/10 light:border-gray-300",
+                  organizationSwitcherPopoverCard: "glass-effect border border-gray-300 dark:border-white/10",
                   organizationSwitcherPopoverActionButton: theme === 'dark' ? "bg-gray-800 hover:bg-white/10" : "bg-white hover:bg-gray-100",
                   organizationPreviewMainIdentifier: theme === 'dark' ? "text-white" : "text-gray-900",
                   organizationPreviewSecondaryIdentifier: theme === 'dark' ? "text-gray-400" : "text-gray-600",
@@ -466,7 +466,7 @@ export default function KanbanBoard() {
                 },
                 elements: {
                   avatarBox: "w-10 h-10 ring-2 ring-primary-400/30 hover:ring-primary-400/50 transition-all",
-                  userButtonPopoverCard: "glass-effect border dark:border-white/10 light:border-gray-300",
+                  userButtonPopoverCard: "glass-effect border border-gray-300 dark:border-white/10",
                   userButtonPopoverActionButton: theme === 'dark' ? "bg-gray-800 hover:bg-white/10" : "bg-white hover:bg-gray-100",
                 }
               }}
@@ -474,7 +474,7 @@ export default function KanbanBoard() {
             <ThemeToggle />
           </div>
         </div>
-        <p className="ml-11 dark:text-gray-400 light:text-gray-600">
+        <p className="ml-11 text-gray-600 dark:text-gray-400">
           Organize and flow through your tasks with beautiful drag-and-drop boards
         </p>
       </motion.div>
@@ -526,7 +526,7 @@ export default function KanbanBoard() {
                     }
                   }}
                   placeholder="Column name..."
-                  className="w-full px-4 py-2 dark:bg-white/5 light:bg-gray-50 border dark:border-white/10 light:border-gray-300 rounded-xl dark:text-white light:text-gray-900 dark:placeholder-gray-500 light:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 mb-3"
+                  className="w-full px-4 py-2 bg-gray-50 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 mb-3"
                   autoFocus
                 />
                 <div className="flex gap-2">
@@ -541,7 +541,7 @@ export default function KanbanBoard() {
                       setShowColumnInput(false);
                       setNewColumnName('');
                     }}
-                    className="flex-1 px-4 py-2 dark:bg-white/5 light:bg-gray-100 dark:hover:bg-white/10 light:hover:bg-gray-200 rounded-lg dark:text-white light:text-gray-900 font-medium transition-colors"
+                    className="flex-1 px-4 py-2 bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 rounded-lg text-gray-900 dark:text-white font-medium transition-colors"
                   >
                     Cancel
                   </button>
@@ -550,7 +550,7 @@ export default function KanbanBoard() {
             ) : (
               <button
                 onClick={() => setShowColumnInput(true)}
-                className="w-full h-full min-h-[120px] glass-effect rounded-2xl border-2 border-dashed dark:border-white/20 light:border-gray-300 hover:border-primary-400/50 hover:bg-primary-500/10 dark:text-gray-400 light:text-gray-600 dark:hover:text-primary-300 light:hover:text-primary-600 transition-all duration-200 flex flex-col items-center justify-center gap-3 group"
+                className="w-full h-full min-h-[120px] glass-effect rounded-2xl border-2 border-dashed border-gray-300 dark:border-white/20 hover:border-primary-400/50 hover:bg-primary-500/10 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-300 transition-all duration-200 flex flex-col items-center justify-center gap-3 group"
               >
                 <Plus className="w-8 h-8 group-hover:scale-110 transition-transform" />
                 <span className="font-medium text-lg">Add Column</span>
