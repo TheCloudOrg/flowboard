@@ -49,7 +49,11 @@ export const saveBoard = (board: Board): void => {
   }
 };
 
-export const addCard = (board: Board, columnId: string, card: Omit<Card, 'id' | 'createdAt' | 'updatedAt'>): Board => {
+export const addCard = (
+  board: Board,
+  columnId: string,
+  card: Omit<Card, 'id' | 'createdAt' | 'updatedAt'>
+): Board => {
   const newCard: Card = {
     ...card,
     id: `card-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -64,9 +68,7 @@ export const addCard = (board: Board, columnId: string, card: Omit<Card, 'id' | 
       [newCard.id]: newCard,
     },
     columns: board.columns.map((col) =>
-      col.id === columnId
-        ? { ...col, cardIds: [...col.cardIds, newCard.id] }
-        : col
+      col.id === columnId ? { ...col, cardIds: [...col.cardIds, newCard.id] } : col
     ),
   };
 
@@ -127,9 +129,7 @@ export const addColumn = (board: Board, title: string, color?: string): Board =>
 export const updateColumn = (board: Board, columnId: string, updates: Partial<Column>): Board => {
   const newBoard: Board = {
     ...board,
-    columns: board.columns.map((col) =>
-      col.id === columnId ? { ...col, ...updates } : col
-    ),
+    columns: board.columns.map((col) => (col.id === columnId ? { ...col, ...updates } : col)),
   };
 
   saveBoard(newBoard);

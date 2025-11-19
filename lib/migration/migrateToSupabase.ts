@@ -1,16 +1,16 @@
-'use server'
+'use server';
 
-import { createBoard, addColumn, addCard } from '../supabase/boards'
-import { Board as LocalStorageBoard } from '@/types'
+import { createBoard, addColumn, addCard } from '../supabase/boards';
+import { Board as LocalStorageBoard } from '@/types';
 
 export interface MigrationResult {
-  success: boolean
-  boardId?: string
+  success: boolean;
+  boardId?: string;
   stats?: {
-    columns: number
-    cards: number
-  }
-  error?: string
+    columns: number;
+    cards: number;
+  };
+  error?: string;
 }
 
 /**
@@ -31,64 +31,69 @@ export async function migrateLocalStorageToSupabase(
       return {
         success: false,
         error: 'No columns found in localStorage data',
-      }
+      };
     }
 
     // Step 1: Create board
-    const boardId = await createBoard(organizationId, 'Main Board', userId)
+    const boardId = await createBoard(organizationId, 'Main Board', userId);
     if (!boardId) {
       return {
         success: false,
         error: 'Failed to create board in Supabase',
-      }
+      };
     }
 
-    console.log(`✅ Board created: ${boardId}`)
+    console.log(`✅ Board created: ${boardId}`);
 
-    let totalColumns = 0
-    let totalCards = 0
+    let totalColumns = 0;
+    let totalCards = 0;
 
     // Step 2: Migrate columns
-    const columnIdMap = new Map<string, string>() // localStorage ID → Supabase ID
+    const columnIdMap = new Map<string, string>(); // localStorage ID → Supabase ID
 
     for (const column of localStorageData.columns) {
-      const newColumn = await addColumn(boardId, column.title, column.color)
+      const newColumn = await addColumn(boardId, column.title, column.color);
 
       if (!newColumn) {
-        console.error(`Failed to create column: ${column.title}`)
-        continue
+        console.error(`Failed to create column: ${column.title}`);
+        continue;
       }
 
-      columnIdMap.set(column.id, newColumn.id)
-      totalColumns++
+      columnIdMap.set(column.id, newColumn.id);
+      totalColumns++;
 
-      console.log(`✅ Column migrated: ${column.title} (${column.cardIds.length} cards)`)
+      console.log(`✅ Column migrated: ${column.title} (${column.cardIds.length} cards)`);
 
       // Step 3: Migrate cards for this column
       for (const cardId of column.cardIds) {
-        const card = localStorageData.cards[cardId]
+        const card = localStorageData.cards[cardId];
 
         if (!card) {
-          console.warn(`Card ${cardId} not found in cards object`)
-          continue
+          console.warn(`Card ${cardId} not found in cards object`);
+          continue;
         }
 
-        const newCard = await addCard(boardId, newColumn.id, {
-          title: card.title,
-          description: card.description,
-          notes: card.notes,
-        }, userId)
+        const newCard = await addCard(
+          boardId,
+          newColumn.id,
+          {
+            title: card.title,
+            description: card.description,
+            notes: card.notes,
+          },
+          userId
+        );
 
         if (!newCard) {
-          console.error(`Failed to create card: ${card.title}`)
-          continue
+          console.error(`Failed to create card: ${card.title}`);
+          continue;
         }
 
-        totalCards++
+        totalCards++;
       }
     }
 
-    console.log(`✅ Migration complete: ${totalColumns} columns, ${totalCards} cards`)
+    console.log(`✅ Migration complete: ${totalColumns} columns, ${totalCards} cards`);
 
     return {
       success: true,
@@ -97,13 +102,13 @@ export async function migrateLocalStorageToSupabase(
         columns: totalColumns,
         cards: totalCards,
       },
-    }
+    };
   } catch (error: any) {
-    console.error('Migration error:', error)
+    console.error('Migration error:', error);
     return {
       success: false,
       error: error.message || 'Unknown error during migration',
-    }
+    };
   }
 }
 
@@ -115,12 +120,12 @@ export async function createDefaultBoard(
   userId: string
 ): Promise<MigrationResult> {
   try {
-    const boardId = await createBoard(organizationId, 'Main Board', userId)
+    const boardId = await createBoard(organizationId, 'Main Board', userId);
     if (!boardId) {
       return {
         success: false,
         error: 'Failed to create default board',
-      }
+      };
     }
 
     // Create default columns
@@ -128,13 +133,13 @@ export async function createDefaultBoard(
       { title: 'TODO', color: '#8b5cf6' },
       { title: 'In Progress', color: '#3b82f6' },
       { title: 'Completed', color: '#10b981' },
-    ]
+    ];
 
     for (const col of defaultColumns) {
-      await addColumn(boardId, col.title, col.color)
+      await addColumn(boardId, col.title, col.color);
     }
 
-    console.log('✅ Default board created with 3 columns')
+    console.log('✅ Default board created with 3 columns');
 
     return {
       success: true,
@@ -143,12 +148,12 @@ export async function createDefaultBoard(
         columns: 3,
         cards: 0,
       },
-    }
+    };
   } catch (error: any) {
-    console.error('Error creating default board:', error)
+    console.error('Error creating default board:', error);
     return {
       success: false,
       error: error.message || 'Failed to create default board',
-    }
+    };
   }
 }

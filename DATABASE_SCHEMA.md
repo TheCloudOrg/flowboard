@@ -3,6 +3,7 @@
 ## Overview
 
 This schema supports a multi-tenant Kanban board application with:
+
 - **Organizations**: Team workspaces (synced from Clerk)
 - **Boards**: Multiple boards per organization
 - **Columns**: Customizable columns per board
@@ -12,6 +13,7 @@ This schema supports a multi-tenant Kanban board application with:
 ## Tables
 
 ### 1. users
+
 Stores user information synced from Clerk authentication.
 
 ```sql
@@ -26,12 +28,14 @@ CREATE TABLE users (
 ```
 
 **Indexes:**
+
 - Primary key on `id`
 - Index on `email` for lookups
 
 ---
 
 ### 2. organizations
+
 Stores organization/team information synced from Clerk.
 
 ```sql
@@ -46,12 +50,14 @@ CREATE TABLE organizations (
 ```
 
 **Indexes:**
+
 - Primary key on `id`
 - Unique index on `slug`
 
 ---
 
 ### 3. organization_members
+
 Maps users to organizations (many-to-many relationship).
 
 ```sql
@@ -66,6 +72,7 @@ CREATE TABLE organization_members (
 ```
 
 **Indexes:**
+
 - Primary key on `id`
 - Index on `organization_id` for filtering by org
 - Index on `user_id` for filtering by user
@@ -74,6 +81,7 @@ CREATE TABLE organization_members (
 ---
 
 ### 4. boards
+
 Each organization can have multiple boards.
 
 ```sql
@@ -89,12 +97,14 @@ CREATE TABLE boards (
 ```
 
 **Indexes:**
+
 - Primary key on `id`
 - Index on `organization_id` for filtering boards by org
 
 ---
 
 ### 5. columns
+
 Columns belong to a board and contain cards.
 
 ```sql
@@ -111,6 +121,7 @@ CREATE TABLE columns (
 ```
 
 **Indexes:**
+
 - Primary key on `id`
 - Index on `board_id` for filtering columns by board
 - Index on `(board_id, position)` for ordering
@@ -118,6 +129,7 @@ CREATE TABLE columns (
 ---
 
 ### 6. cards
+
 Cards belong to a column and represent tasks/items.
 
 ```sql
@@ -137,6 +149,7 @@ CREATE TABLE cards (
 ```
 
 **Indexes:**
+
 - Primary key on `id`
 - Index on `column_id` for filtering cards by column
 - Index on `board_id` for filtering cards by board
@@ -348,6 +361,7 @@ users
 ## Migration from localStorage
 
 When migrating from localStorage to Supabase:
+
 1. User signs in with Clerk
 2. Get or create user's default organization
 3. Create a default board for that organization
@@ -360,11 +374,13 @@ When migrating from localStorage to Supabase:
 ## Authentication Flow (Clerk + Supabase)
 
 ### Option 1: JWT-based RLS (Recommended)
+
 - Clerk provides JWT tokens
 - Configure Supabase to accept Clerk JWTs
 - Use `auth.uid()` in RLS policies (points to Clerk user ID)
 
 ### Option 2: Webhook-based sync
+
 - Set up Clerk webhooks to sync user/org data to Supabase
 - When user signs up: Create user in `users` table
 - When org created: Create org in `organizations` table

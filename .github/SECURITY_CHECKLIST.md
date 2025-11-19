@@ -5,6 +5,7 @@ Use this checklist before committing code or creating a pull request.
 ## 🔒 Pre-Commit Checklist
 
 ### Secrets & Credentials
+
 - [ ] No API keys, tokens, or passwords in code
 - [ ] All secrets use environment variables
 - [ ] No `.env.local` files committed
@@ -13,12 +14,14 @@ Use this checklist before committing code or creating a pull request.
 - [ ] No commented-out secrets
 
 ### Authentication & Authorization
+
 - [ ] All API routes check authentication (`auth()` from Clerk)
 - [ ] All server actions check authentication (`currentUser()` from Clerk)
 - [ ] User can only access their own organization's data
 - [ ] Proper error handling for unauthorized access (401, 403)
 
 ### Input Validation
+
 - [ ] All user inputs are validated
 - [ ] Maximum length checks on text inputs
 - [ ] Type validation (using TypeScript)
@@ -26,6 +29,7 @@ Use this checklist before committing code or creating a pull request.
 - [ ] No direct use of user input in queries
 
 ### Database Operations
+
 - [ ] Using Supabase client (parameterized queries)
 - [ ] No raw SQL with string concatenation
 - [ ] Proper error handling
@@ -33,6 +37,7 @@ Use this checklist before committing code or creating a pull request.
 - [ ] Data filtered by organization/user
 
 ### Error Handling
+
 - [ ] No sensitive data in error messages
 - [ ] Error details logged server-side only
 - [ ] User-friendly error messages
@@ -40,6 +45,7 @@ Use this checklist before committing code or creating a pull request.
 - [ ] No stack traces exposed to users
 
 ### Dependencies
+
 - [ ] Only necessary dependencies added
 - [ ] Checked for known vulnerabilities (`npm audit`)
 - [ ] Using latest stable versions
@@ -48,6 +54,7 @@ Use this checklist before committing code or creating a pull request.
 ## 📝 Pre-Pull Request Checklist
 
 ### Code Quality
+
 - [ ] TypeScript types properly defined
 - [ ] No `any` types (unless absolutely necessary)
 - [ ] ESLint passes (`npm run lint`)
@@ -55,6 +62,7 @@ Use this checklist before committing code or creating a pull request.
 - [ ] Build succeeds (`npm run build`)
 
 ### Security Specific
+
 - [ ] No `dangerouslySetInnerHTML` usage
 - [ ] No `eval()` or `Function()` constructor
 - [ ] No `innerHTML` for user-generated content
@@ -62,6 +70,7 @@ Use this checklist before committing code or creating a pull request.
 - [ ] No SQL injection vectors
 
 ### API Security
+
 - [ ] Rate limiting considered (if new API route)
 - [ ] CORS policy appropriate (if new API route)
 - [ ] Input validation on all parameters
@@ -69,6 +78,7 @@ Use this checklist before committing code or creating a pull request.
 - [ ] Request/response logging (without sensitive data)
 
 ### Third-Party Integrations
+
 - [ ] Using official SDKs where available
 - [ ] API keys in environment variables
 - [ ] Webhook signatures verified (if applicable)
@@ -78,6 +88,7 @@ Use this checklist before committing code or creating a pull request.
 ## 🚀 Pre-Deployment Checklist
 
 ### Environment
+
 - [ ] All production environment variables set
 - [ ] Using production API keys (not test/dev)
 - [ ] Production database configured
@@ -85,6 +96,7 @@ Use this checklist before committing code or creating a pull request.
 - [ ] HTTPS enforced
 
 ### Configuration
+
 - [ ] Security headers configured (`next.config.js`)
 - [ ] RLS enabled on all Supabase tables
 - [ ] Rate limiting configured
@@ -92,6 +104,7 @@ Use this checklist before committing code or creating a pull request.
 - [ ] Error logging configured
 
 ### Monitoring
+
 - [ ] Error tracking enabled (Sentry/similar)
 - [ ] Security alerts configured
 - [ ] Uptime monitoring enabled
@@ -99,6 +112,7 @@ Use this checklist before committing code or creating a pull request.
 - [ ] Audit logging active
 
 ### Testing
+
 - [ ] Security scans passed
 - [ ] Manual testing in staging
 - [ ] Authentication flows tested
@@ -108,6 +122,7 @@ Use this checklist before committing code or creating a pull request.
 ## 🔍 Code Review Checklist (For Reviewers)
 
 ### General Security
+
 - [ ] No hardcoded secrets or credentials
 - [ ] Authentication properly implemented
 - [ ] Authorization checks in place
@@ -115,6 +130,7 @@ Use this checklist before committing code or creating a pull request.
 - [ ] Error handling doesn't leak information
 
 ### Logic Security
+
 - [ ] No authentication bypass possible
 - [ ] No privilege escalation possible
 - [ ] Race conditions handled
@@ -122,6 +138,7 @@ Use this checklist before committing code or creating a pull request.
 - [ ] Edge cases considered
 
 ### Data Security
+
 - [ ] Personal data properly handled
 - [ ] Data scoped to user/organization
 - [ ] No mass assignment vulnerabilities
@@ -156,6 +173,7 @@ npm run security-scan  # add this script to package.json
 ## 🚨 Red Flags to Watch For
 
 ### In Code Reviews
+
 - ⛔ Hardcoded secrets or tokens
 - ⛔ Authentication bypasses
 - ⛔ Raw SQL queries
@@ -168,6 +186,7 @@ npm run security-scan  # add this script to package.json
 - ⛔ No rate limiting on new endpoints
 
 ### In Dependencies
+
 - ⛔ Unmaintained packages (last update > 2 years)
 - ⛔ Packages with known vulnerabilities
 - ⛔ Packages from unknown authors
@@ -177,57 +196,65 @@ npm run security-scan  # add this script to package.json
 ## 📚 Common Vulnerabilities to Avoid
 
 ### 1. SQL Injection
+
 ❌ **Bad:**
+
 ```typescript
-const query = `SELECT * FROM users WHERE id = ${userId}`
+const query = `SELECT * FROM users WHERE id = ${userId}`;
 ```
 
 ✅ **Good:**
+
 ```typescript
-const { data } = await supabase
-  .from('users')
-  .select('*')
-  .eq('id', userId)
+const { data } = await supabase.from('users').select('*').eq('id', userId);
 ```
 
 ### 2. XSS (Cross-Site Scripting)
+
 ❌ **Bad:**
+
 ```typescript
 <div dangerouslySetInnerHTML={{ __html: userInput }} />
 ```
 
 ✅ **Good:**
+
 ```typescript
 <div>{userInput}</div>  // React escapes automatically
 ```
 
 ### 3. Authentication Bypass
+
 ❌ **Bad:**
+
 ```typescript
 export async function deleteBoard(boardId: string) {
   // No auth check!
-  await supabase.from('boards').delete().eq('id', boardId)
+  await supabase.from('boards').delete().eq('id', boardId);
 }
 ```
 
 ✅ **Good:**
+
 ```typescript
 export async function deleteBoard(boardId: string) {
-  const user = await currentUser()
-  if (!user) throw new Error('Unauthorized')
+  const user = await currentUser();
+  if (!user) throw new Error('Unauthorized');
 
   // Verify user owns this board
-  const board = await getBoard(boardId)
+  const board = await getBoard(boardId);
   if (board.organization_id !== user.orgId) {
-    throw new Error('Forbidden')
+    throw new Error('Forbidden');
   }
 
-  await supabase.from('boards').delete().eq('id', boardId)
+  await supabase.from('boards').delete().eq('id', boardId);
 }
 ```
 
 ### 4. Sensitive Data Exposure
+
 ❌ **Bad:**
+
 ```typescript
 catch (error) {
   return NextResponse.json({ error: error.stack }, { status: 500 })
@@ -235,6 +262,7 @@ catch (error) {
 ```
 
 ✅ **Good:**
+
 ```typescript
 catch (error) {
   console.error('Internal error:', error)  // Log server-side
@@ -246,35 +274,40 @@ catch (error) {
 ```
 
 ### 5. Missing Rate Limiting
+
 ❌ **Bad:**
+
 ```typescript
 export async function POST(request: NextRequest) {
   // No rate limiting - can be abused
-  await expensiveOperation()
+  await expensiveOperation();
 }
 ```
 
 ✅ **Good:**
+
 ```typescript
 export async function POST(request: NextRequest) {
-  const { success } = await ratelimit.limit(request.ip)
+  const { success } = await ratelimit.limit(request.ip);
   if (!success) {
-    return new Response('Too many requests', { status: 429 })
+    return new Response('Too many requests', { status: 429 });
   }
 
-  await expensiveOperation()
+  await expensiveOperation();
 }
 ```
 
 ## 📋 File-Specific Guidelines
 
 ### Environment Files (`.env.local`)
+
 - ✅ Listed in `.gitignore`
 - ✅ Never committed
 - ✅ Has corresponding `.env.local.example`
 - ✅ All values are actual secrets (not config)
 
 ### API Routes (`app/api/**/*.ts`)
+
 - ✅ Authentication check at the start
 - ✅ Input validation
 - ✅ Rate limiting
@@ -282,6 +315,7 @@ export async function POST(request: NextRequest) {
 - ✅ CORS configured if needed
 
 ### Server Actions (`app/actions/**/*.ts`)
+
 - ✅ Marked with `'use server'`
 - ✅ Authentication check (`currentUser()`)
 - ✅ Authorization check (user can access resource)
@@ -289,12 +323,14 @@ export async function POST(request: NextRequest) {
 - ✅ Proper error handling
 
 ### Components (`components/**/*.tsx`)
+
 - ✅ No sensitive logic (move to server)
 - ✅ No API keys or secrets
 - ✅ Proper TypeScript types
 - ✅ User input properly handled
 
 ### Database Migrations (`supabase/migrations/*.sql`)
+
 - ✅ RLS enabled on new tables
 - ✅ RLS policies defined
 - ✅ Proper indexes

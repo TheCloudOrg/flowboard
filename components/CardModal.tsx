@@ -13,13 +13,7 @@ interface CardModalProps {
   columnId?: string;
 }
 
-export default function CardModal({
-  isOpen,
-  onClose,
-  onSave,
-  card,
-  columnId,
-}: CardModalProps) {
+export default function CardModal({ isOpen, onClose, onSave, card, columnId }: CardModalProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [notes, setNotes] = useState('');

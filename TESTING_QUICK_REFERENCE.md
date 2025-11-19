@@ -79,47 +79,47 @@ describe('MyComponent', () => {
 ### E2E Test Template
 
 ```typescript
-import { test, expect } from '@playwright/test'
+import { test, expect } from '@playwright/test';
 
 test.describe('Feature Name', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/')
-  })
+    await page.goto('/');
+  });
 
   test('should do something', async ({ page }) => {
-    await page.click('text=Button')
-    await expect(page.locator('text=Success')).toBeVisible()
-  })
-})
+    await page.click('text=Button');
+    await expect(page.locator('text=Success')).toBeVisible();
+  });
+});
 ```
 
 ### Async Test Pattern
 
 ```typescript
 test('async operation', async () => {
-  const result = await asyncFunction()
+  const result = await asyncFunction();
 
   await waitFor(() => {
-    expect(result).toBeDefined()
-  })
-})
+    expect(result).toBeDefined();
+  });
+});
 ```
 
 ### Mock Pattern
 
 ```typescript
 // Mock module
-jest.mock('@/lib/api')
+jest.mock('@/lib/api');
 
 // Mock function
-const mockFn = jest.fn()
-mockFn.mockResolvedValue({ data: 'test' })
-mockFn.mockRejectedValue(new Error('Failed'))
+const mockFn = jest.fn();
+mockFn.mockResolvedValue({ data: 'test' });
+mockFn.mockRejectedValue(new Error('Failed'));
 
 // Reset mocks
 beforeEach(() => {
-  jest.clearAllMocks()
-})
+  jest.clearAllMocks();
+});
 ```
 
 ## Common Selectors
@@ -128,41 +128,41 @@ beforeEach(() => {
 
 ```typescript
 // By role (preferred)
-screen.getByRole('button', { name: 'Submit' })
+screen.getByRole('button', { name: 'Submit' });
 
 // By text
-screen.getByText('Hello World')
-screen.getByText(/hello/i)  // Case insensitive
+screen.getByText('Hello World');
+screen.getByText(/hello/i); // Case insensitive
 
 // By label
-screen.getByLabelText('Email')
+screen.getByLabelText('Email');
 
 // By test ID
-screen.getByTestId('custom-element')
+screen.getByTestId('custom-element');
 
 // By placeholder
-screen.getByPlaceholderText('Enter email')
+screen.getByPlaceholderText('Enter email');
 ```
 
 ### Playwright
 
 ```typescript
 // By text
-page.locator('text=Submit')
-page.getByText('Submit')
+page.locator('text=Submit');
+page.getByText('Submit');
 
 // By role
-page.getByRole('button', { name: 'Submit' })
+page.getByRole('button', { name: 'Submit' });
 
 // By test ID
-page.getByTestId('submit-button')
+page.getByTestId('submit-button');
 
 // By CSS
-page.locator('.my-class')
-page.locator('#my-id')
+page.locator('.my-class');
+page.locator('#my-id');
 
 // Chaining
-page.locator('form').locator('button')
+page.locator('form').locator('button');
 ```
 
 ## Assertions
@@ -170,33 +170,33 @@ page.locator('form').locator('button')
 ### Jest/Testing Library
 
 ```typescript
-expect(value).toBe(expected)
-expect(value).toEqual(expected)
-expect(value).toBeTruthy()
-expect(value).toBeNull()
-expect(value).toBeUndefined()
-expect(array).toContain(item)
-expect(array).toHaveLength(3)
-expect(fn).toHaveBeenCalled()
-expect(fn).toHaveBeenCalledWith(arg)
-expect(element).toBeInTheDocument()
-expect(element).toBeVisible()
-expect(element).toHaveClass('my-class')
-expect(element).toHaveAttribute('href', '/path')
+expect(value).toBe(expected);
+expect(value).toEqual(expected);
+expect(value).toBeTruthy();
+expect(value).toBeNull();
+expect(value).toBeUndefined();
+expect(array).toContain(item);
+expect(array).toHaveLength(3);
+expect(fn).toHaveBeenCalled();
+expect(fn).toHaveBeenCalledWith(arg);
+expect(element).toBeInTheDocument();
+expect(element).toBeVisible();
+expect(element).toHaveClass('my-class');
+expect(element).toHaveAttribute('href', '/path');
 ```
 
 ### Playwright
 
 ```typescript
-await expect(page).toHaveURL(/dashboard/)
-await expect(page).toHaveTitle('Dashboard')
-await expect(locator).toBeVisible()
-await expect(locator).toBeHidden()
-await expect(locator).toHaveText('Expected')
-await expect(locator).toContainText('Partial')
-await expect(locator).toHaveClass(/active/)
-await expect(locator).toHaveAttribute('disabled')
-await expect(locator).toHaveCount(5)
+await expect(page).toHaveURL(/dashboard/);
+await expect(page).toHaveTitle('Dashboard');
+await expect(locator).toBeVisible();
+await expect(locator).toBeHidden();
+await expect(locator).toHaveText('Expected');
+await expect(locator).toContainText('Partial');
+await expect(locator).toHaveClass(/active/);
+await expect(locator).toHaveAttribute('disabled');
+await expect(locator).toHaveCount(5);
 ```
 
 ## User Interactions
@@ -204,46 +204,46 @@ await expect(locator).toHaveCount(5)
 ### Testing Library
 
 ```typescript
-import { fireEvent, userEvent } from '@testing-library/react'
+import { fireEvent, userEvent } from '@testing-library/react';
 
 // Click
-fireEvent.click(button)
+fireEvent.click(button);
 
 // Type (userEvent is preferred for realistic input)
-await userEvent.type(input, 'Hello')
+await userEvent.type(input, 'Hello');
 
 // Clear and type
-await userEvent.clear(input)
-await userEvent.type(input, 'New value')
+await userEvent.clear(input);
+await userEvent.type(input, 'New value');
 
 // Select
-await userEvent.selectOptions(select, 'option1')
+await userEvent.selectOptions(select, 'option1');
 
 // Keyboard
-await userEvent.keyboard('{Enter}')
-await userEvent.keyboard('{Escape}')
+await userEvent.keyboard('{Enter}');
+await userEvent.keyboard('{Escape}');
 ```
 
 ### Playwright
 
 ```typescript
 // Click
-await page.click('text=Submit')
-await page.getByRole('button').click()
+await page.click('text=Submit');
+await page.getByRole('button').click();
 
 // Type
-await page.fill('input[name="email"]', 'user@example.com')
-await page.type('input[name="email"]', 'user@example.com')
+await page.fill('input[name="email"]', 'user@example.com');
+await page.type('input[name="email"]', 'user@example.com');
 
 // Press key
-await page.press('input', 'Enter')
-await page.keyboard.press('Escape')
+await page.press('input', 'Enter');
+await page.keyboard.press('Escape');
 
 // Hover
-await page.hover('button')
+await page.hover('button');
 
 // Drag and drop
-await page.dragAndDrop('#source', '#target')
+await page.dragAndDrop('#source', '#target');
 ```
 
 ## Waiting & Timeouts
@@ -251,39 +251,42 @@ await page.dragAndDrop('#source', '#target')
 ### Testing Library
 
 ```typescript
-import { waitFor, waitForElementToBeRemoved } from '@testing-library/react'
+import { waitFor, waitForElementToBeRemoved } from '@testing-library/react';
 
 // Wait for element
 await waitFor(() => {
-  expect(screen.getByText('Loaded')).toBeInTheDocument()
-})
+  expect(screen.getByText('Loaded')).toBeInTheDocument();
+});
 
 // Wait for element to be removed
-await waitForElementToBeRemoved(() => screen.getByText('Loading...'))
+await waitForElementToBeRemoved(() => screen.getByText('Loading...'));
 
 // With timeout
-await waitFor(() => {
-  expect(screen.getByText('Done')).toBeInTheDocument()
-}, { timeout: 5000 })
+await waitFor(
+  () => {
+    expect(screen.getByText('Done')).toBeInTheDocument();
+  },
+  { timeout: 5000 }
+);
 ```
 
 ### Playwright
 
 ```typescript
 // Wait for element
-await page.waitForSelector('text=Success')
+await page.waitForSelector('text=Success');
 
 // Wait for navigation
-await page.waitForURL('/dashboard')
+await page.waitForURL('/dashboard');
 
 // Wait for network
-await page.waitForResponse(resp => resp.url().includes('/api/'))
+await page.waitForResponse((resp) => resp.url().includes('/api/'));
 
 // Wait for state
-await page.waitForLoadState('networkidle')
+await page.waitForLoadState('networkidle');
 
 // Custom timeout
-await page.waitForSelector('text=Success', { timeout: 10000 })
+await page.waitForSelector('text=Success', { timeout: 10000 });
 ```
 
 ## Coverage Commands

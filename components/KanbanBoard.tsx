@@ -59,7 +59,10 @@ export default function KanbanBoard() {
   const [currentAICard, setCurrentAICard] = useState<CardType | null>(null);
 
   // Track intended drop position for database update
-  const [intendedDropPosition, setIntendedDropPosition] = useState<{ columnId: string; position: number } | null>(null);
+  const [intendedDropPosition, setIntendedDropPosition] = useState<{
+    columnId: string;
+    position: number;
+  } | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -92,10 +95,7 @@ export default function KanbanBoard() {
           // No board in Supabase - check localStorage for migration
           const localStorageData = getBoard();
 
-          const result = await initializeBoardAction(
-            organization.id,
-            localStorageData
-          );
+          const result = await initializeBoardAction(organization.id, localStorageData);
 
           if (result.success && result.boardId) {
             setBoardId(result.boardId);
@@ -127,9 +127,7 @@ export default function KanbanBoard() {
     if (card) {
       setActiveCard(card);
       // Store which column the card originally came from
-      const originalColumn = board.columns.find((col) =>
-        col.cardIds.includes(active.id as string)
-      );
+      const originalColumn = board.columns.find((col) => col.cardIds.includes(active.id as string));
       setDraggedCardOriginalColumn(originalColumn?.id || null);
       console.log('🎬 Drag started from column:', originalColumn?.title);
     }
@@ -143,9 +141,7 @@ export default function KanbanBoard() {
     const overId = over.id as string;
 
     // Find source and destination columns
-    const activeColumn = board.columns.find((col) =>
-      col.cardIds.includes(activeId)
-    );
+    const activeColumn = board.columns.find((col) => col.cardIds.includes(activeId));
 
     const overColumn = board.columns.find(
       (col) => col.id === overId || col.cardIds.includes(overId)
@@ -400,11 +396,7 @@ export default function KanbanBoard() {
   return (
     <div className="min-h-screen p-8">
       {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mb-8"
-      >
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-3">
             <Sparkles className="w-8 h-8 text-primary-400" />
@@ -427,7 +419,8 @@ export default function KanbanBoard() {
                   colorText: theme === 'dark' ? 'white' : 'rgb(17, 24, 39)',
                   colorTextSecondary: theme === 'dark' ? 'rgb(209, 213, 219)' : 'rgb(75, 85, 99)',
                   colorTextOnPrimaryBackground: theme === 'dark' ? 'white' : 'rgb(17, 24, 39)',
-                  colorBackground: theme === 'dark' ? 'rgb(31, 41, 55)' : 'rgba(255, 255, 255, 0.95)',
+                  colorBackground:
+                    theme === 'dark' ? 'rgb(31, 41, 55)' : 'rgba(255, 255, 255, 0.95)',
                   colorInputBackground: theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'white',
                   colorInputText: theme === 'dark' ? 'white' : 'rgb(17, 24, 39)',
                   colorPrimary: theme === 'dark' ? '#8b5cf6' : '#7c3aed',
@@ -438,14 +431,21 @@ export default function KanbanBoard() {
                   fontSize: '0.875rem',
                 },
                 elements: {
-                  rootBox: "flex items-center",
-                  organizationSwitcherTrigger: "glass-effect px-4 py-2 rounded-xl border dark:border-white/10 light:border-gray-300 hover:border-primary-400/50 transition-all",
-                  organizationSwitcherTriggerIcon: "text-primary-400",
-                  organizationSwitcherPopoverCard: "glass-effect border dark:border-white/10 light:border-gray-300",
-                  organizationSwitcherPopoverActionButton: theme === 'dark' ? "bg-gray-800 hover:bg-white/10" : "bg-white hover:bg-gray-100",
-                  organizationPreviewMainIdentifier: theme === 'dark' ? "text-white" : "text-gray-900",
-                  organizationPreviewSecondaryIdentifier: theme === 'dark' ? "text-gray-400" : "text-gray-600",
-                }
+                  rootBox: 'flex items-center',
+                  organizationSwitcherTrigger:
+                    'glass-effect px-4 py-2 rounded-xl border dark:border-white/10 light:border-gray-300 hover:border-primary-400/50 transition-all',
+                  organizationSwitcherTriggerIcon: 'text-primary-400',
+                  organizationSwitcherPopoverCard:
+                    'glass-effect border dark:border-white/10 light:border-gray-300',
+                  organizationSwitcherPopoverActionButton:
+                    theme === 'dark'
+                      ? 'bg-gray-800 hover:bg-white/10'
+                      : 'bg-white hover:bg-gray-100',
+                  organizationPreviewMainIdentifier:
+                    theme === 'dark' ? 'text-white' : 'text-gray-900',
+                  organizationPreviewSecondaryIdentifier:
+                    theme === 'dark' ? 'text-gray-400' : 'text-gray-600',
+                },
               }}
             />
             <UserButton
@@ -454,7 +454,8 @@ export default function KanbanBoard() {
                   colorText: theme === 'dark' ? 'white' : 'rgb(17, 24, 39)',
                   colorTextSecondary: theme === 'dark' ? 'rgb(209, 213, 219)' : 'rgb(75, 85, 99)',
                   colorTextOnPrimaryBackground: theme === 'dark' ? 'white' : 'rgb(17, 24, 39)',
-                  colorBackground: theme === 'dark' ? 'rgb(31, 41, 55)' : 'rgba(255, 255, 255, 0.95)',
+                  colorBackground:
+                    theme === 'dark' ? 'rgb(31, 41, 55)' : 'rgba(255, 255, 255, 0.95)',
                   colorInputBackground: theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'white',
                   colorInputText: theme === 'dark' ? 'white' : 'rgb(17, 24, 39)',
                   colorPrimary: theme === 'dark' ? '#8b5cf6' : '#7c3aed',
@@ -465,10 +466,15 @@ export default function KanbanBoard() {
                   fontSize: '0.875rem',
                 },
                 elements: {
-                  avatarBox: "w-10 h-10 ring-2 ring-primary-400/30 hover:ring-primary-400/50 transition-all",
-                  userButtonPopoverCard: "glass-effect border dark:border-white/10 light:border-gray-300",
-                  userButtonPopoverActionButton: theme === 'dark' ? "bg-gray-800 hover:bg-white/10" : "bg-white hover:bg-gray-100",
-                }
+                  avatarBox:
+                    'w-10 h-10 ring-2 ring-primary-400/30 hover:ring-primary-400/50 transition-all',
+                  userButtonPopoverCard:
+                    'glass-effect border dark:border-white/10 light:border-gray-300',
+                  userButtonPopoverActionButton:
+                    theme === 'dark'
+                      ? 'bg-gray-800 hover:bg-white/10'
+                      : 'bg-white hover:bg-gray-100',
+                },
               }}
             />
             <ThemeToggle />
@@ -488,9 +494,7 @@ export default function KanbanBoard() {
       >
         <div className="flex gap-6 overflow-x-auto pb-4 custom-scrollbar">
           {board.columns.map((column) => {
-            const columnCards = column.cardIds
-              .map((id) => board.cards[id])
-              .filter(Boolean);
+            const columnCards = column.cardIds.map((id) => board.cards[id]).filter(Boolean);
 
             return (
               <Column

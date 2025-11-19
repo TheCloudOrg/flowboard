@@ -5,11 +5,13 @@
 The following has been implemented:
 
 ### Installed Packages
+
 - `@clerk/nextjs` - Authentication with Organizations support
 - `@supabase/supabase-js` - Supabase client
 - `@supabase/ssr` - Supabase SSR utilities for Next.js
 
 ### Files Created/Modified
+
 1. **app/layout.tsx** - Wrapped with `ClerkProvider`
 2. **middleware.ts** - Authentication middleware protecting routes
 3. **app/sign-in/[[...sign-in]]/page.tsx** - Sign-in page
@@ -44,11 +46,13 @@ The following has been implemented:
 ### Step 3: Configure Environment Variables
 
 1. Copy `.env.local.example` to `.env.local`:
+
    ```bash
    cp .env.local.example .env.local
    ```
 
 2. Edit `.env.local` and add your keys:
+
    ```env
    # Keep your existing OpenAI key
    OPENAI_API_KEY=sk-your-actual-key
@@ -87,6 +91,7 @@ The following has been implemented:
 ### Step 5: Test Authentication
 
 1. Restart your development server (if running):
+
    ```bash
    npm run dev
    ```
@@ -118,20 +123,24 @@ Once you've completed the setup above and confirmed authentication works:
 ## 🆘 Troubleshooting
 
 ### "Invalid Clerk publishable key"
+
 - Check `.env.local` has correct `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
 - Restart dev server after adding keys
 
 ### "Redirect loop" or "Too many redirects"
+
 - Check Clerk Dashboard paths are configured correctly
 - Ensure middleware.ts has correct public routes
 
 ### "CORS error" with Supabase
+
 - Verify Supabase URL is correct
-- Use the **Publishable key** (sb_publishable_...) from Settings → API, NOT the secret key
+- Use the **Publishable key** (sb*publishable*...) from Settings → API, NOT the secret key
 - Legacy "anon" key (eyJhbGci...) still works but use Publishable key for 2025+ projects
 - Ensure you're using the client-safe key, not the service_role/secret key
 
 ### Changes not reflecting
+
 - Clear `.next` folder: `rm -rf .next`
 - Restart dev server: `npm run dev`
 

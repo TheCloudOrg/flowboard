@@ -3,6 +3,7 @@
 ## Email #1: Welcome Email (Immediate)
 
 **Subject Line Options:**
+
 1. "Welcome! Your Kanban board is ready 🎉"
 2. "Get started in 3 seconds (no, really)"
 3. "You're in! Here's what you can do now"
@@ -50,6 +51,7 @@ P.S. If you run into any issues or have ideas for improvements, I'd love to hear
 ## Email #2: Quick Start Guide (Day 2)
 
 **Subject Lines:**
+
 1. "Here's how to get the most out of your Kanban board"
 2. "3 tips to supercharge your workflow"
 3. "You're using it! Here's what you might have missed"
@@ -106,6 +108,7 @@ P.S. If you're loving the board, share it with a friend! The best tools are the 
 ## Email #3: Advanced Features (Day 5)
 
 **Subject Lines:**
+
 1. "You've mastered the basics. Here's what's next"
 2. "Advanced tips for power users"
 3. "Hidden features you might have missed"
@@ -304,6 +307,7 @@ P.S. If you're enjoying the updates, star us on GitHub! It helps more people dis
 ## Email #7: Re-engagement (30 Days Since Last Use)
 
 **Subject Lines:**
+
 1. "We miss you! Here's what's new"
 2. "Your board is waiting for you (+ new features)"
 3. "3 new features you might have missed"
@@ -546,16 +550,19 @@ Then:
 ### By Engagement Level
 
 **High Engagement (daily users):**
+
 - Beta features
 - Power user tips
 - Contribution opportunities
 
 **Medium Engagement (weekly users):**
+
 - Feature highlights
 - Use case ideas
 - Productivity tips
 
 **Low Engagement (haven't used in 30+ days):**
+
 - Re-engagement campaign
 - What we've improved
 - "We miss you" offers
@@ -563,21 +570,25 @@ Then:
 ### By Use Case
 
 **Developers:**
+
 - GitHub integration tips
 - Agile workflow templates
 - Sprint planning strategies
 
 **Freelancers:**
+
 - Client project templates
 - Invoice tracking workflows
 - Time management tips
 
 **Students:**
+
 - Assignment tracking
 - Study planning
 - Group project collaboration
 
 **Creators:**
+
 - Content pipeline templates
 - Idea management
 - Publishing workflows
@@ -587,26 +598,31 @@ Then:
 ## Subject Line A/B Testing Ideas
 
 ### Curiosity-Driven
+
 - "You're doing it wrong (and that's okay)"
 - "The feature 83% of users miss"
 - "This changed how I work"
 
 ### Benefit-Focused
+
 - "Save 2 hours per week with this trick"
 - "Get more done with less stress"
 - "Your productivity, simplified"
 
 ### Urgency/FOMO
+
 - "New feature drops tomorrow"
 - "Last chance to vote on roadmap"
 - "Limited beta spots available"
 
 ### Personal/Direct
+
 - "A quick question for you"
 - "I built this for you"
 - "Your feedback made this happen"
 
 ### Numeric
+
 - "3 ways to master your Kanban board"
 - "47 tasks completed - here's how"
 - "One board, infinite possibilities"

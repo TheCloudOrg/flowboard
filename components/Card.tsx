@@ -14,14 +14,9 @@ interface CardProps {
 }
 
 export default function Card({ card, onEdit, onDelete, onAIGenerate }: CardProps) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: card.id });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: card.id,
+  });
 
   const style = {
     transform: CSS.Transform.toString(transform),

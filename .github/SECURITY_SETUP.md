@@ -11,7 +11,9 @@ We've implemented comprehensive automated security scanning that runs on every p
 ### 1. GitHub Actions Workflows
 
 #### `security-scan.yml`
+
 Runs on every PR and daily at 2 AM UTC. Includes:
+
 - **npm audit** - Scans for dependency vulnerabilities
 - **Gitleaks** - Scans for accidentally committed secrets
 - **Snyk** - Advanced dependency vulnerability scanning
@@ -19,18 +21,22 @@ Runs on every PR and daily at 2 AM UTC. Includes:
 - **Security headers check** - Validates security configuration
 
 **Triggers:**
+
 - Pull requests to `main` or `develop`
 - Pushes to `main` or `develop`
 - Daily schedule (2 AM UTC)
 - Manual dispatch
 
 #### `codeql-analysis.yml`
+
 GitHub's native code security scanner. Runs weekly on Monday at 3 AM UTC.
+
 - **CodeQL** - Static analysis for security vulnerabilities
 - Analyzes JavaScript and TypeScript code
 - Uploads findings to GitHub Security tab
 
 **Triggers:**
+
 - Pull requests to `main` or `develop`
 - Pushes to `main` or `develop`
 - Weekly schedule (Monday 3 AM UTC)
@@ -39,6 +45,7 @@ GitHub's native code security scanner. Runs weekly on Monday at 3 AM UTC.
 ### 2. Dependabot
 
 Automatically creates pull requests for:
+
 - Dependency security updates (high priority)
 - Dependency version updates (weekly)
 - GitHub Actions workflow updates (weekly)
@@ -54,6 +61,7 @@ Automatically creates pull requests for:
 **Configuration:** `.gitleaksignore`
 
 **Ignores:**
+
 - Example files (`.env.local.example`)
 - Documentation with placeholder secrets
 - Test fixtures
@@ -121,6 +129,7 @@ Snyk provides advanced dependency vulnerability scanning.
 ### Step 4: Test the Setup
 
 1. **Create a test PR:**
+
    ```bash
    git checkout -b test-security-scan
    echo "# Test" >> README.md
@@ -159,6 +168,7 @@ All security findings are aggregated in one place:
 ### Pull Request Checks
 
 When you create a PR, security scans run automatically:
+
 - View results in the "Checks" tab of the PR
 - Each job shows detailed logs
 - Failed checks will block merging (if branch protection enabled)
@@ -166,6 +176,7 @@ When you create a PR, security scans run automatically:
 ### Workflow Runs
 
 View historical scan results:
+
 1. Go to **Actions** tab
 2. Select a workflow (e.g., "Security Scan")
 3. View recent runs and their results
@@ -188,22 +199,26 @@ You'll receive notifications for:
    - Failed scheduled scans
 
 **Configure notifications:**
+
 - GitHub → Settings → Notifications → Dependabot alerts
 - GitHub → Settings → Notifications → Actions
 
 ## 🔧 Maintenance
 
 ### Weekly Tasks
+
 - [ ] Review and merge Dependabot PRs
 - [ ] Check Security tab for new alerts
 - [ ] Review failed workflow runs
 
 ### Monthly Tasks
+
 - [ ] Review security scan trends
 - [ ] Update security configurations if needed
 - [ ] Review and update `.gitleaksignore` if needed
 
 ### Quarterly Tasks
+
 - [ ] Review overall security posture
 - [ ] Update security documentation
 - [ ] Test incident response procedures
@@ -267,6 +282,7 @@ You'll receive notifications for:
 1. **Edit `.github/workflows/security-scan.yml`**
 
 2. **Add a new job:**
+
 ```yaml
 new-security-check:
   name: New Security Check
@@ -279,6 +295,7 @@ new-security-check:
 ```
 
 3. **Add to audit summary:**
+
 ```yaml
 audit-summary:
   needs: [dependency-scan, secret-scan, snyk-scan, eslint-scan, new-security-check]
@@ -301,6 +318,7 @@ Security headers are configured in `next.config.js`:
 - **X-Content-Type-Options:** Prevents MIME sniffing
 
 **Test headers after deployment:**
+
 ```bash
 curl -I https://your-app.com
 # or visit https://securityheaders.com
@@ -309,17 +327,20 @@ curl -I https://your-app.com
 ## 📚 Resources
 
 ### Documentation
+
 - [GitHub Actions Security](https://docs.github.com/en/actions/security-guides)
 - [Dependabot Documentation](https://docs.github.com/en/code-security/dependabot)
 - [CodeQL Documentation](https://codeql.github.com/docs/)
 - [Snyk Documentation](https://docs.snyk.io/)
 
 ### Best Practices
+
 - [OWASP Top 10](https://owasp.org/www-project-top-ten/)
 - [Node.js Security Best Practices](https://cheatsheetseries.owasp.org/cheatsheets/Nodejs_Security_Cheat_Sheet.html)
 - [Next.js Security](https://nextjs.org/docs/app/building-your-application/deploying/production-checklist)
 
 ### Tools
+
 - [SecurityHeaders.com](https://securityheaders.com) - Test security headers
 - [SSL Labs](https://www.ssllabs.com/ssltest/) - Test SSL/TLS configuration
 - [OWASP ZAP](https://www.zaproxy.org/) - Web security scanner
@@ -329,6 +350,7 @@ curl -I https://your-app.com
 ### Q: Why are security scans failing on my PR?
 
 **A:** Security scans can fail for several reasons:
+
 1. New vulnerabilities in dependencies → Run `npm audit fix`
 2. Code security issues → Review CodeQL alerts
 3. Secrets detected → Remove secrets, use env vars
@@ -337,10 +359,12 @@ curl -I https://your-app.com
 ### Q: Can I skip security checks for a PR?
 
 **A:** You can, but you shouldn't. If you absolutely must:
+
 1. Add `[skip ci]` to commit message (skips all checks)
 2. Or disable branch protection temporarily (not recommended)
 
 **Better approach:**
+
 - Fix the security issues
 - Or if false positive, add to ignore files
 - Or update security check configuration
@@ -348,6 +372,7 @@ curl -I https://your-app.com
 ### Q: How often should I update dependencies?
 
 **A:**
+
 - **Security updates:** Immediately (within 48 hours)
 - **Minor updates:** Weekly (via Dependabot)
 - **Major updates:** Monthly, with thorough testing
@@ -356,6 +381,7 @@ curl -I https://your-app.com
 ### Q: What if I find a security issue?
 
 **A:**
+
 1. **Do not** create a public issue
 2. Use GitHub Security Advisory (Security tab)
 3. Or email security contact (see SECURITY.md)
@@ -364,6 +390,7 @@ curl -I https://your-app.com
 ### Q: How do I test security locally?
 
 **A:**
+
 ```bash
 # Check for dependency vulnerabilities
 npm audit

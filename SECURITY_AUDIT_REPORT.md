@@ -15,6 +15,7 @@ This security audit was conducted on the Flow Board application, a Next.js-based
 ### Overall Security Rating: ⚠️ MODERATE RISK
 
 **Key Findings:**
+
 - ✅ Strong authentication foundation with Clerk
 - ✅ No hardcoded secrets found
 - ✅ Proper use of environment variables
@@ -23,6 +24,7 @@ This security audit was conducted on the Flow Board application, a Next.js-based
 - ⚠️ Missing rate limiting and security headers (now fixed)
 
 **Immediate Actions Required:**
+
 1. Enable RLS on all Supabase tables
 2. Add authentication to `/api/generate-prompt` endpoint
 3. Review and test all security configurations
@@ -33,35 +35,35 @@ This security audit was conducted on the Flow Board application, a Next.js-based
 
 ### Critical Severity (P0) - 2 Issues
 
-| ID | Title | Component | CVSS | Status |
-|----|-------|-----------|------|--------|
-| SEC-001 | Row Level Security Disabled | Supabase Database | 9.1 | 🔴 Open |
-| SEC-002 | Service Role Key Overuse | Database Layer | 8.5 | 🔴 Open |
+| ID      | Title                       | Component         | CVSS | Status  |
+| ------- | --------------------------- | ----------------- | ---- | ------- |
+| SEC-001 | Row Level Security Disabled | Supabase Database | 9.1  | 🔴 Open |
+| SEC-002 | Service Role Key Overuse    | Database Layer    | 8.5  | 🔴 Open |
 
 ### High Severity (P1) - 3 Issues
 
-| ID | Title | Component | CVSS | Status |
-|----|-------|-----------|------|--------|
-| SEC-003 | Unauthenticated AI API Endpoint | `/api/generate-prompt` | 7.5 | ✅ **Fixed** |
-| SEC-004 | Missing Rate Limiting | All API Routes | 7.2 | 🔴 Open |
-| SEC-005 | Dependency Vulnerabilities | npm packages | 7.0 | ✅ **Fixed** |
+| ID      | Title                           | Component              | CVSS | Status       |
+| ------- | ------------------------------- | ---------------------- | ---- | ------------ |
+| SEC-003 | Unauthenticated AI API Endpoint | `/api/generate-prompt` | 7.5  | ✅ **Fixed** |
+| SEC-004 | Missing Rate Limiting           | All API Routes         | 7.2  | 🔴 Open      |
+| SEC-005 | Dependency Vulnerabilities      | npm packages           | 7.0  | ✅ **Fixed** |
 
 ### Medium Severity (P2) - 3 Issues
 
-| ID | Title | Component | CVSS | Status |
-|----|-------|-----------|------|--------|
-| SEC-006 | Insufficient Input Validation | Server Actions | 5.5 | ✅ **Fixed** |
-| SEC-007 | Excessive Error Information | Error Handlers | 5.0 | 🔴 Open |
-| SEC-008 | Missing CORS Configuration | API Routes | 4.8 | 🔴 Open |
+| ID      | Title                         | Component      | CVSS | Status       |
+| ------- | ----------------------------- | -------------- | ---- | ------------ |
+| SEC-006 | Insufficient Input Validation | Server Actions | 5.5  | ✅ **Fixed** |
+| SEC-007 | Excessive Error Information   | Error Handlers | 5.0  | 🔴 Open      |
+| SEC-008 | Missing CORS Configuration    | API Routes     | 4.8  | 🔴 Open      |
 
 ### Low Severity (P3) - 4 Issues
 
-| ID | Title | Component | CVSS | Status |
-|----|-------|-----------|------|--------|
-| SEC-009 | Missing Security Headers | next.config.js | 3.5 | ✅ **Fixed** |
-| SEC-010 | No Audit Logging | Application-wide | 3.2 | 🔴 Open |
-| SEC-011 | Missing Data Export (GDPR) | User Management | 3.0 | 🔴 Open |
-| SEC-012 | No Backup Strategy | Database | 2.8 | 🔴 Open |
+| ID      | Title                      | Component        | CVSS | Status       |
+| ------- | -------------------------- | ---------------- | ---- | ------------ |
+| SEC-009 | Missing Security Headers   | next.config.js   | 3.5  | ✅ **Fixed** |
+| SEC-010 | No Audit Logging           | Application-wide | 3.2  | 🔴 Open      |
+| SEC-011 | Missing Data Export (GDPR) | User Management  | 3.0  | 🔴 Open      |
+| SEC-012 | No Backup Strategy         | Database         | 2.8  | 🔴 Open      |
 
 ---
 
@@ -77,6 +79,7 @@ This security audit was conducted on the Flow Board application, a Next.js-based
 All Supabase tables have Row Level Security (RLS) explicitly disabled. This means that anyone with the service role key can access ALL data across ALL organizations without restriction.
 
 **Affected Tables:**
+
 - `users`
 - `organizations`
 - `organization_members`
@@ -85,6 +88,7 @@ All Supabase tables have Row Level Security (RLS) explicitly disabled. This mean
 - `cards`
 
 **Code Evidence:**
+
 ```sql
 -- From migration file (line 134-139):
 -- DISABLE RLS FOR NOW (we'll enable after Clerk JWT setup)
@@ -92,22 +96,25 @@ All Supabase tables have Row Level Security (RLS) explicitly disabled. This mean
 ```
 
 **Impact:**
+
 - **Data Breach Risk:** Complete database exposure if service role key leaks
 - **Cross-Organization Access:** Users could potentially access other organizations' data
 - **Compliance Violation:** Fails SOC 2 and GDPR requirements
 - **Zero Trust Failure:** Application logic is the only protection
 
 **Exploitation Scenario:**
+
 ```javascript
 // If SUPABASE_SERVICE_ROLE_KEY is leaked:
-const supabase = createClient(url, serviceRoleKey)
-const { data } = await supabase.from('boards').select('*')
+const supabase = createClient(url, serviceRoleKey);
+const { data } = await supabase.from('boards').select('*');
 // Returns ALL boards from ALL organizations!
 ```
 
 **Remediation Steps:**
 
 1. **Enable RLS on all tables:**
+
 ```sql
 ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE organizations ENABLE ROW LEVEL SECURITY;
@@ -118,6 +125,7 @@ ALTER TABLE cards ENABLE ROW LEVEL SECURITY;
 ```
 
 2. **Create RLS policies using Clerk JWT:**
+
 ```sql
 -- Example policy for boards table
 CREATE POLICY "Users can view their organization's boards"
@@ -151,6 +159,7 @@ CREATE POLICY "Users can insert boards in their organization"
    - Update Clerk JWT template to include Supabase claims
 
 4. **Update client initialization to use authenticated client:**
+
 ```typescript
 // lib/supabase/server.ts - already correct, just need RLS enabled
 ```
@@ -163,6 +172,7 @@ CREATE POLICY "Users can insert boards in their organization"
 **Timeline:** Fix within 24 hours (P0)
 
 **References:**
+
 - [Supabase RLS Documentation](https://supabase.com/docs/guides/auth/row-level-security)
 - [Clerk + Supabase Integration](https://supabase.com/docs/guides/auth/social-login/auth-clerk)
 - Existing policy definitions in `DATABASE_SCHEMA.md`
@@ -179,11 +189,13 @@ CREATE POLICY "Users can insert boards in their organization"
 The Supabase service role key (which bypasses ALL RLS policies) is currently required for normal operations because RLS is disabled. This key has unrestricted database access and should only be used in highly controlled contexts.
 
 **Current Usage:**
+
 - ✅ **Appropriate:** Webhook endpoint (`/api/webhooks/clerk`) for syncing Clerk data
 - ⚠️ **Concerning:** Available in server environment (could be used elsewhere)
 - ❌ **Risky:** Required because RLS is disabled
 
 **Impact:**
+
 - Key compromise = full database access
 - No audit trail of operations performed with service key
 - Violates principle of least privilege
@@ -221,6 +233,7 @@ The Supabase service role key (which bypasses ALL RLS policies) is currently req
 The `/api/generate-prompt` endpoint was calling OpenAI's API without any authentication check. This has been fixed by adding Clerk authentication middleware.
 
 **Previous Vulnerable Code:**
+
 ```typescript
 // app/api/generate-prompt/route.ts (BEFORE FIX)
 export async function POST(request: NextRequest) {
@@ -237,12 +250,14 @@ export async function POST(request: NextRequest) {
 ```
 
 **Impact:**
+
 - **Cost Drain:** Unlimited OpenAI API calls at your expense
 - **Abuse:** Could be used for unintended purposes
 - **DoS:** Overwhelm the endpoint with requests
 - **Data Leakage:** Potential to extract information via prompts
 
 **Proof of Concept:**
+
 ```bash
 # Anyone can call this endpoint without authentication
 curl -X POST https://your-app.com/api/generate-prompt \
@@ -285,6 +300,7 @@ export async function POST(request: NextRequest) {
 ✅ Protects against API cost drain from unauthorized requests
 
 **Future Enhancements** (to be addressed separately):
+
 1. Implement rate limiting (e.g., 10 requests per hour per user) - See SEC-004
 2. Add usage tracking to monitor API costs
 3. Consider implementing a credit/quota system
@@ -292,6 +308,7 @@ export async function POST(request: NextRequest) {
 5. Log all AI generation requests for audit - See SEC-010
 
 **Verification:**
+
 - ✅ Unauthenticated requests return 401
 - ✅ Authenticated users can access the endpoint
 - ✅ Production deployment confirmed working
@@ -308,17 +325,20 @@ export async function POST(request: NextRequest) {
 
 **Description:**
 No rate limiting is implemented on any API endpoints, making the application vulnerable to:
+
 - API abuse
 - Denial of Service attacks
 - Cost drain (especially OpenAI endpoint)
 - Resource exhaustion
 
 **Affected Endpoints:**
+
 - `/api/generate-prompt` - Could drain OpenAI credits
 - `/api/webhooks/clerk` - Could overwhelm webhook processing
 - All server actions - Could overwhelm database
 
 **Impact:**
+
 - Service degradation or outage
 - Unexpected costs from OpenAI API abuse
 - Database connection exhaustion
@@ -327,21 +347,22 @@ No rate limiting is implemented on any API endpoints, making the application vul
 **Remediation Options:**
 
 #### Option 1: Vercel Rate Limiting (Recommended for Vercel deployments)
+
 ```typescript
 // middleware.ts
-import { Ratelimit } from '@vercel/rate-limit'
-import { kv } from '@vercel/kv'
+import { Ratelimit } from '@vercel/rate-limit';
+import { kv } from '@vercel/kv';
 
 const ratelimit = new Ratelimit({
   redis: kv,
   limiter: Ratelimit.slidingWindow(10, '10 s'),
-})
+});
 
 export async function middleware(request: NextRequest) {
   // Rate limit API routes
   if (request.nextUrl.pathname.startsWith('/api/')) {
-    const identifier = request.ip ?? 'anonymous'
-    const { success, limit, reset, remaining } = await ratelimit.limit(identifier)
+    const identifier = request.ip ?? 'anonymous';
+    const { success, limit, reset, remaining } = await ratelimit.limit(identifier);
 
     if (!success) {
       return new Response('Too Many Requests', {
@@ -350,8 +371,8 @@ export async function middleware(request: NextRequest) {
           'X-RateLimit-Limit': limit.toString(),
           'X-RateLimit-Remaining': remaining.toString(),
           'X-RateLimit-Reset': reset.toString(),
-        }
-      })
+        },
+      });
     }
   }
 
@@ -360,27 +381,29 @@ export async function middleware(request: NextRequest) {
 ```
 
 #### Option 2: Upstash Rate Limiting (Works anywhere)
+
 ```bash
 npm install @upstash/ratelimit @upstash/redis
 ```
 
 ```typescript
-import { Ratelimit } from '@upstash/ratelimit'
-import { Redis } from '@upstash/redis'
+import { Ratelimit } from '@upstash/ratelimit';
+import { Redis } from '@upstash/redis';
 
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL,
   token: process.env.UPSTASH_REDIS_REST_TOKEN,
-})
+});
 
 const ratelimit = new Ratelimit({
   redis: redis,
   limiter: Ratelimit.slidingWindow(5, '10 s'),
   analytics: true,
-})
+});
 ```
 
 #### Option 3: Simple In-Memory Rate Limiting (Dev only)
+
 ```typescript
 // lib/ratelimit.ts
 const requestCounts = new Map<string, { count: number; resetTime: number }>();
@@ -404,6 +427,7 @@ export function checkRateLimit(identifier: string, limit: number, windowMs: numb
 ```
 
 **Recommended Limits:**
+
 - `/api/generate-prompt`: 10 requests per hour per user
 - `/api/webhooks/clerk`: 100 requests per minute per IP
 - Server Actions: 100 requests per minute per user
@@ -425,6 +449,7 @@ export function checkRateLimit(identifier: string, limit: number, windowMs: numb
 npm audit identified 5 high-severity vulnerabilities in dependencies. All have been resolved.
 
 **Vulnerable Packages:**
+
 1. **glob** (v10.3.7 - 11.0.3)
    - CVE: GHSA-5j98-mcp5-4vw2
    - Issue: Command injection via CLI
@@ -448,6 +473,7 @@ npm audit identified 5 high-severity vulnerabilities in dependencies. All have b
    - Fix: Upgrade to v4.1.17
 
 **npm audit output:**
+
 ```json
 {
   "vulnerabilities": {
@@ -461,18 +487,22 @@ npm audit identified 5 high-severity vulnerabilities in dependencies. All have b
 **Implemented Fixes:**
 
 1. **Updated ESLint to v9:**
+
    ```bash
    npm install -D eslint@9 eslint-config-next@16.0.3
    ```
+
    - Updated ESLint from v8 to v9
    - Updated eslint-config-next to 16.0.3 (matching Next.js 16)
    - Resolved 2 of 5 glob vulnerabilities
 
 2. **Updated Tailwind CSS to v4:**
+
    ```bash
    npm audit fix --force  # Updated tailwindcss to 4.1.17
    npm install -D @tailwindcss/postcss
    ```
+
    - Upgraded Tailwind CSS from v3.4.17 to v4.1.17
    - Installed new `@tailwindcss/postcss` package (v4 requirement)
    - Updated `postcss.config.js` to use `@tailwindcss/postcss`
@@ -493,6 +523,7 @@ npm audit identified 5 high-severity vulnerabilities in dependencies. All have b
 ✅ Zero npm audit vulnerabilities remaining
 
 **Migration Notes:**
+
 - Tailwind v4 uses CSS-first configuration instead of `@apply`
 - Custom styles converted to plain CSS in globals.css
 - Functionality preserved, visual appearance unchanged
@@ -528,19 +559,21 @@ export async function addCardAction(boardId: string, columnId: string, card: any
 ```
 
 **Attack Scenario:**
+
 ```javascript
 // Attacker sends massive payload
 addCardAction(boardId, columnId, {
-  title: "A".repeat(1000000), // 1MB string!
-  description: "B".repeat(1000000),
-  notes: "C".repeat(1000000)
-})
+  title: 'A'.repeat(1000000), // 1MB string!
+  description: 'B'.repeat(1000000),
+  notes: 'C'.repeat(1000000),
+});
 // Could cause: Database bloat, memory issues, slow queries
 ```
 
 **Implemented Fixes:**
 
 1. **Created validation utility ([lib/validation.ts](lib/validation.ts)):**
+
 ```typescript
 // lib/validation.ts
 export const VALIDATION_LIMITS = {
@@ -559,15 +592,24 @@ export function validateCardInput(card: any): { valid: boolean; error?: string }
   }
 
   if (card.title.length > VALIDATION_LIMITS.CARD_TITLE) {
-    return { valid: false, error: `Card title must be ${VALIDATION_LIMITS.CARD_TITLE} characters or less` };
+    return {
+      valid: false,
+      error: `Card title must be ${VALIDATION_LIMITS.CARD_TITLE} characters or less`,
+    };
   }
 
   if (card.description && card.description.length > VALIDATION_LIMITS.CARD_DESCRIPTION) {
-    return { valid: false, error: `Description must be ${VALIDATION_LIMITS.CARD_DESCRIPTION} characters or less` };
+    return {
+      valid: false,
+      error: `Description must be ${VALIDATION_LIMITS.CARD_DESCRIPTION} characters or less`,
+    };
   }
 
   if (card.notes && card.notes.length > VALIDATION_LIMITS.CARD_NOTES) {
-    return { valid: false, error: `Notes must be ${VALIDATION_LIMITS.CARD_NOTES} characters or less` };
+    return {
+      valid: false,
+      error: `Notes must be ${VALIDATION_LIMITS.CARD_NOTES} characters or less`,
+    };
   }
 
   return { valid: true };
@@ -575,6 +617,7 @@ export function validateCardInput(card: any): { valid: boolean; error?: string }
 ```
 
 2. **Apply validation in server actions:**
+
 ```typescript
 export async function addCardAction(boardId: string, columnId: string, card: any) {
   const user = await currentUser();
@@ -619,6 +662,7 @@ export async function addCardAction(boardId: string, columnId: string, card: any
 ✅ Build verified and tested
 
 **Future Enhancements:**
+
 - Add database-level constraints (check constraints)
 - Implement rate limiting on operations
 - Add monitoring for validation failures
@@ -637,6 +681,7 @@ export async function addCardAction(boardId: string, columnId: string, card: any
 Error handlers log full error objects to console, which could leak sensitive information in production logs.
 
 **Examples:**
+
 ```typescript
 // app/api/webhooks/clerk/route.ts
 catch (error: any) {
@@ -648,6 +693,7 @@ catch (error: any) {
 ```
 
 **Potential Leaks:**
+
 - Database connection strings
 - Internal file paths
 - Stack traces with code
@@ -657,6 +703,7 @@ catch (error: any) {
 **Remediation:**
 
 1. **Create error logging utility:**
+
 ```typescript
 // lib/logger.ts
 export function logError(context: string, error: unknown, metadata?: Record<string, any>) {
@@ -679,6 +726,7 @@ export function logError(context: string, error: unknown, metadata?: Record<stri
 ```
 
 2. **Update error handlers:**
+
 ```typescript
 catch (error: unknown) {
   logError('webhook-verification', error, {
@@ -691,6 +739,7 @@ catch (error: unknown) {
 ```
 
 3. **Implement Sentry or similar:**
+
 ```bash
 npm install @sentry/nextjs
 ```
@@ -776,6 +825,7 @@ export async function middleware(request: NextRequest) {
 Security headers were missing from the Next.js configuration. This has been fixed with comprehensive security headers.
 
 **Implemented Headers:**
+
 - ✅ `Strict-Transport-Security`: Force HTTPS
 - ✅ `X-Frame-Options`: Prevent clickjacking
 - ✅ `X-Content-Type-Options`: Prevent MIME sniffing
@@ -789,6 +839,7 @@ See `next.config.js` for full implementation.
 
 **Testing:**
 After deployment, verify headers using:
+
 ```bash
 curl -I https://your-app.com | grep -E "X-Frame|X-Content|CSP|Strict"
 ```
@@ -805,12 +856,14 @@ Or use: https://securityheaders.com
 
 **Description:**
 No audit logging for security-relevant events like:
+
 - Authentication attempts
 - Permission changes
 - Data access
 - Administrative actions
 
 **Impact:**
+
 - Difficult to investigate security incidents
 - No forensic trail
 - Compliance issues (SOC 2, GDPR)
@@ -873,6 +926,7 @@ No data export functionality for GDPR compliance (right to data portability).
 
 **Recommendation:**
 Implement user data export endpoint:
+
 ```typescript
 // app/api/user/export/route.ts
 export async function GET() {
@@ -917,21 +971,26 @@ No documented backup and recovery strategy.
    - Cross-region replication
 
 2. **Document recovery procedures:**
+
 ```markdown
 ## Backup & Recovery
 
 ### Automated Backups
+
 - Daily snapshots at 2 AM UTC
 - Retained for 30 days
 - Located in Supabase dashboard → Database → Backups
 
 ### Manual Backup
+
 supabase db dump > backup-$(date +%Y%m%d).sql
 
 ### Restore
+
 supabase db restore backup-20250117.sql
 
 ### Testing
+
 - Test restore quarterly
 - Document restore time (RTO: 4 hours)
 - Document data loss tolerance (RPO: 24 hours)
@@ -1010,27 +1069,27 @@ supabase db restore backup-20250117.sql
 
 ### GDPR Compliance
 
-| Requirement | Status | Notes |
-|-------------|--------|-------|
-| Right to Access | ⚠️ Partial | Users can view their data, but no export |
-| Right to Erasure | ✅ Yes | Clerk webhook handles user deletion |
-| Right to Portability | ❌ No | No data export feature |
-| Privacy by Design | ⚠️ Partial | Some measures in place, RLS missing |
-| Data Minimization | ✅ Yes | Only necessary data collected |
-| Consent Management | ❌ No | No cookie consent banner |
-| Privacy Policy | ❌ No | Not implemented |
+| Requirement          | Status     | Notes                                    |
+| -------------------- | ---------- | ---------------------------------------- |
+| Right to Access      | ⚠️ Partial | Users can view their data, but no export |
+| Right to Erasure     | ✅ Yes     | Clerk webhook handles user deletion      |
+| Right to Portability | ❌ No      | No data export feature                   |
+| Privacy by Design    | ⚠️ Partial | Some measures in place, RLS missing      |
+| Data Minimization    | ✅ Yes     | Only necessary data collected            |
+| Consent Management   | ❌ No      | No cookie consent banner                 |
+| Privacy Policy       | ❌ No      | Not implemented                          |
 
 ### SOC 2 Considerations
 
-| Control | Status | Notes |
-|---------|--------|-------|
-| Access Control | ⚠️ Partial | Auth in place, but no RLS |
-| Audit Logging | ❌ No | No audit trail |
-| Encryption at Rest | ✅ Yes | Supabase default |
-| Encryption in Transit | ✅ Yes | HTTPS enforced |
-| Monitoring | ❌ No | No security monitoring |
-| Incident Response | ❌ No | No documented process |
-| Backup & Recovery | ⚠️ Partial | Supabase backups, not tested |
+| Control               | Status     | Notes                        |
+| --------------------- | ---------- | ---------------------------- |
+| Access Control        | ⚠️ Partial | Auth in place, but no RLS    |
+| Audit Logging         | ❌ No      | No audit trail               |
+| Encryption at Rest    | ✅ Yes     | Supabase default             |
+| Encryption in Transit | ✅ Yes     | HTTPS enforced               |
+| Monitoring            | ❌ No      | No security monitoring       |
+| Incident Response     | ❌ No      | No documented process        |
+| Backup & Recovery     | ⚠️ Partial | Supabase backups, not tested |
 
 **Recommendation:** For production/enterprise use, implement missing controls.
 
@@ -1040,23 +1099,23 @@ supabase db restore backup-20250117.sql
 
 ### Production Dependencies
 
-| Package | Version | Known Vulnerabilities | Status |
-|---------|---------|----------------------|--------|
-| @clerk/nextjs | 6.35.1 | None | ✅ Secure |
-| @supabase/ssr | 0.7.0 | None | ✅ Secure |
-| @supabase/supabase-js | 2.81.1 | None | ✅ Secure |
-| next | 16.0.3 | None | ✅ Secure |
-| openai | 6.9.0 | None | ✅ Secure |
-| react | 19.2.0 | None | ✅ Secure |
-| svix | 1.81.0 | None | ✅ Secure |
+| Package               | Version | Known Vulnerabilities | Status    |
+| --------------------- | ------- | --------------------- | --------- |
+| @clerk/nextjs         | 6.35.1  | None                  | ✅ Secure |
+| @supabase/ssr         | 0.7.0   | None                  | ✅ Secure |
+| @supabase/supabase-js | 2.81.1  | None                  | ✅ Secure |
+| next                  | 16.0.3  | None                  | ✅ Secure |
+| openai                | 6.9.0   | None                  | ✅ Secure |
+| react                 | 19.2.0  | None                  | ✅ Secure |
+| svix                  | 1.81.0  | None                  | ✅ Secure |
 
 ### Development Dependencies
 
-| Package | Version | Known Vulnerabilities | Status |
-|---------|---------|----------------------|--------|
-| eslint-config-next | 14.2.18 | High (glob) | ❌ Update to 16.0.3 |
-| tailwindcss | 3.4.17 | High (glob chain) | ❌ Update to 4.x |
-| typescript | 5.x | None | ✅ Secure |
+| Package            | Version | Known Vulnerabilities | Status              |
+| ------------------ | ------- | --------------------- | ------------------- |
+| eslint-config-next | 14.2.18 | High (glob)           | ❌ Update to 16.0.3 |
+| tailwindcss        | 3.4.17  | High (glob chain)     | ❌ Update to 4.x    |
+| typescript         | 5.x     | None                  | ✅ Secure           |
 
 **Note:** All production dependencies are secure. Only dev dependencies have vulnerabilities.
 
@@ -1087,6 +1146,7 @@ supabase db restore backup-20250117.sql
 ### Setup Instructions
 
 #### 1. Configure Snyk
+
 1. Sign up at https://snyk.io
 2. Connect your GitHub repository
 3. Get your Snyk token from Account Settings
@@ -1095,6 +1155,7 @@ supabase db restore backup-20250117.sql
    - Add new secret: `SNYK_TOKEN=your-snyk-token`
 
 #### 2. Enable GitHub Security Features
+
 1. Go to Settings → Security → Code security and analysis
 2. Enable:
    - ✅ Dependency graph
@@ -1104,6 +1165,7 @@ supabase db restore backup-20250117.sql
    - ✅ Secret scanning
 
 #### 3. Configure Branch Protection
+
 1. Go to Settings → Branches
 2. Add rule for `main` branch:
    - ✅ Require status checks to pass before merging
@@ -1196,6 +1258,7 @@ supabase db restore backup-20250117.sql
   - Estimated time: 2-3 hours
 
 ### Total Estimated Effort
+
 - **Phase 1 (Critical):** 6-8 hours
 - **Phase 2 (High):** 4-6 hours
 - **Phase 3 (Medium):** 7-10 hours
@@ -1211,6 +1274,7 @@ supabase db restore backup-20250117.sql
 After implementing fixes, validate with:
 
 #### Authentication Testing
+
 - [ ] Unauthenticated users cannot access protected routes
 - [ ] Unauthenticated users cannot call API endpoints
 - [ ] Users cannot access other organizations' data
@@ -1218,30 +1282,35 @@ After implementing fixes, validate with:
 - [ ] Logout properly clears session
 
 #### Database Security Testing
+
 - [ ] RLS policies block cross-organization access
 - [ ] Service role key only used in webhook endpoint
 - [ ] Anon key cannot bypass RLS
 - [ ] Database queries properly filtered by user/org
 
 #### Input Validation Testing
+
 - [ ] Oversized inputs are rejected
 - [ ] Invalid formats are rejected
 - [ ] XSS attempts are sanitized
 - [ ] SQL injection attempts fail (should already be safe)
 
 #### Rate Limiting Testing
+
 - [ ] Exceeding rate limit returns 429
 - [ ] Rate limit headers present
 - [ ] Rate limit resets correctly
 - [ ] Different endpoints have appropriate limits
 
 #### Header Testing
+
 - [ ] Security headers present in responses
 - [ ] CSP doesn't break functionality
 - [ ] HSTS header present
 - [ ] X-Frame-Options blocks embedding
 
 #### Automated Scanning
+
 - [ ] All GitHub Actions workflows pass
 - [ ] Snyk reports no high/critical vulnerabilities
 - [ ] CodeQL finds no issues
@@ -1283,6 +1352,7 @@ After implementing fixes, validate with:
 ### Alerting Rules
 
 Configure alerts for:
+
 - 🚨 **Critical:** Failed RLS policy checks
 - 🚨 **Critical:** Service role key usage outside webhook
 - ⚠️ **High:** More than 10 failed auth attempts in 5 minutes
@@ -1354,17 +1424,20 @@ Configure alerts for:
 ## 11. Resources & References
 
 ### Documentation
+
 - [Flow Board Security Policy](SECURITY.md)
 - [Supabase RLS Documentation](https://supabase.com/docs/guides/auth/row-level-security)
 - [Clerk Security](https://clerk.com/docs/security/overview)
 - [Next.js Security](https://nextjs.org/docs/app/building-your-application/deploying/production-checklist)
 
 ### Security Standards
+
 - [OWASP Top 10](https://owasp.org/www-project-top-ten/)
 - [OWASP API Security Top 10](https://owasp.org/www-project-api-security/)
 - [CWE Top 25](https://cwe.mitre.org/top25/)
 
 ### Tools & Services
+
 - [Snyk](https://snyk.io) - Dependency scanning
 - [GitHub Advanced Security](https://github.com/security)
 - [Sentry](https://sentry.io) - Error tracking
@@ -1395,6 +1468,7 @@ With the automated security scanning now in place, future vulnerabilities will b
 ### Success Criteria
 
 Security posture will be considered **production-ready** when:
+
 - ✅ All P0 and P1 issues resolved
 - ✅ RLS enabled and tested
 - ✅ All security scans passing
@@ -1414,6 +1488,7 @@ Security posture will be considered **production-ready** when:
 ## Appendix A: Quick Reference Commands
 
 ### Security Scanning
+
 ```bash
 # Run npm audit
 npm audit
@@ -1435,6 +1510,7 @@ curl -I https://your-app.com | grep -E "X-Frame|CSP|HSTS"
 ```
 
 ### Database Security
+
 ```sql
 -- Check if RLS is enabled
 SELECT schemaname, tablename, rowsecurity
@@ -1449,6 +1525,7 @@ ALTER TABLE table_name ENABLE ROW LEVEL SECURITY;
 ```
 
 ### Monitoring
+
 ```bash
 # View recent logs (if using Vercel)
 vercel logs
@@ -1473,6 +1550,7 @@ gh run list --workflow=security-scan.yml
 5. **Vercel Support:** https://vercel.com/support
 
 **Emergency Response Steps:**
+
 1. Assess severity (use CVSS calculator)
 2. Contain the incident (disable affected features if needed)
 3. Notify stakeholders
@@ -1481,4 +1559,4 @@ gh run list --workflow=security-scan.yml
 
 ---
 
-*End of Security Audit Report*
+_End of Security Audit Report_

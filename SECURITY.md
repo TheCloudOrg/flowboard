@@ -8,10 +8,10 @@ Flow Board takes security seriously. We appreciate the security community's effo
 
 We release patches for security vulnerabilities for the following versions:
 
-| Version | Supported          |
-| ------- | ------------------ |
-| Latest  | :white_check_mark: |
-| < Latest| :x:                |
+| Version  | Supported          |
+| -------- | ------------------ |
+| Latest   | :white_check_mark: |
+| < Latest | :x:                |
 
 **Note:** We currently only support the latest version. Please ensure you're running the most recent release.
 
@@ -30,6 +30,7 @@ If you discover a security vulnerability, please report it to us privately using
 ### Alternative: Email
 
 If you prefer, you can also send an email to:
+
 - **Email:** [Your Security Email] (Please add your security email here)
 - **Subject Line:** [SECURITY] Flow Board Vulnerability Report
 
@@ -202,6 +203,7 @@ This repository uses automated security scanning:
 - **ESLint:** Code quality and security linting
 
 Security scans run:
+
 - On every pull request
 - On every push to main/develop branches
 - Daily via scheduled workflows
@@ -223,7 +225,7 @@ We appreciate security researchers who have responsibly disclosed vulnerabilitie
 
 <!-- This section will be updated as we receive and address security reports -->
 
-*No vulnerabilities have been reported yet.*
+_No vulnerabilities have been reported yet._
 
 ## Questions?
 

@@ -1,7 +1,7 @@
-'use server'
+'use server';
 
-import { revalidatePath } from 'next/cache'
-import { auth, currentUser } from '@clerk/nextjs/server'
+import { revalidatePath } from 'next/cache';
+import { auth, currentUser } from '@clerk/nextjs/server';
 import {
   getBoard as getSupabaseBoard,
   getBoardId,
@@ -13,29 +13,29 @@ import {
   updateColumn as updateSupabaseColumn,
   deleteColumn as deleteSupabaseColumn,
   moveCard as moveSupabaseCard,
-} from '@/lib/supabase/boards'
+} from '@/lib/supabase/boards';
 import {
   migrateLocalStorageToSupabase,
   createDefaultBoard,
-} from '@/lib/migration/migrateToSupabase'
+} from '@/lib/migration/migrateToSupabase';
 import {
   validateAndSanitizeCard,
   validateAndSanitizeColumn,
   validateCardInput,
   validateColumnInput,
-} from '@/lib/validation'
-import { Board, Card, Column } from '@/types'
+} from '@/lib/validation';
+import { Board, Card, Column } from '@/types';
 
 /**
  * Get the current organization's board
  */
 export async function getBoardAction(organizationId: string): Promise<Board | null> {
   try {
-    const board = await getSupabaseBoard(organizationId)
-    return board
+    const board = await getSupabaseBoard(organizationId);
+    return board;
   } catch (error) {
-    console.error('Error getting board:', error)
-    return null
+    console.error('Error getting board:', error);
+    return null;
   }
 }
 
@@ -44,11 +44,11 @@ export async function getBoardAction(organizationId: string): Promise<Board | nu
  */
 export async function getBoardIdAction(organizationId: string): Promise<string | null> {
   try {
-    const boardId = await getBoardId(organizationId)
-    return boardId
+    const boardId = await getBoardId(organizationId);
+    return boardId;
   } catch (error) {
-    console.error('Error getting board ID:', error)
-    return null
+    console.error('Error getting board ID:', error);
+    return null;
   }
 }
 
@@ -60,33 +60,29 @@ export async function initializeBoardAction(
   localStorageData?: Board
 ): Promise<{ success: boolean; boardId?: string; error?: string }> {
   try {
-    const user = await currentUser()
+    const user = await currentUser();
     if (!user) {
-      return { success: false, error: 'User not authenticated' }
+      return { success: false, error: 'User not authenticated' };
     }
 
     // Check if board already exists
-    const existingBoardId = await getBoardId(organizationId)
+    const existingBoardId = await getBoardId(organizationId);
     if (existingBoardId) {
-      return { success: true, boardId: existingBoardId }
+      return { success: true, boardId: existingBoardId };
     }
 
     // If localStorage data exists, migrate it
     if (localStorageData && localStorageData.columns.length > 0) {
-      const result = await migrateLocalStorageToSupabase(
-        organizationId,
-        user.id,
-        localStorageData
-      )
-      return result
+      const result = await migrateLocalStorageToSupabase(organizationId, user.id, localStorageData);
+      return result;
     }
 
     // Otherwise create default board
-    const result = await createDefaultBoard(organizationId, user.id)
-    return result
+    const result = await createDefaultBoard(organizationId, user.id);
+    return result;
   } catch (error: any) {
-    console.error('Error initializing board:', error)
-    return { success: false, error: error.message }
+    console.error('Error initializing board:', error);
+    return { success: false, error: error.message };
   }
 }
 
@@ -99,18 +95,18 @@ export async function addCardAction(
   card: { title: string; description?: string; notes?: string }
 ): Promise<Card | null> {
   try {
-    const user = await currentUser()
-    const userId = user?.id
+    const user = await currentUser();
+    const userId = user?.id;
 
     // SEC-006 FIX: Validate and sanitize card input
-    const sanitizedCard = validateAndSanitizeCard(card)
+    const sanitizedCard = validateAndSanitizeCard(card);
 
-    const newCard = await addSupabaseCard(boardId, columnId, sanitizedCard, userId)
-    revalidatePath('/')
-    return newCard
+    const newCard = await addSupabaseCard(boardId, columnId, sanitizedCard, userId);
+    revalidatePath('/');
+    return newCard;
   } catch (error) {
-    console.error('Error adding card:', error)
-    return null
+    console.error('Error adding card:', error);
+    return null;
   }
 }
 
@@ -123,17 +119,17 @@ export async function updateCardAction(
 ): Promise<boolean> {
   try {
     // SEC-006 FIX: Validate card input before updating
-    const validation = validateCardInput(updates)
+    const validation = validateCardInput(updates);
     if (!validation.valid) {
-      throw new Error(validation.error)
+      throw new Error(validation.error);
     }
 
-    const success = await updateSupabaseCard(cardId, updates)
-    revalidatePath('/')
-    return success
+    const success = await updateSupabaseCard(cardId, updates);
+    revalidatePath('/');
+    return success;
   } catch (error) {
-    console.error('Error updating card:', error)
-    return false
+    console.error('Error updating card:', error);
+    return false;
   }
 }
 
@@ -142,12 +138,12 @@ export async function updateCardAction(
  */
 export async function deleteCardAction(cardId: string): Promise<boolean> {
   try {
-    const success = await deleteSupabaseCard(cardId)
-    revalidatePath('/')
-    return success
+    const success = await deleteSupabaseCard(cardId);
+    revalidatePath('/');
+    return success;
   } catch (error) {
-    console.error('Error deleting card:', error)
-    return false
+    console.error('Error deleting card:', error);
+    return false;
   }
 }
 
@@ -161,14 +157,14 @@ export async function addColumnAction(
 ): Promise<Column | null> {
   try {
     // SEC-006 FIX: Validate and sanitize column input
-    const sanitizedColumn = validateAndSanitizeColumn({ title })
+    const sanitizedColumn = validateAndSanitizeColumn({ title });
 
-    const newColumn = await addSupabaseColumn(boardId, sanitizedColumn.title, color)
-    revalidatePath('/')
-    return newColumn
+    const newColumn = await addSupabaseColumn(boardId, sanitizedColumn.title, color);
+    revalidatePath('/');
+    return newColumn;
   } catch (error) {
-    console.error('Error adding column:', error)
-    return null
+    console.error('Error adding column:', error);
+    return null;
   }
 }
 
@@ -182,18 +178,18 @@ export async function updateColumnAction(
   try {
     // SEC-006 FIX: Validate column input before updating
     if (updates.title) {
-      const validation = validateColumnInput({ title: updates.title })
+      const validation = validateColumnInput({ title: updates.title });
       if (!validation.valid) {
-        throw new Error(validation.error)
+        throw new Error(validation.error);
       }
     }
 
-    const success = await updateSupabaseColumn(columnId, updates)
-    revalidatePath('/')
-    return success
+    const success = await updateSupabaseColumn(columnId, updates);
+    revalidatePath('/');
+    return success;
   } catch (error) {
-    console.error('Error updating column:', error)
-    return false
+    console.error('Error updating column:', error);
+    return false;
   }
 }
 
@@ -202,12 +198,12 @@ export async function updateColumnAction(
  */
 export async function deleteColumnAction(columnId: string): Promise<boolean> {
   try {
-    const success = await deleteSupabaseColumn(columnId)
-    revalidatePath('/')
-    return success
+    const success = await deleteSupabaseColumn(columnId);
+    revalidatePath('/');
+    return success;
   } catch (error) {
-    console.error('Error deleting column:', error)
-    return false
+    console.error('Error deleting column:', error);
+    return false;
   }
 }
 
@@ -220,11 +216,11 @@ export async function moveCardAction(
   newPosition: number
 ): Promise<boolean> {
   try {
-    const success = await moveSupabaseCard(cardId, newColumnId, newPosition)
-    revalidatePath('/')
-    return success
+    const success = await moveSupabaseCard(cardId, newColumnId, newPosition);
+    revalidatePath('/');
+    return success;
   } catch (error) {
-    console.error('Error moving card:', error)
-    return false
+    console.error('Error moving card:', error);
+    return false;
   }
 }
