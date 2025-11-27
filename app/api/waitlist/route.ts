@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
       .from('waitlist')
       .select('id')
       .eq('email', email.toLowerCase())
-      .eq('plan', plan)
+      .eq('plan_interest', plan)
       .single();
 
     if (checkError && checkError.code !== 'PGRST116') {
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     // Insert new waitlist entry
     const { error: insertError } = await supabase.from('waitlist').insert({
       email: email.toLowerCase(),
-      plan,
+      plan_interest: plan,
       created_at: new Date().toISOString(),
     });
 
