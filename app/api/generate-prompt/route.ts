@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import OpenAI from 'openai';
 import { validateCardInput } from '@/lib/validation';
+import { checkUsageLimit, trackUsage } from '@/lib/usage-limits';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -9,12 +10,33 @@ const openai = new OpenAI({
 
 export async function POST(request: NextRequest) {
   // SEC-003 FIX: Add authentication check
-  const { userId } = await auth();
+  const { userId, orgId } = await auth();
 
   if (!userId) {
     return NextResponse.json(
       { error: 'Unauthorized. Please sign in to use AI features.' },
       { status: 401 }
+    );
+  }
+
+  if (!orgId) {
+    return NextResponse.json(
+      { error: 'No organization selected. Please select an organization to use AI features.' },
+      { status: 400 }
+    );
+  }
+
+  // USAGE LIMIT CHECK: Verify user hasn't exceeded AI prompt quota
+  const canUseAI = await checkUsageLimit(orgId, 'ai_prompts');
+  if (!canUseAI) {
+    return NextResponse.json(
+      {
+        error: 'AI prompt limit reached for this month (10 prompts on free plan)',
+        upgrade_required: true,
+        limit_type: 'ai_prompts',
+        limit: 10,
+      },
+      { status: 429 }
     );
   }
 
@@ -64,6 +86,9 @@ Generate a detailed prompt for Claude Code to implement this feature.`;
     if (!generatedPrompt) {
       return NextResponse.json({ error: 'Failed to generate prompt' }, { status: 500 });
     }
+
+    // TRACK USAGE: Increment AI prompt count after successful generation
+    await trackUsage(orgId, 'ai_prompts');
 
     return NextResponse.json({
       prompt: generatedPrompt,

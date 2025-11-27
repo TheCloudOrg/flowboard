@@ -13,14 +13,17 @@ import {
 } from '@dnd-kit/core';
 import { arrayMove } from '@dnd-kit/sortable';
 import { motion } from 'framer-motion';
-import { Plus, Sparkles, Loader2 } from 'lucide-react';
+import { Plus, Sparkles, Loader2, ChevronDown, LayoutGrid } from 'lucide-react';
 import { UserButton, useOrganization, useUser, OrganizationSwitcher } from '@clerk/nextjs';
 import { Board, Card as CardType, Column as ColumnType } from '@/types';
 import { getBoard } from '@/lib/localStorage';
 import {
   getBoardAction,
   getBoardIdAction,
+  getBoardByIdAction,
+  getAllBoardsAction,
   initializeBoardAction,
+  createBoardAction,
   addCardAction,
   updateCardAction,
   deleteCardAction,
@@ -32,7 +35,9 @@ import Column from './Column';
 import Card from './Card';
 import CardModal from './CardModal';
 import AIPromptModal from './AIPromptModal';
+import CreateBoardModal from './CreateBoardModal';
 import ThemeToggle from './ThemeToggle';
+import UsageStats from './UsageStats';
 import { useTheme } from '@/contexts/ThemeContext';
 
 export default function KanbanBoard() {
@@ -42,6 +47,11 @@ export default function KanbanBoard() {
 
   const [board, setBoard] = useState<Board>({ columns: [], cards: {} });
   const [boardId, setBoardId] = useState<string>('');
+  const [boards, setBoards] = useState<{ id: string; name: string; created_at: string }[]>([]);
+  const [selectedBoardId, setSelectedBoardId] = useState<string>('');
+  const [selectedBoardName, setSelectedBoardName] = useState<string>('My Board');
+  const [showBoardDropdown, setShowBoardDropdown] = useState(false);
+  const [isCreateBoardOpen, setIsCreateBoardOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [activeCard, setActiveCard] = useState<CardType | null>(null);
   const [draggedCardOriginalColumn, setDraggedCardOriginalColumn] = useState<string | null>(null);
@@ -56,6 +66,7 @@ export default function KanbanBoard() {
   const [aiPrompt, setAiPrompt] = useState<string | null>(null);
   const [isLoadingAI, setIsLoadingAI] = useState(false);
   const [aiError, setAiError] = useState<string | null>(null);
+  const [aiUpgradeRequired, setAiUpgradeRequired] = useState(false);
   const [currentAICard, setCurrentAICard] = useState<CardType | null>(null);
 
   // Track intended drop position for database update
@@ -72,54 +83,108 @@ export default function KanbanBoard() {
     })
   );
 
-  // Initialize board (migrate from localStorage if needed)
+  // Fetch all boards for organization and load the selected one
   useEffect(() => {
-    async function initializeBoard() {
+    async function fetchAndLoadBoards() {
       if (!organization || !user) return;
 
       setIsLoading(true);
 
       try {
-        // Check if board already exists
-        const existingBoardId = await getBoardIdAction(organization.id);
+        const allBoards = await getAllBoardsAction(organization.id);
+        setBoards(allBoards);
 
-        if (existingBoardId) {
-          // Board already exists - just fetch it
-          setBoardId(existingBoardId);
-
-          const existingBoard = await getBoardAction(organization.id);
-          if (existingBoard) {
-            setBoard(existingBoard);
-          }
-        } else {
-          // No board in Supabase - check localStorage for migration
+        // If no boards exist, initialize one
+        if (allBoards.length === 0) {
           const localStorageData = getBoard();
-
           const result = await initializeBoardAction(organization.id, localStorageData);
 
           if (result.success && result.boardId) {
-            setBoardId(result.boardId);
+            // Refresh boards list and load the new board
+            const updatedBoards = await getAllBoardsAction(organization.id);
+            setBoards(updatedBoards);
+            setSelectedBoardId(result.boardId);
+            setSelectedBoardName(updatedBoards[0]?.name || 'My Board');
+            sessionStorage.setItem(`selectedBoardId_${organization.id}`, result.boardId);
 
-            // Fetch the newly created board
-            const newBoard = await getBoardAction(organization.id);
-            if (newBoard) {
-              setBoard(newBoard);
+            // Load the board data immediately
+            const boardData = await getBoardByIdAction(result.boardId);
+            if (boardData) {
+              setBoard(boardData);
+              setBoardId(result.boardId);
             }
+          }
+        } else {
+          // Determine which board to load
+          const savedBoardId = sessionStorage.getItem(`selectedBoardId_${organization.id}`);
+          const savedBoard = savedBoardId ? allBoards.find((b) => b.id === savedBoardId) : null;
 
-            console.log('✅ Board initialized:', result.boardId);
-          } else {
-            console.error('Failed to initialize board:', result.error);
+          const boardToLoad = savedBoard || allBoards[0];
+
+          // Set the selected board
+          setSelectedBoardId(boardToLoad.id);
+          setSelectedBoardName(boardToLoad.name);
+
+          if (!savedBoard) {
+            sessionStorage.setItem(`selectedBoardId_${organization.id}`, allBoards[0].id);
+          }
+
+          // Load board data immediately (no waiting for second useEffect)
+          const boardData = await getBoardByIdAction(boardToLoad.id);
+          if (boardData) {
+            setBoard(boardData);
+            setBoardId(boardToLoad.id);
           }
         }
       } catch (error) {
-        console.error('Error initializing board:', error);
+        console.error('Error fetching boards:', error);
       } finally {
         setIsLoading(false);
       }
     }
 
-    initializeBoard();
+    fetchAndLoadBoards();
   }, [organization, user]);
+
+  // Refresh current board data
+  const refreshCurrentBoard = async () => {
+    if (!selectedBoardId) return;
+
+    try {
+      const boardData = await getBoardByIdAction(selectedBoardId);
+      if (boardData) {
+        setBoard(boardData);
+        setBoardId(selectedBoardId);
+      }
+    } catch (error) {
+      console.error('Error refreshing board:', error);
+    }
+  };
+
+  // Load board data when user manually switches boards
+  useEffect(() => {
+    async function loadBoard() {
+      // Skip if this is the initial load (handled by fetchAndLoadBoards)
+      // or if board is already loaded
+      if (!selectedBoardId || boardId === selectedBoardId) return;
+
+      setIsLoading(true);
+
+      try {
+        const boardData = await getBoardByIdAction(selectedBoardId);
+        if (boardData) {
+          setBoard(boardData);
+          setBoardId(selectedBoardId);
+        }
+      } catch (error) {
+        console.error('Error loading board:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    loadBoard();
+  }, [selectedBoardId]);
 
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
@@ -246,14 +311,11 @@ export default function KanbanBoard() {
 
     console.log('✅ moveCardAction result:', success);
 
-    if (success && organization) {
+    if (success) {
       // Refresh board from Supabase
       console.log('🔄 Refreshing board from Supabase...');
-      const updatedBoard = await getBoardAction(organization.id);
-      if (updatedBoard) {
-        setBoard(updatedBoard);
-        console.log('✅ Board refreshed');
-      }
+      await refreshCurrentBoard();
+      console.log('✅ Board refreshed');
     }
 
     // Clear the tracked state
@@ -279,10 +341,7 @@ export default function KanbanBoard() {
       // Update existing card
       const success = await updateCardAction(editingCard.id, cardData);
       if (success) {
-        const updatedBoard = await getBoardAction(organization.id);
-        if (updatedBoard) {
-          setBoard(updatedBoard);
-        }
+        await refreshCurrentBoard();
       }
     } else {
       // Add new card
@@ -293,10 +352,7 @@ export default function KanbanBoard() {
       });
 
       if (newCard) {
-        const updatedBoard = await getBoardAction(organization.id);
-        if (updatedBoard) {
-          setBoard(updatedBoard);
-        }
+        await refreshCurrentBoard();
       }
     }
   };
@@ -307,10 +363,7 @@ export default function KanbanBoard() {
     if (confirm('Are you sure you want to delete this card?')) {
       const success = await deleteCardAction(cardId);
       if (success) {
-        const updatedBoard = await getBoardAction(organization.id);
-        if (updatedBoard) {
-          setBoard(updatedBoard);
-        }
+        await refreshCurrentBoard();
       }
     }
   };
@@ -321,10 +374,7 @@ export default function KanbanBoard() {
     if (confirm('Are you sure you want to delete this column and all its cards?')) {
       const success = await deleteColumnAction(columnId);
       if (success) {
-        const updatedBoard = await getBoardAction(organization.id);
-        if (updatedBoard) {
-          setBoard(updatedBoard);
-        }
+        await refreshCurrentBoard();
       }
     }
   };
@@ -337,10 +387,7 @@ export default function KanbanBoard() {
 
     const newColumn = await addColumnAction(boardId, newColumnName.trim(), randomColor);
     if (newColumn) {
-      const updatedBoard = await getBoardAction(organization.id);
-      if (updatedBoard) {
-        setBoard(updatedBoard);
-      }
+      await refreshCurrentBoard();
       setNewColumnName('');
       setShowColumnInput(false);
     }
@@ -352,6 +399,7 @@ export default function KanbanBoard() {
     setIsLoadingAI(true);
     setAiError(null);
     setAiPrompt(null);
+    setAiUpgradeRequired(false);
 
     try {
       const response = await fetch('/api/generate-prompt', {
@@ -369,15 +417,57 @@ export default function KanbanBoard() {
       const data = await response.json();
 
       if (!response.ok) {
+        // Check if this is a limit error (429 status)
+        if (response.status === 429 && data.upgrade_required) {
+          setAiUpgradeRequired(true);
+        }
         throw new Error(data.error || 'Failed to generate prompt');
       }
 
       setAiPrompt(data.prompt);
+
+      // Trigger usage stats refresh
+      window.dispatchEvent(new Event('usage-updated'));
     } catch (error: any) {
       console.error('Error generating AI prompt:', error);
       setAiError(error.message || 'Failed to generate prompt. Please try again.');
     } finally {
       setIsLoadingAI(false);
+    }
+  };
+
+  const handleCreateBoard = async (name: string) => {
+    if (!organization) return;
+
+    const result = await createBoardAction(organization.id, name);
+
+    if (result.success && result.boardId) {
+      // Refresh boards list
+      const updatedBoards = await getAllBoardsAction(organization.id);
+      setBoards(updatedBoards);
+
+      // Switch to the new board
+      setSelectedBoardId(result.boardId);
+      setSelectedBoardName(name);
+
+      // Save to sessionStorage
+      sessionStorage.setItem(`selectedBoardId_${organization.id}`, result.boardId);
+
+      // Trigger usage stats refresh
+      window.dispatchEvent(new Event('usage-updated'));
+    } else {
+      throw new Error(result.error || 'Failed to create board');
+    }
+  };
+
+  const handleSelectBoard = (boardId: string, boardName: string) => {
+    setSelectedBoardId(boardId);
+    setSelectedBoardName(boardName);
+    setShowBoardDropdown(false);
+
+    // Save to sessionStorage
+    if (organization) {
+      sessionStorage.setItem(`selectedBoardId_${organization.id}`, boardId);
     }
   };
 
@@ -398,7 +488,7 @@ export default function KanbanBoard() {
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
         <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <Sparkles className="w-8 h-8 text-primary-400" />
             <div>
               <h1 className="text-4xl font-bold bg-gradient-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent">
@@ -408,6 +498,68 @@ export default function KanbanBoard() {
                 <p className="ml-1 mt-1 text-sm dark:text-gray-400 light:text-gray-600">
                   {organization.name}
                 </p>
+              )}
+            </div>
+
+            {/* Board Selector */}
+            <div className="relative">
+              <button
+                onClick={() => setShowBoardDropdown(!showBoardDropdown)}
+                className="flex items-center gap-2 px-4 py-2 glass-effect rounded-xl border dark:border-white/10 light:border-gray-300 hover:border-primary-400/50 transition-all"
+              >
+                <LayoutGrid className="w-4 h-4 text-primary-400" />
+                <span className="font-medium dark:text-white light:text-gray-900">
+                  {selectedBoardName}
+                </span>
+                <ChevronDown
+                  className={`w-4 h-4 dark:text-gray-400 light:text-gray-600 transition-transform ${
+                    showBoardDropdown ? 'rotate-180' : ''
+                  }`}
+                />
+              </button>
+
+              {/* Dropdown */}
+              {showBoardDropdown && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="absolute top-full left-0 mt-2 w-64 glass-effect rounded-2xl border dark:border-white/10 light:border-gray-300 shadow-2xl z-50 overflow-hidden"
+                >
+                  <div className="p-2">
+                    <div className="max-h-64 overflow-y-auto custom-scrollbar">
+                      {boards.map((b) => (
+                        <button
+                          key={b.id}
+                          onClick={() => handleSelectBoard(b.id, b.name)}
+                          className={`w-full text-left px-4 py-3 rounded-xl transition-all ${
+                            b.id === selectedBoardId
+                              ? 'bg-primary-500/20 dark:text-white light:text-gray-900'
+                              : 'dark:hover:bg-white/5 light:hover:bg-gray-100 dark:text-gray-300 light:text-gray-700'
+                          }`}
+                        >
+                          <div className="font-medium">{b.name}</div>
+                          <div className="text-xs dark:text-gray-500 light:text-gray-600 mt-1">
+                            {new Date(b.created_at).toLocaleDateString()}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Create Board Button */}
+                    <div className="border-t dark:border-white/10 light:border-gray-300 mt-2 pt-2">
+                      <button
+                        onClick={() => {
+                          setShowBoardDropdown(false);
+                          setIsCreateBoardOpen(true);
+                        }}
+                        className="w-full flex items-center gap-2 px-4 py-3 rounded-xl dark:hover:bg-white/5 light:hover:bg-gray-100 dark:text-primary-300 light:text-primary-600 transition-all"
+                      >
+                        <Plus className="w-4 h-4" />
+                        <span className="font-medium">Create New Board</span>
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
               )}
             </div>
           </div>
@@ -483,6 +635,11 @@ export default function KanbanBoard() {
         <p className="ml-11 dark:text-gray-400 light:text-gray-600">
           Organize and flow through your tasks with beautiful drag-and-drop boards
         </p>
+      </motion.div>
+
+      {/* Usage Stats */}
+      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
+        <UsageStats />
       </motion.div>
 
       {/* Board */}
@@ -597,12 +754,21 @@ export default function KanbanBoard() {
           setIsAIModalOpen(false);
           setAiPrompt(null);
           setAiError(null);
+          setAiUpgradeRequired(false);
           setCurrentAICard(null);
         }}
         prompt={aiPrompt}
         isLoading={isLoadingAI}
         error={aiError}
+        upgradeRequired={aiUpgradeRequired}
         cardTitle={currentAICard?.title || ''}
+      />
+
+      {/* Create Board Modal */}
+      <CreateBoardModal
+        isOpen={isCreateBoardOpen}
+        onClose={() => setIsCreateBoardOpen(false)}
+        onCreateBoard={handleCreateBoard}
       />
     </div>
   );

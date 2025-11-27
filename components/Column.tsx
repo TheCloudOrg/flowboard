@@ -89,7 +89,7 @@ export default function Column({
         {/* Cards Area */}
         <div
           ref={setNodeRef}
-          className="flex-1 overflow-y-auto space-y-3 min-h-[200px] pr-2 custom-scrollbar"
+          className="flex-1 overflow-y-auto space-y-3 min-h-[200px] p-1 pr-2 custom-scrollbar"
         >
           <SortableContext items={cardIds} strategy={verticalListSortingStrategy}>
             {cards.map((card) => (

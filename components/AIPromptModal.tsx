@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Copy, Check, Sparkles, Loader2 } from 'lucide-react';
+import { X, Copy, Check, Sparkles, Loader2, AlertCircle, TrendingUp } from 'lucide-react';
 import { useState } from 'react';
 
 interface AIPromptModalProps {
@@ -11,6 +11,7 @@ interface AIPromptModalProps {
   isLoading: boolean;
   error: string | null;
   cardTitle: string;
+  upgradeRequired?: boolean;
 }
 
 export default function AIPromptModal({
@@ -20,6 +21,7 @@ export default function AIPromptModal({
   isLoading,
   error,
   cardTitle,
+  upgradeRequired = false,
 }: AIPromptModalProps) {
   const [copied, setCopied] = useState(false);
 
@@ -101,16 +103,65 @@ export default function AIPromptModal({
                 )}
 
                 {error && (
-                  <div className="flex-1 flex flex-col items-center justify-center gap-4">
-                    <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-2xl">
-                      <p className="dark:text-red-300 light:text-red-600 text-center">{error}</p>
+                  <div className="flex-1 flex flex-col items-center justify-center gap-6">
+                    <div className="flex flex-col items-center gap-4">
+                      <div
+                        className={`p-4 rounded-full ${upgradeRequired ? 'bg-yellow-500/10' : 'bg-red-500/10'}`}
+                      >
+                        <AlertCircle
+                          className={`w-12 h-12 ${upgradeRequired ? 'text-yellow-400' : 'text-red-400'}`}
+                        />
+                      </div>
+                      <div className="text-center max-w-md">
+                        <h3 className="text-lg font-semibold dark:text-white light:text-gray-900 mb-2">
+                          {upgradeRequired ? 'AI Prompt Limit Reached' : 'Error'}
+                        </h3>
+                        <p
+                          className={`${upgradeRequired ? 'dark:text-yellow-200 light:text-yellow-700' : 'dark:text-red-300 light:text-red-600'}`}
+                        >
+                          {error}
+                        </p>
+                      </div>
                     </div>
-                    <button
-                      onClick={handleClose}
-                      className="px-6 py-3 dark:bg-white/5 light:bg-gray-100 dark:hover:bg-white/10 light:hover:bg-gray-200 border dark:border-white/10 light:border-gray-300 rounded-xl dark:text-white light:text-gray-900 font-medium transition-all"
-                    >
-                      Close
-                    </button>
+
+                    {upgradeRequired && (
+                      <div className="flex flex-col items-center gap-4 p-6 bg-gradient-to-br from-primary-500/10 to-accent-500/10 border border-primary-500/20 rounded-2xl max-w-md">
+                        <TrendingUp className="w-8 h-8 text-primary-400" />
+                        <div className="text-center">
+                          <p className="font-semibold dark:text-white light:text-gray-900 mb-2">
+                            Upgrade to Pro
+                          </p>
+                          <p className="text-sm dark:text-gray-300 light:text-gray-700 mb-4">
+                            Get 100 AI prompts per month, unlimited boards & cards, and priority
+                            support for just $8/user.
+                          </p>
+                          <div className="flex gap-2">
+                            <a
+                              href="/#pricing"
+                              onClick={handleClose}
+                              className="px-6 py-2.5 bg-gradient-to-r from-primary-500 to-accent-500 hover:from-primary-600 hover:to-accent-600 rounded-lg text-white font-medium shadow-lg hover:shadow-glow transition-all"
+                            >
+                              View Plans
+                            </a>
+                            <button
+                              onClick={handleClose}
+                              className="px-6 py-2.5 dark:bg-white/5 light:bg-gray-100 dark:hover:bg-white/10 light:hover:bg-gray-200 border dark:border-white/10 light:border-gray-300 rounded-lg dark:text-white light:text-gray-900 font-medium transition-all"
+                            >
+                              Close
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {!upgradeRequired && (
+                      <button
+                        onClick={handleClose}
+                        className="px-6 py-3 dark:bg-white/5 light:bg-gray-100 dark:hover:bg-white/10 light:hover:bg-gray-200 border dark:border-white/10 light:border-gray-300 rounded-xl dark:text-white light:text-gray-900 font-medium transition-all"
+                      >
+                        Close
+                      </button>
+                    )}
                   </div>
                 )}
 

@@ -65,33 +65,39 @@ export default function Card({ card, onEdit, onDelete, onAIGenerate }: CardProps
           )}
 
           {/* Card Footer */}
-          <div className="flex items-center justify-between mt-4">
+          <div className="flex items-center justify-between mt-4 gap-3">
             <span className="text-xs dark:text-gray-500 light:text-gray-500">
               {new Date(card.updatedAt).toLocaleDateString()}
             </span>
 
-            <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="flex gap-2">
+              {/* AI Prompt Button - Always Visible */}
               <button
                 onClick={() => onAIGenerate(card)}
-                className="p-1.5 rounded-lg bg-gradient-to-r from-primary-500/20 to-accent-500/20 hover:from-primary-500/30 hover:to-accent-500/30 text-accent-300 hover:text-accent-200 transition-all"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-primary-500/20 to-accent-500/20 hover:from-primary-500/30 hover:to-accent-500/30 text-accent-300 hover:text-accent-200 transition-all shadow-sm hover:shadow-md"
                 aria-label="Generate AI prompt"
               >
-                <Sparkles className="w-4 h-4" />
+                <Sparkles className="w-3.5 h-3.5" />
+                <span className="text-xs font-medium whitespace-nowrap">AI Prompt</span>
               </button>
-              <button
-                onClick={() => onEdit(card)}
-                className="p-1.5 rounded-lg bg-primary-500/20 hover:bg-primary-500/30 dark:text-primary-300 light:text-primary-600 dark:hover:text-primary-200 light:hover:text-primary-700 transition-colors"
-                aria-label="Edit card"
-              >
-                <Edit className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => onDelete(card.id)}
-                className="p-1.5 rounded-lg bg-red-500/20 hover:bg-red-500/30 dark:text-red-300 light:text-red-600 dark:hover:text-red-200 light:hover:text-red-700 transition-colors"
-                aria-label="Delete card"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
+
+              {/* Edit & Delete - Hover Only */}
+              <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button
+                  onClick={() => onEdit(card)}
+                  className="p-1.5 rounded-lg bg-primary-500/20 hover:bg-primary-500/30 dark:text-primary-300 light:text-primary-600 dark:hover:text-primary-200 light:hover:text-primary-700 transition-colors"
+                  aria-label="Edit card"
+                >
+                  <Edit className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => onDelete(card.id)}
+                  className="p-1.5 rounded-lg bg-red-500/20 hover:bg-red-500/30 dark:text-red-300 light:text-red-600 dark:hover:text-red-200 light:hover:text-red-700 transition-colors"
+                  aria-label="Delete card"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           </div>
         </div>

@@ -224,3 +224,143 @@ export async function moveCardAction(
     return false;
   }
 }
+
+/**
+ * Get all boards for an organization
+ */
+export async function getAllBoardsAction(
+  organizationId: string
+): Promise<{ id: string; name: string; created_at: string }[]> {
+  try {
+    const { createClient } = await import('@/lib/supabase/server');
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+      .from('boards')
+      .select('id, name, created_at')
+      .eq('organization_id', organizationId)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error getting boards:', error);
+      return [];
+    }
+
+    return data || [];
+  } catch (error) {
+    console.error('Error getting boards:', error);
+    return [];
+  }
+}
+
+/**
+ * Get a specific board by ID
+ */
+export async function getBoardByIdAction(boardId: string): Promise<Board | null> {
+  try {
+    const { createClient } = await import('@/lib/supabase/server');
+    const supabase = await createClient();
+
+    // Get board
+    const { data: boardData, error: boardError } = await supabase
+      .from('boards')
+      .select('*')
+      .eq('id', boardId)
+      .single();
+
+    if (boardError || !boardData) {
+      return null;
+    }
+
+    // Get columns ordered by position
+    const { data: columnsData, error: columnsError } = await supabase
+      .from('columns')
+      .select('*')
+      .eq('board_id', boardId)
+      .order('position', { ascending: true });
+
+    if (columnsError) {
+      console.error('Error fetching columns:', columnsError);
+      return null;
+    }
+
+    const columns = columnsData || [];
+
+    // Get all cards for this board
+    const { data: cardsData, error: cardsError } = await supabase
+      .from('cards')
+      .select('*')
+      .eq('board_id', boardId)
+      .order('position', { ascending: true });
+
+    if (cardsError) {
+      console.error('Error fetching cards:', cardsError);
+      return null;
+    }
+
+    const cards = cardsData || [];
+
+    // Transform to format
+    const cardsMap: { [key: string]: Card } = {};
+    cards.forEach((card: any) => {
+      cardsMap[card.id] = {
+        id: card.id,
+        title: card.title,
+        description: card.description || undefined,
+        notes: card.notes || undefined,
+        createdAt: card.created_at,
+        updatedAt: card.updated_at,
+      };
+    });
+
+    const columnsArray: Column[] = columns.map((col: any) => ({
+      id: col.id,
+      title: col.title,
+      color: col.color || undefined,
+      cardIds: cards
+        .filter((card: any) => card.column_id === col.id)
+        .sort((a: any, b: any) => a.position - b.position)
+        .map((card: any) => card.id),
+    }));
+
+    return {
+      columns: columnsArray,
+      cards: cardsMap,
+    };
+  } catch (error) {
+    console.error('Error getting board:', error);
+    return null;
+  }
+}
+
+/**
+ * Create a new board for an organization
+ */
+export async function createBoardAction(
+  organizationId: string,
+  name: string
+): Promise<{ success: boolean; boardId?: string; error?: string }> {
+  try {
+    const user = await currentUser();
+    if (!user) {
+      return { success: false, error: 'User not authenticated' };
+    }
+
+    const boardId = await createBoard(organizationId, name, user.id);
+
+    if (!boardId) {
+      return { success: false, error: 'Failed to create board' };
+    }
+
+    // Create default columns for the new board
+    await addSupabaseColumn(boardId, 'TODO', '#a855f7');
+    await addSupabaseColumn(boardId, 'In Progress', '#3b82f6');
+    await addSupabaseColumn(boardId, 'Completed', '#10b981');
+
+    revalidatePath('/');
+    return { success: true, boardId };
+  } catch (error: any) {
+    console.error('Error creating board:', error);
+    return { success: false, error: error.message };
+  }
+}

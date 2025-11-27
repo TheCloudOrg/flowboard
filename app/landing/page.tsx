@@ -20,6 +20,7 @@ import {
   X,
   Github,
 } from 'lucide-react';
+import WaitlistModal from '@/components/WaitlistModal';
 
 // Floating orb component for background effects
 function FloatingOrb({ delay = 0, duration = 20, left = '10%', top = '20%' }: any) {
@@ -116,6 +117,8 @@ export default function LandingPage() {
   const springScale = useSpring(scaleProgress, { stiffness: 100, damping: 30 });
 
   const [copiedPrompt, setCopiedPrompt] = useState(false);
+  const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<'pro' | 'business'>('pro');
 
   const samplePrompt = `Create a user authentication system with the following requirements:
 
@@ -180,7 +183,7 @@ Expected Deliverables:
       icon: Code2,
       title: 'Developer-First',
       description:
-        'Keyboard shortcuts, dark mode, GitHub integration. Built by developers, for developers.',
+        'Dark mode, GitHub OAuth, and a beautiful UI. Built by developers, for developers.',
       gradient: 'from-indigo-500 to-purple-500',
     },
   ];
@@ -433,18 +436,17 @@ Expected Deliverables:
                         </div>
 
                         {/* Mock cards */}
-                        {[1, 2].map((card) => (
-                          <motion.div
-                            key={card}
-                            whileHover={{ scale: 1.02, y: -2 }}
-                            className="bg-white/5 rounded-xl p-4 mb-3 border border-white/5 hover:border-purple-400/30 transition-all cursor-pointer group relative"
-                          >
-                            <div className="h-4 bg-white/10 rounded w-3/4 mb-2" />
-                            <div className="h-3 bg-white/5 rounded w-full mb-1" />
-                            <div className="h-3 bg-white/5 rounded w-2/3" />
+                        {idx === 0 && (
+                          <>
+                            <motion.div
+                              whileHover={{ scale: 1.02, y: -2 }}
+                              className="bg-white/5 rounded-xl p-4 mb-3 border border-white/5 hover:border-purple-400/30 transition-all cursor-pointer group relative"
+                            >
+                              <h4 className="text-white font-semibold mb-2">Add Auth System</h4>
+                              <p className="text-gray-400 text-xs mb-2">OAuth + 2FA support</p>
+                              <p className="text-gray-500 text-xs">Next.js, Clerk</p>
 
-                            {/* AI sparkle on hover */}
-                            {idx === 0 && card === 1 && (
+                              {/* AI sparkle on hover */}
                               <motion.div
                                 initial={{ opacity: 0, scale: 0.8 }}
                                 whileHover={{ opacity: 1, scale: 1 }}
@@ -452,9 +454,49 @@ Expected Deliverables:
                               >
                                 <Sparkles className="w-4 h-4" />
                               </motion.div>
-                            )}
-                          </motion.div>
-                        ))}
+                            </motion.div>
+                            <motion.div
+                              whileHover={{ scale: 1.02, y: -2 }}
+                              className="bg-white/5 rounded-xl p-4 mb-3 border border-white/5 hover:border-purple-400/30 transition-all cursor-pointer group"
+                            >
+                              <h4 className="text-white font-semibold mb-2">Payment Flow</h4>
+                              <p className="text-gray-400 text-xs mb-2">Stripe integration</p>
+                              <p className="text-gray-500 text-xs">React, TypeScript</p>
+                            </motion.div>
+                          </>
+                        )}
+                        {idx === 1 && (
+                          <>
+                            <motion.div
+                              whileHover={{ scale: 1.02, y: -2 }}
+                              className="bg-white/5 rounded-xl p-4 mb-3 border border-white/5 hover:border-blue-400/30 transition-all cursor-pointer group"
+                            >
+                              <h4 className="text-white font-semibold mb-2">API Endpoints</h4>
+                              <p className="text-gray-400 text-xs mb-2">REST + GraphQL</p>
+                              <p className="text-gray-500 text-xs">Node.js, Prisma</p>
+                            </motion.div>
+                          </>
+                        )}
+                        {idx === 2 && (
+                          <>
+                            <motion.div
+                              whileHover={{ scale: 1.02, y: -2 }}
+                              className="bg-white/5 rounded-xl p-4 mb-3 border border-white/5 hover:border-green-400/30 transition-all cursor-pointer group"
+                            >
+                              <h4 className="text-white font-semibold mb-2">Deployed to Prod</h4>
+                              <p className="text-gray-400 text-xs mb-2">CI/CD pipeline</p>
+                              <p className="text-gray-500 text-xs">Vercel</p>
+                            </motion.div>
+                            <motion.div
+                              whileHover={{ scale: 1.02, y: -2 }}
+                              className="bg-white/5 rounded-xl p-4 mb-3 border border-white/5 hover:border-green-400/30 transition-all cursor-pointer group"
+                            >
+                              <h4 className="text-white font-semibold mb-2">Dashboard UI</h4>
+                              <p className="text-gray-400 text-xs mb-2">Charts & analytics</p>
+                              <p className="text-gray-500 text-xs">Recharts</p>
+                            </motion.div>
+                          </>
+                        )}
                       </motion.div>
                     ))}
                   </div>
@@ -517,9 +559,13 @@ Expected Deliverables:
             viewport={{ once: true }}
             className="text-center mt-16"
           >
-            <p className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-              There&apos;s a better way →
-            </p>
+            <Link
+              href="#demo"
+              className="inline-flex items-center gap-2 text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent hover:from-purple-300 hover:to-pink-300 transition-all group"
+            >
+              There&apos;s a better way
+              <ArrowRight className="w-8 h-8 text-purple-400 group-hover:translate-x-2 transition-transform" />
+            </Link>
           </motion.div>
         </div>
       </AnimatedSection>
@@ -909,7 +955,7 @@ Expected Deliverables:
 
                 <Link
                   href="/sign-up"
-                  className="w-full py-3 px-6 glass-effect border border-white/20 hover:border-purple-400/50 rounded-xl font-semibold text-center transition-all mb-8"
+                  className="w-full py-3 px-6 glass-effect border border-white/20 hover:border-purple-400/50 rounded-xl font-semibold text-center transition-all mb-8 block"
                 >
                   Get Started
                 </Link>
@@ -971,12 +1017,15 @@ Expected Deliverables:
                   <div className="text-sm text-gray-500 mt-1">or $10/month billed monthly</div>
                 </div>
 
-                <Link
-                  href="/sign-up"
+                <button
+                  onClick={() => {
+                    setSelectedPlan('pro');
+                    setIsWaitlistOpen(true);
+                  }}
                   className="w-full py-3 px-6 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-xl font-semibold text-center transition-all mb-8 shadow-lg shadow-purple-500/50"
                 >
-                  Start Pro Trial
-                </Link>
+                  Join Waitlist
+                </button>
 
                 <ul className="space-y-3 flex-1">
                   <li className="flex items-start gap-3 text-gray-300">
@@ -995,23 +1044,15 @@ Expected Deliverables:
                   </li>
                   <li className="flex items-start gap-3 text-gray-300">
                     <CheckCircle className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
-                    <span>Real-time collaboration</span>
+                    <span>Organization workspaces</span>
                   </li>
                   <li className="flex items-start gap-3 text-gray-300">
                     <CheckCircle className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
-                    <span>File attachments</span>
+                    <span>Drag-and-drop Kanban boards</span>
                   </li>
                   <li className="flex items-start gap-3 text-gray-300">
                     <CheckCircle className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
-                    <span>API access & webhooks</span>
-                  </li>
-                  <li className="flex items-start gap-3 text-gray-300">
-                    <CheckCircle className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
-                    <span>Slack & GitHub integration</span>
-                  </li>
-                  <li className="flex items-start gap-3 text-gray-300">
-                    <CheckCircle className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
-                    <span>5 GB storage</span>
+                    <span>Priority support</span>
                   </li>
                 </ul>
               </motion.div>
@@ -1037,12 +1078,15 @@ Expected Deliverables:
                   <div className="text-sm text-gray-500 mt-1">or $20/month billed monthly</div>
                 </div>
 
-                <Link
-                  href="/sign-up"
+                <button
+                  onClick={() => {
+                    setSelectedPlan('business');
+                    setIsWaitlistOpen(true);
+                  }}
                   className="w-full py-3 px-6 glass-effect border border-white/20 hover:border-cyan-400/50 rounded-xl font-semibold text-center transition-all mb-8"
                 >
-                  Contact Sales
-                </Link>
+                  Join Waitlist
+                </button>
 
                 <ul className="space-y-3 flex-1">
                   <li className="flex items-start gap-3 text-gray-300">
@@ -1061,23 +1105,19 @@ Expected Deliverables:
                   </li>
                   <li className="flex items-start gap-3 text-gray-300">
                     <CheckCircle className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
-                    <span>Advanced analytics & reporting</span>
+                    <span>Multiple AI model support</span>
                   </li>
                   <li className="flex items-start gap-3 text-gray-300">
                     <CheckCircle className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
-                    <span>Unlimited automation rules</span>
+                    <span>Team analytics & insights</span>
                   </li>
                   <li className="flex items-start gap-3 text-gray-300">
                     <CheckCircle className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
-                    <span>Choice of AI models (GPT-4o/Claude)</span>
+                    <span>Dedicated support</span>
                   </li>
                   <li className="flex items-start gap-3 text-gray-300">
                     <CheckCircle className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
-                    <span>50 GB storage</span>
-                  </li>
-                  <li className="flex items-start gap-3 text-gray-300">
-                    <CheckCircle className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
-                    <span>Priority support</span>
+                    <span>Early access to new features</span>
                   </li>
                 </ul>
               </motion.div>
@@ -1265,6 +1305,13 @@ Expected Deliverables:
           </div>
         </div>
       </footer>
+
+      {/* Waitlist Modal */}
+      <WaitlistModal
+        isOpen={isWaitlistOpen}
+        onClose={() => setIsWaitlistOpen(false)}
+        plan={selectedPlan}
+      />
     </div>
   );
 }
