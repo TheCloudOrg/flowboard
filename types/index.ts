@@ -21,3 +21,22 @@ export interface Board {
 }
 
 export type CardMap = { [key: string]: Card };
+
+export interface OnboardingStatus {
+  id: string;
+  user_id: string;
+  completed: boolean;
+  current_step: number;
+  theme_preference: string | null;
+  first_board_created: boolean;
+  skipped: boolean;
+  created_at: string;
+  completed_at: string | null;
+  updated_at: string;
+}
+
+export interface OnboardingStepData {
+  theme_preference?: string;
+  first_board_created?: boolean;
+  [key: string]: any;
+}
