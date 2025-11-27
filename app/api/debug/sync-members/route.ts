@@ -52,7 +52,7 @@ async function syncMembers() {
 
     // Find missing members
     const missingMembers = clerkMembers.data.filter(
-      (m: any) => !existingUserIds.has(m.publicUserData.userId)
+      (m: any) => m.publicUserData && !existingUserIds.has(m.publicUserData.userId)
     );
 
     // Sync missing members
@@ -60,6 +60,11 @@ async function syncMembers() {
     const errors = [];
 
     for (const member of missingMembers) {
+      // Skip if publicUserData is null/undefined
+      if (!member.publicUserData) {
+        continue;
+      }
+
       const memberId = member.publicUserData.userId;
 
       // First, ensure the user exists in Supabase

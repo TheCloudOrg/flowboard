@@ -34,6 +34,7 @@ import {
 import Column from './Column';
 import Card from './Card';
 import CardModal from './CardModal';
+import CardViewModal from './CardViewModal';
 import AIPromptModal from './AIPromptModal';
 import CreateBoardModal from './CreateBoardModal';
 import ThemeToggle from './ThemeToggle';
@@ -68,6 +69,10 @@ export default function KanbanBoard() {
   const [aiError, setAiError] = useState<string | null>(null);
   const [aiUpgradeRequired, setAiUpgradeRequired] = useState(false);
   const [currentAICard, setCurrentAICard] = useState<CardType | null>(null);
+
+  // View Card Modal State
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [viewingCard, setViewingCard] = useState<CardType | null>(null);
 
   // Track intended drop position for database update
   const [intendedDropPosition, setIntendedDropPosition] = useState<{
@@ -175,15 +180,21 @@ export default function KanbanBoard() {
         if (boardData) {
           setBoard(boardData);
           setBoardId(selectedBoardId);
+        } else {
+          console.error('No board data returned for board:', selectedBoardId);
         }
       } catch (error) {
         console.error('Error loading board:', error);
+        // Reset to prevent infinite loops
+        setIsLoading(false);
+        return;
       } finally {
         setIsLoading(false);
       }
     }
 
     loadBoard();
+    // Only depend on selectedBoardId to prevent loops
   }, [selectedBoardId]);
 
   const handleDragStart = (event: DragStartEvent) => {
@@ -327,6 +338,11 @@ export default function KanbanBoard() {
     setCurrentColumnId(columnId);
     setEditingCard(null);
     setIsModalOpen(true);
+  };
+
+  const handleViewCard = (card: CardType) => {
+    setViewingCard(card);
+    setIsViewModalOpen(true);
   };
 
   const handleEditCard = (card: CardType) => {
@@ -659,6 +675,7 @@ export default function KanbanBoard() {
                 column={column}
                 cards={columnCards}
                 onAddCard={handleAddCard}
+                onViewCard={handleViewCard}
                 onEditCard={handleEditCard}
                 onDeleteCard={handleDeleteCard}
                 onDeleteColumn={handleDeleteColumn}
@@ -726,6 +743,12 @@ export default function KanbanBoard() {
             <div className="opacity-80 rotate-3 scale-105">
               <Card
                 card={activeCard}
+                columnColor={
+                  draggedCardOriginalColumn
+                    ? board.columns.find((c) => c.id === draggedCardOriginalColumn)?.color
+                    : undefined
+                }
+                onView={() => {}}
                 onEdit={() => {}}
                 onDelete={() => {}}
                 onAIGenerate={() => {}}
@@ -745,6 +768,27 @@ export default function KanbanBoard() {
         onSave={handleSaveCard}
         card={editingCard}
         columnId={currentColumnId}
+      />
+
+      {/* Card View Modal */}
+      <CardViewModal
+        isOpen={isViewModalOpen}
+        onClose={() => {
+          setIsViewModalOpen(false);
+          setViewingCard(null);
+        }}
+        onEdit={() => {
+          if (viewingCard) {
+            setIsViewModalOpen(false);
+            handleEditCard(viewingCard);
+          }
+        }}
+        onAIGenerate={() => {
+          if (viewingCard) {
+            handleAIGenerate(viewingCard);
+          }
+        }}
+        card={viewingCard}
       />
 
       {/* AI Prompt Modal */}

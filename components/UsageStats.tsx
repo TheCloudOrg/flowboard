@@ -82,7 +82,11 @@ function ProgressBar({ current, limit, percentage, label, icon, color }: Progres
               / {limit === -1 ? '∞' : limit}
             </span>
           </span>
-          {isAtLimit && <AlertCircle className="w-4 h-4 text-red-400" title="Limit reached" />}
+          {isAtLimit && (
+            <span title="Limit reached">
+              <AlertCircle className="w-4 h-4 text-red-400" />
+            </span>
+          )}
         </div>
       </div>
 
@@ -216,7 +220,7 @@ export default function UsageStats() {
       className="glass-effect rounded-2xl p-6 shadow-card border dark:border-white/10 light:border-gray-200"
     >
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className={`flex items-center justify-between ${isExpanded ? 'mb-6' : ''}`}>
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-xl bg-gradient-to-br from-primary-500/20 to-accent-500/20">
             <TrendingUp className="w-5 h-5 text-primary-400" />

@@ -440,28 +440,51 @@ Expected Deliverables:
                           <>
                             <motion.div
                               whileHover={{ scale: 1.02, y: -2 }}
-                              className="bg-white/5 rounded-xl p-4 mb-3 border border-white/5 hover:border-purple-400/30 transition-all cursor-pointer group relative"
+                              className="glass-effect card-gradient rounded-2xl p-4 mb-3 shadow-card hover:shadow-card-hover border border-white/5 hover:border-purple-400/30 transition-all duration-300 cursor-pointer group"
                             >
-                              <h4 className="text-white font-semibold mb-2">Add Auth System</h4>
-                              <p className="text-gray-400 text-xs mb-2">OAuth + 2FA support</p>
-                              <p className="text-gray-500 text-xs">Next.js, Clerk</p>
-
-                              {/* AI sparkle on hover */}
-                              <motion.div
-                                initial={{ opacity: 0, scale: 0.8 }}
-                                whileHover={{ opacity: 1, scale: 1 }}
-                                className="absolute top-2 right-2 w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                              >
-                                <Sparkles className="w-4 h-4" />
-                              </motion.div>
+                              <h4 className="text-lg font-semibold text-white mb-2 pr-8">
+                                Add Auth System
+                              </h4>
+                              <p className="text-xs text-gray-500 mb-3">
+                                Next.js, Clerk, OAuth + 2FA
+                              </p>
+                              <div className="flex items-center justify-between mt-3">
+                                <span className="text-xs text-gray-400">11/26/2025</span>
+                                <button
+                                  className="flex items-center gap-1 px-2 py-1 rounded-lg transition-all shadow-sm"
+                                  style={{
+                                    backgroundColor: 'rgba(168, 85, 247, 0.2)',
+                                    color: '#a855f7',
+                                  }}
+                                >
+                                  <Sparkles className="w-3 h-3" />
+                                  <span className="text-xs font-medium">AI Prompt</span>
+                                </button>
+                              </div>
                             </motion.div>
                             <motion.div
                               whileHover={{ scale: 1.02, y: -2 }}
-                              className="bg-white/5 rounded-xl p-4 mb-3 border border-white/5 hover:border-purple-400/30 transition-all cursor-pointer group"
+                              className="glass-effect card-gradient rounded-2xl p-4 mb-3 shadow-card hover:shadow-card-hover border border-white/5 hover:border-purple-400/30 transition-all duration-300 cursor-pointer group"
                             >
-                              <h4 className="text-white font-semibold mb-2">Payment Flow</h4>
-                              <p className="text-gray-400 text-xs mb-2">Stripe integration</p>
-                              <p className="text-gray-500 text-xs">React, TypeScript</p>
+                              <h4 className="text-lg font-semibold text-white mb-2 pr-8">
+                                Payment Flow
+                              </h4>
+                              <p className="text-xs text-gray-500 mb-3">
+                                React, TypeScript, Stripe
+                              </p>
+                              <div className="flex items-center justify-between mt-3">
+                                <span className="text-xs text-gray-400">11/25/2025</span>
+                                <button
+                                  className="flex items-center gap-1 px-2 py-1 rounded-lg transition-all shadow-sm"
+                                  style={{
+                                    backgroundColor: 'rgba(168, 85, 247, 0.2)',
+                                    color: '#a855f7',
+                                  }}
+                                >
+                                  <Sparkles className="w-3 h-3" />
+                                  <span className="text-xs font-medium">AI Prompt</span>
+                                </button>
+                              </div>
                             </motion.div>
                           </>
                         )}
@@ -469,11 +492,27 @@ Expected Deliverables:
                           <>
                             <motion.div
                               whileHover={{ scale: 1.02, y: -2 }}
-                              className="bg-white/5 rounded-xl p-4 mb-3 border border-white/5 hover:border-blue-400/30 transition-all cursor-pointer group"
+                              className="glass-effect card-gradient rounded-2xl p-4 mb-3 shadow-card hover:shadow-card-hover border border-white/5 hover:border-blue-400/30 transition-all duration-300 cursor-pointer group"
                             >
-                              <h4 className="text-white font-semibold mb-2">API Endpoints</h4>
-                              <p className="text-gray-400 text-xs mb-2">REST + GraphQL</p>
-                              <p className="text-gray-500 text-xs">Node.js, Prisma</p>
+                              <h4 className="text-lg font-semibold text-white mb-2 pr-8">
+                                API Endpoints
+                              </h4>
+                              <p className="text-xs text-gray-500 mb-3">
+                                Node.js, Prisma, REST + GraphQL
+                              </p>
+                              <div className="flex items-center justify-between mt-3">
+                                <span className="text-xs text-gray-400">11/27/2025</span>
+                                <button
+                                  className="flex items-center gap-1 px-2 py-1 rounded-lg transition-all shadow-sm"
+                                  style={{
+                                    backgroundColor: 'rgba(96, 165, 250, 0.2)',
+                                    color: '#60a5fa',
+                                  }}
+                                >
+                                  <Sparkles className="w-3 h-3" />
+                                  <span className="text-xs font-medium">AI Prompt</span>
+                                </button>
+                              </div>
                             </motion.div>
                           </>
                         )}
@@ -481,19 +520,49 @@ Expected Deliverables:
                           <>
                             <motion.div
                               whileHover={{ scale: 1.02, y: -2 }}
-                              className="bg-white/5 rounded-xl p-4 mb-3 border border-white/5 hover:border-green-400/30 transition-all cursor-pointer group"
+                              className="glass-effect card-gradient rounded-2xl p-4 mb-3 shadow-card hover:shadow-card-hover border border-white/5 hover:border-green-400/30 transition-all duration-300 cursor-pointer group"
                             >
-                              <h4 className="text-white font-semibold mb-2">Deployed to Prod</h4>
-                              <p className="text-gray-400 text-xs mb-2">CI/CD pipeline</p>
-                              <p className="text-gray-500 text-xs">Vercel</p>
+                              <h4 className="text-lg font-semibold text-white mb-2 pr-8">
+                                Deployed to Prod
+                              </h4>
+                              <p className="text-xs text-gray-500 mb-3">Vercel, CI/CD pipeline</p>
+                              <div className="flex items-center justify-between mt-3">
+                                <span className="text-xs text-gray-400">11/20/2025</span>
+                                <button
+                                  className="flex items-center gap-1 px-2 py-1 rounded-lg transition-all shadow-sm"
+                                  style={{
+                                    backgroundColor: 'rgba(74, 222, 128, 0.2)',
+                                    color: '#4ade80',
+                                  }}
+                                >
+                                  <Sparkles className="w-3 h-3" />
+                                  <span className="text-xs font-medium">AI Prompt</span>
+                                </button>
+                              </div>
                             </motion.div>
                             <motion.div
                               whileHover={{ scale: 1.02, y: -2 }}
-                              className="bg-white/5 rounded-xl p-4 mb-3 border border-white/5 hover:border-green-400/30 transition-all cursor-pointer group"
+                              className="glass-effect card-gradient rounded-2xl p-4 mb-3 shadow-card hover:shadow-card-hover border border-white/5 hover:border-green-400/30 transition-all duration-300 cursor-pointer group"
                             >
-                              <h4 className="text-white font-semibold mb-2">Dashboard UI</h4>
-                              <p className="text-gray-400 text-xs mb-2">Charts & analytics</p>
-                              <p className="text-gray-500 text-xs">Recharts</p>
+                              <h4 className="text-lg font-semibold text-white mb-2 pr-8">
+                                Dashboard UI
+                              </h4>
+                              <p className="text-xs text-gray-500 mb-3">
+                                Recharts, Charts & analytics
+                              </p>
+                              <div className="flex items-center justify-between mt-3">
+                                <span className="text-xs text-gray-400">11/18/2025</span>
+                                <button
+                                  className="flex items-center gap-1 px-2 py-1 rounded-lg transition-all shadow-sm"
+                                  style={{
+                                    backgroundColor: 'rgba(74, 222, 128, 0.2)',
+                                    color: '#4ade80',
+                                  }}
+                                >
+                                  <Sparkles className="w-3 h-3" />
+                                  <span className="text-xs font-medium">AI Prompt</span>
+                                </button>
+                              </div>
                             </motion.div>
                           </>
                         )}

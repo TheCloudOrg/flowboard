@@ -107,6 +107,11 @@ export async function syncAllOrgMembers(orgId: string) {
     const errors = [];
 
     for (const member of clerkMembers.data) {
+      // Skip if publicUserData is null/undefined
+      if (!member.publicUserData) {
+        continue;
+      }
+
       const memberId = member.publicUserData.userId;
 
       // Sync user

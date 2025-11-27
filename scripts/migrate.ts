@@ -37,7 +37,8 @@ async function runMigrations() {
     console.log(`📁 Migrations directory: ${migrationsDir}\n`);
 
     // Parse connection string into components
-    const config = parse(DATABASE_URL);
+    // DATABASE_URL is guaranteed to be defined due to check above
+    const config = parse(DATABASE_URL!);
 
     console.log(`🔍 Parsed connection config:`, {
       host: config.host,
@@ -49,11 +50,11 @@ async function runMigrations() {
 
     // Configure database connection
     const dbConfig = {
-      host: config.host!,
-      port: parseInt(config.port || '5432'),
-      database: config.database!,
-      user: config.user!,
-      password: config.password!,
+      host: config.host || 'localhost',
+      port: parseInt((config.port as string | undefined) || '5432', 10),
+      database: config.database || 'postgres',
+      user: config.user || 'postgres',
+      password: config.password || '',
       ssl: {
         rejectUnauthorized: false,
       },

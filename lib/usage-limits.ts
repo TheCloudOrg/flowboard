@@ -6,6 +6,19 @@
  */
 
 import { createClient } from '@/lib/supabase/server';
+import { createClient as createSupabaseClient } from '@supabase/supabase-js';
+
+// Service role client for admin operations (bypasses RLS)
+const supabaseAdmin = createSupabaseClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  }
+);
 
 // =====================================================
 // PLAN LIMITS CONFIGURATION
@@ -187,11 +200,11 @@ export async function checkUsageLimit(orgId: string, metricType: MetricType): Pr
  */
 export async function trackUsage(orgId: string, metricType: MetricType): Promise<void> {
   try {
-    const supabase = await createClient();
+    // Use admin client to bypass RLS for usage tracking
     const periodMonth = getCurrentPeriodMonth();
 
     // First, try to get the current usage record
-    const { data: existingUsage } = await supabase
+    const { data: existingUsage } = await supabaseAdmin
       .from('usage_tracking')
       .select('id, count')
       .eq('organization_id', orgId)
@@ -201,7 +214,7 @@ export async function trackUsage(orgId: string, metricType: MetricType): Promise
 
     if (existingUsage) {
       // Update existing record
-      const { error } = await supabase
+      const { error } = await supabaseAdmin
         .from('usage_tracking')
         .update({ count: existingUsage.count + 1 })
         .eq('id', existingUsage.id);
@@ -211,7 +224,7 @@ export async function trackUsage(orgId: string, metricType: MetricType): Promise
       }
     } else {
       // Insert new record
-      const { error } = await supabase.from('usage_tracking').insert({
+      const { error } = await supabaseAdmin.from('usage_tracking').insert({
         organization_id: orgId,
         metric_type: metricType,
         count: 1,

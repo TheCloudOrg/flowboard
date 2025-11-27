@@ -65,6 +65,7 @@ export async function getBoard(organizationId: string): Promise<Board | null> {
       id: card.id,
       title: card.title,
       description: card.description || undefined,
+      techStack: card.tech_stack || undefined,
       notes: card.notes || undefined,
       createdAt: card.created_at,
       updatedAt: card.updated_at,
@@ -141,7 +142,7 @@ export async function createBoard(
 export async function addCard(
   boardId: string,
   columnId: string,
-  card: { title: string; description?: string; notes?: string },
+  card: { title: string; description?: string; techStack?: string; notes?: string },
   createdBy?: string
 ): Promise<Card | null> {
   const supabase = await createClient();
@@ -165,6 +166,7 @@ export async function addCard(
       column_id: columnId,
       title: card.title,
       description: card.description || null,
+      tech_stack: card.techStack || null,
       notes: card.notes || null,
       position: newPosition,
       created_by: createdBy || null,
@@ -181,6 +183,7 @@ export async function addCard(
     id: data.id,
     title: data.title,
     description: data.description || undefined,
+    techStack: data.tech_stack || undefined,
     notes: data.notes || undefined,
     createdAt: data.created_at,
     updatedAt: data.updated_at,
@@ -192,14 +195,21 @@ export async function addCard(
  */
 export async function updateCard(
   cardId: string,
-  updates: { title?: string; description?: string; notes?: string }
+  updates: { title?: string; description?: string; techStack?: string; notes?: string }
 ): Promise<boolean> {
   const supabase = await createClient();
+
+  // Map techStack to tech_stack for database
+  const dbUpdates: any = { ...updates };
+  if ('techStack' in updates) {
+    dbUpdates.tech_stack = updates.techStack;
+    delete dbUpdates.techStack;
+  }
 
   const { error } = await supabase
     .from('cards')
     .update({
-      ...updates,
+      ...dbUpdates,
       updated_at: new Date().toISOString(),
     })
     .eq('id', cardId);

@@ -2,6 +2,7 @@ export interface Card {
   id: string;
   title: string;
   description?: string;
+  techStack?: string;
   notes?: string;
   createdAt: string;
   updatedAt: string;

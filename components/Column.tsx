@@ -12,6 +12,7 @@ interface ColumnProps {
   column: ColumnType;
   cards: CardType[];
   onAddCard: (columnId: string) => void;
+  onViewCard: (card: CardType) => void;
   onEditCard: (card: CardType) => void;
   onDeleteCard: (cardId: string) => void;
   onDeleteColumn: (columnId: string) => void;
@@ -22,6 +23,7 @@ export default function Column({
   column,
   cards,
   onAddCard,
+  onViewCard,
   onEditCard,
   onDeleteCard,
   onDeleteColumn,
@@ -96,6 +98,8 @@ export default function Column({
               <Card
                 key={card.id}
                 card={card}
+                columnColor={column.color}
+                onView={onViewCard}
                 onEdit={onEditCard}
                 onDelete={onDeleteCard}
                 onAIGenerate={onAIGenerate}

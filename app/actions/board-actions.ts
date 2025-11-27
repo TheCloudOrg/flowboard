@@ -92,7 +92,7 @@ export async function initializeBoardAction(
 export async function addCardAction(
   boardId: string,
   columnId: string,
-  card: { title: string; description?: string; notes?: string }
+  card: { title: string; description?: string; techStack?: string; notes?: string }
 ): Promise<Card | null> {
   try {
     const user = await currentUser();
@@ -115,7 +115,7 @@ export async function addCardAction(
  */
 export async function updateCardAction(
   cardId: string,
-  updates: { title?: string; description?: string; notes?: string }
+  updates: { title?: string; description?: string; techStack?: string; notes?: string }
 ): Promise<boolean> {
   try {
     // SEC-006 FIX: Validate card input before updating
@@ -307,6 +307,7 @@ export async function getBoardByIdAction(boardId: string): Promise<Board | null>
         id: card.id,
         title: card.title,
         description: card.description || undefined,
+        techStack: card.tech_stack || undefined,
         notes: card.notes || undefined,
         createdAt: card.created_at,
         updatedAt: card.updated_at,

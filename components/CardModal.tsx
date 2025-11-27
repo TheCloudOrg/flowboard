@@ -1,10 +1,9 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Sparkles } from 'lucide-react';
+import { X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Card } from '@/types';
-import AIPromptModal from './AIPromptModal';
 
 interface CardModalProps {
   isOpen: boolean;
@@ -17,17 +16,19 @@ interface CardModalProps {
 export default function CardModal({ isOpen, onClose, onSave, card, columnId }: CardModalProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [techStack, setTechStack] = useState('');
   const [notes, setNotes] = useState('');
-  const [isAIModalOpen, setIsAIModalOpen] = useState(false);
 
   useEffect(() => {
     if (card) {
       setTitle(card.title || '');
       setDescription(card.description || '');
+      setTechStack(card.techStack || '');
       setNotes(card.notes || '');
     } else {
       setTitle('');
       setDescription('');
+      setTechStack('');
       setNotes('');
     }
   }, [card, isOpen]);
@@ -39,11 +40,13 @@ export default function CardModal({ isOpen, onClose, onSave, card, columnId }: C
     onSave({
       title: title.trim(),
       description: description.trim(),
+      techStack: techStack.trim(),
       notes: notes.trim(),
     });
 
     setTitle('');
     setDescription('');
+    setTechStack('');
     setNotes('');
     onClose();
   };
@@ -51,13 +54,9 @@ export default function CardModal({ isOpen, onClose, onSave, card, columnId }: C
   const handleClose = () => {
     setTitle('');
     setDescription('');
+    setTechStack('');
     setNotes('');
     onClose();
-  };
-
-  const handleAIPromptGenerated = (generatedPrompt: string) => {
-    setDescription(generatedPrompt);
-    setIsAIModalOpen(false);
   };
 
   return (
@@ -120,29 +119,37 @@ export default function CardModal({ isOpen, onClose, onSave, card, columnId }: C
 
                 {/* Description */}
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <label
-                      htmlFor="description"
-                      className="block text-sm font-medium dark:text-gray-300 light:text-gray-700"
-                    >
-                      Description
-                    </label>
-                    <button
-                      type="button"
-                      onClick={() => setIsAIModalOpen(true)}
-                      className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium bg-gradient-to-r from-primary-500/20 to-accent-500/20 hover:from-primary-500/30 hover:to-accent-500/30 border border-primary-400/30 rounded-lg dark:text-primary-300 light:text-primary-600 transition-all"
-                    >
-                      <Sparkles className="w-3.5 h-3.5" />
-                      Generate with AI
-                    </button>
-                  </div>
+                  <label
+                    htmlFor="description"
+                    className="block text-sm font-medium dark:text-gray-300 light:text-gray-700 mb-2"
+                  >
+                    Description
+                  </label>
                   <textarea
                     id="description"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Enter card description or use AI to generate one"
+                    placeholder="Enter card description"
                     rows={3}
                     className="w-full px-4 py-3 dark:bg-white/5 light:bg-gray-50 border dark:border-white/10 light:border-gray-300 rounded-xl dark:text-white light:text-gray-900 dark:placeholder-gray-500 light:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all resize-none"
+                  />
+                </div>
+
+                {/* Tech Stack */}
+                <div>
+                  <label
+                    htmlFor="techStack"
+                    className="block text-sm font-medium dark:text-gray-300 light:text-gray-700 mb-2"
+                  >
+                    Tech Stack
+                  </label>
+                  <input
+                    id="techStack"
+                    type="text"
+                    value={techStack}
+                    onChange={(e) => setTechStack(e.target.value)}
+                    placeholder="e.g., Next.js, TypeScript, Supabase"
+                    className="w-full px-4 py-3 dark:bg-white/5 light:bg-gray-50 border dark:border-white/10 light:border-gray-300 rounded-xl dark:text-white light:text-gray-900 dark:placeholder-gray-500 light:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                   />
                 </div>
 
@@ -183,14 +190,6 @@ export default function CardModal({ isOpen, onClose, onSave, card, columnId }: C
               </form>
             </motion.div>
           </div>
-
-          {/* AI Prompt Modal */}
-          <AIPromptModal
-            isOpen={isAIModalOpen}
-            onClose={() => setIsAIModalOpen(false)}
-            onPromptGenerated={handleAIPromptGenerated}
-            cardTitle={title}
-          />
         </>
       )}
     </AnimatePresence>
