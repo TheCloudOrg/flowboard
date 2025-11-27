@@ -1,16 +1,27 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@clerk/nextjs';
 
 export default function OnboardingPage() {
   const router = useRouter();
-  const { userId } = useAuth();
+  const { userId, isLoaded } = useAuth();
   const [step, setStep] = useState(1);
   const [boardName, setBoardName] = useState('My First Board');
   const [isCreating, setIsCreating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  // Ensure component only renders on client
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Wait for auth to load and component to mount
+  if (!mounted || !isLoaded) {
+    return null;
+  }
 
   if (!userId) {
     router.push('/sign-in');

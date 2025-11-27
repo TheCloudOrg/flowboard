@@ -148,6 +148,7 @@ export type Database = {
           board_id: string;
           title: string;
           description: string | null;
+          tech_stack: string | null;
           notes: string | null;
           position: number;
           created_by: string | null;
@@ -160,6 +161,7 @@ export type Database = {
           board_id: string;
           title: string;
           description?: string | null;
+          tech_stack?: string | null;
           notes?: string | null;
           position: number;
           created_by?: string | null;
@@ -172,6 +174,7 @@ export type Database = {
           board_id?: string;
           title?: string;
           description?: string | null;
+          tech_stack?: string | null;
           notes?: string | null;
           position?: number;
           created_by?: string | null;

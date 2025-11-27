@@ -29,6 +29,7 @@ describe('Card Component', () => {
     updatedAt: '2024-01-15T00:00:00Z',
   };
 
+  const mockOnView = jest.fn();
   const mockOnEdit = jest.fn();
   const mockOnDelete = jest.fn();
   const mockOnAIGenerate = jest.fn();
@@ -41,6 +42,7 @@ describe('Card Component', () => {
     render(
       <Card
         card={mockCard}
+        onView={mockOnView}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onAIGenerate={mockOnAIGenerate}
@@ -50,66 +52,41 @@ describe('Card Component', () => {
     expect(screen.getByText('Test Card Title')).toBeInTheDocument();
   });
 
-  it('renders card with description', () => {
+  it('renders card with tech stack when provided', () => {
+    const cardWithTechStack = { ...mockCard, techStack: 'Next.js, TypeScript' };
+
+    render(
+      <Card
+        card={cardWithTechStack}
+        onView={mockOnView}
+        onEdit={mockOnEdit}
+        onDelete={mockOnDelete}
+        onAIGenerate={mockOnAIGenerate}
+      />
+    );
+
+    expect(screen.getByText('Next.js, TypeScript')).toBeInTheDocument();
+  });
+
+  it('does not render tech stack when not provided', () => {
     render(
       <Card
         card={mockCard}
+        onView={mockOnView}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onAIGenerate={mockOnAIGenerate}
       />
     );
 
-    expect(screen.getByText('Test card description')).toBeInTheDocument();
-  });
-
-  it('renders card with notes', () => {
-    render(
-      <Card
-        card={mockCard}
-        onEdit={mockOnEdit}
-        onDelete={mockOnDelete}
-        onAIGenerate={mockOnAIGenerate}
-      />
-    );
-
-    expect(screen.getByText('Test notes')).toBeInTheDocument();
-  });
-
-  it('does not render description when not provided', () => {
-    const cardWithoutDescription = { ...mockCard, description: undefined };
-
-    render(
-      <Card
-        card={cardWithoutDescription}
-        onEdit={mockOnEdit}
-        onDelete={mockOnDelete}
-        onAIGenerate={mockOnAIGenerate}
-      />
-    );
-
-    expect(screen.queryByText('Test card description')).not.toBeInTheDocument();
-  });
-
-  it('does not render notes when not provided', () => {
-    const cardWithoutNotes = { ...mockCard, notes: undefined };
-
-    render(
-      <Card
-        card={cardWithoutNotes}
-        onEdit={mockOnEdit}
-        onDelete={mockOnDelete}
-        onAIGenerate={mockOnAIGenerate}
-      />
-    );
-
-    expect(screen.queryByText('Test notes')).not.toBeInTheDocument();
+    expect(screen.queryByText('Next.js, TypeScript')).not.toBeInTheDocument();
   });
 
   it('displays formatted date', () => {
     render(
       <Card
         card={mockCard}
+        onView={mockOnView}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onAIGenerate={mockOnAIGenerate}
@@ -125,6 +102,7 @@ describe('Card Component', () => {
     render(
       <Card
         card={mockCard}
+        onView={mockOnView}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onAIGenerate={mockOnAIGenerate}
@@ -147,6 +125,7 @@ describe('Card Component', () => {
     render(
       <Card
         card={mockCard}
+        onView={mockOnView}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onAIGenerate={mockOnAIGenerate}
@@ -169,6 +148,7 @@ describe('Card Component', () => {
     render(
       <Card
         card={mockCard}
+        onView={mockOnView}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onAIGenerate={mockOnAIGenerate}
@@ -191,6 +171,7 @@ describe('Card Component', () => {
     const { container } = render(
       <Card
         card={mockCard}
+        onView={mockOnView}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onAIGenerate={mockOnAIGenerate}
@@ -213,6 +194,7 @@ describe('Card Component', () => {
     render(
       <Card
         card={minimalCard}
+        onView={mockOnView}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onAIGenerate={mockOnAIGenerate}
