@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 
-// Force Node.js runtime (not Edge)
-export const runtime = 'nodejs';
-
 export async function POST(request: NextRequest) {
   try {
     const { email, plan } = await request.json();
@@ -26,12 +23,11 @@ export async function POST(request: NextRequest) {
     // Create Supabase client
     const supabase = await createClient();
 
-    // Check if email already exists for this plan
+    // Check if email already exists (database has unique constraint on email only)
     const { data: existingEntry, error: checkError } = await supabase
       .from('waitlist')
-      .select('id')
+      .select('id, plan_interest')
       .eq('email', email.toLowerCase())
-      .eq('plan_interest', plan)
       .single();
 
     if (checkError && checkError.code !== 'PGRST116') {
@@ -40,11 +36,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to process waitlist request' }, { status: 500 });
     }
 
-    // If already on waitlist for this plan, return success (don't error out)
+    // If already on waitlist, return success (don't error out)
     if (existingEntry) {
       return NextResponse.json({
         success: true,
-        message: 'You are already on the waitlist for this plan',
+        message: 'You are already on the waitlist',
       });
     }
 
@@ -57,6 +53,13 @@ export async function POST(request: NextRequest) {
 
     if (insertError) {
       console.error('Error inserting waitlist entry:', insertError);
+      // Handle duplicate key error gracefully (in case of race condition)
+      if (insertError.code === '23505') {
+        return NextResponse.json({
+          success: true,
+          message: 'You are already on the waitlist',
+        });
+      }
       return NextResponse.json({ error: 'Failed to join waitlist' }, { status: 500 });
     }
 
