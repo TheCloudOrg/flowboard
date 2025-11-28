@@ -35,7 +35,14 @@ export default function WaitlistModal({ isOpen, onClose, plan }: WaitlistModalPr
         }),
       });
 
-      const data = await response.json();
+      // Check if response has content before parsing
+      const text = await response.text();
+      let data;
+      try {
+        data = text ? JSON.parse(text) : {};
+      } catch {
+        throw new Error('Server returned invalid response. Please try again.');
+      }
 
       if (!response.ok) {
         throw new Error(data.error || 'Failed to join waitlist');
