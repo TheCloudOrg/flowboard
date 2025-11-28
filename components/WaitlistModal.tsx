@@ -14,6 +14,7 @@ export default function WaitlistModal({ isOpen, onClose, plan }: WaitlistModalPr
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -49,6 +50,7 @@ export default function WaitlistModal({ isOpen, onClose, plan }: WaitlistModalPr
       }
 
       setSuccess(true);
+      setSuccessMessage(data.message || 'Successfully joined the waitlist');
       setEmail('');
 
       // Close modal after 2 seconds on success
@@ -66,6 +68,7 @@ export default function WaitlistModal({ isOpen, onClose, plan }: WaitlistModalPr
     setEmail('');
     setError(null);
     setSuccess(false);
+    setSuccessMessage(null);
     onClose();
   };
 
@@ -129,10 +132,12 @@ export default function WaitlistModal({ isOpen, onClose, plan }: WaitlistModalPr
                     <CheckCircle className="w-12 h-12 text-green-400" />
                   </div>
                   <h3 className="text-2xl font-bold dark:text-white light:text-gray-900 mb-2">
-                    You&apos;re on the list!
+                    {successMessage?.includes('already')
+                      ? 'Already Registered!'
+                      : "You're on the list!"}
                   </h3>
                   <p className="text-center dark:text-gray-400 light:text-gray-600">
-                    We&apos;ll notify you when the {planName} plan is available.
+                    {successMessage || `We'll notify you when the ${planName} plan is available.`}
                   </p>
                 </motion.div>
               ) : (

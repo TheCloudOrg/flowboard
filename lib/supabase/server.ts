@@ -1,4 +1,5 @@
 import { createServerClient } from '@supabase/ssr';
+import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
 import { auth } from '@clerk/nextjs/server';
 
@@ -58,6 +59,34 @@ export async function createClient() {
             // user sessions.
           }
         },
+      },
+    }
+  );
+}
+
+/**
+ * Supabase Admin Client (bypasses RLS)
+ *
+ * Use this ONLY for operations that need to bypass Row Level Security,
+ * such as:
+ * - Public waitlist signups (users not authenticated)
+ * - Administrative operations
+ * - Background jobs
+ *
+ * ⚠️ WARNING: This client has full database access. Use with caution.
+ */
+export function createAdminClient() {
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    throw new Error('SUPABASE_SERVICE_ROLE_KEY is not set');
+  }
+
+  return createSupabaseClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY,
+    {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
       },
     }
   );

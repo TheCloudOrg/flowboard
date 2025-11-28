@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/server';
 
 export async function POST(request: NextRequest) {
   try {
@@ -20,8 +20,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid email address' }, { status: 400 });
     }
 
-    // Create Supabase client
-    const supabase = await createClient();
+    // Create Supabase admin client (bypasses RLS for public waitlist)
+    const supabase = createAdminClient();
 
     // Check if email already exists (database has unique constraint on email only)
     const { data: existingEntry, error: checkError } = await supabase
@@ -36,11 +36,38 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to process waitlist request' }, { status: 500 });
     }
 
-    // If already on waitlist, return success (don't error out)
+    // If already on waitlist, check if they're signing up for a different plan
     if (existingEntry) {
+      const currentPlan = existingEntry.plan_interest;
+
+      // If they're already signed up for this exact plan, return success
+      if (currentPlan === plan) {
+        return NextResponse.json({
+          success: true,
+          message: 'You are already on the waitlist for this plan',
+        });
+      }
+
+      // If signing up for a different plan, update their preference
+      const { error: updateError } = await supabase
+        .from('waitlist')
+        .update({
+          plan_interest: plan,
+          created_at: new Date().toISOString(), // Update timestamp
+        })
+        .eq('id', existingEntry.id);
+
+      if (updateError) {
+        console.error('Error updating waitlist entry:', updateError);
+        return NextResponse.json({ error: 'Failed to update waitlist' }, { status: 500 });
+      }
+
+      const planName = plan === 'pro' ? 'Pro' : 'Business';
+      const oldPlanName = currentPlan === 'pro' ? 'Pro' : 'Business';
+
       return NextResponse.json({
         success: true,
-        message: 'You are already on the waitlist',
+        message: `Updated! You're now on the waitlist for the ${planName} plan (changed from ${oldPlanName})`,
       });
     }
 
