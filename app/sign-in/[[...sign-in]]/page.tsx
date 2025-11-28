@@ -11,7 +11,27 @@ export default function SignInPage() {
         appearance={{
           elements: {
             rootBox: 'mx-auto',
-            card: 'glass-effect shadow-2xl border border-white/10',
+            card: 'bg-slate-900/80 backdrop-blur-xl shadow-2xl border border-white/10',
+            headerTitle: 'text-white',
+            headerSubtitle: 'text-gray-300',
+            socialButtonsBlockButton:
+              'bg-white/10 border border-white/20 text-white hover:bg-white/20',
+            socialButtonsBlockButtonText: 'text-white font-medium',
+            dividerLine: 'bg-white/20',
+            dividerText: 'text-gray-400',
+            formButtonPrimary:
+              'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white',
+            formFieldLabel: 'text-gray-300',
+            formFieldInput: 'bg-white/10 border-white/20 text-white placeholder:text-gray-500',
+            footerActionLink: 'text-purple-400 hover:text-purple-300',
+            identityPreviewText: 'text-white',
+            identityPreviewEditButton: 'text-purple-400',
+            formHeaderTitle: 'text-white',
+            formHeaderSubtitle: 'text-gray-300',
+            otpCodeFieldInput: 'bg-white/10 border-white/20 text-white',
+            formResendCodeLink: 'text-purple-400 hover:text-purple-300',
+            footerActionText: 'text-gray-400',
+            footer: 'hidden', // Hide Clerk branding footer
           },
         }}
       />
