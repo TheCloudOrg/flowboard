@@ -731,10 +731,9 @@ Expected Deliverables:
                 style={{ transformStyle: 'preserve-3d', backfaceVisibility: 'hidden' }}
                 className={demoState !== 'idle' ? 'pointer-events-none absolute inset-0' : ''}
               >
-                <Card3D>
+                <div>
                   <motion.div
-                    whileHover={{ scale: 1.01 }}
-                    className="glass-effect rounded-3xl p-8 border border-white/10 backdrop-blur-xl cursor-pointer group"
+                    className="glass-effect rounded-3xl p-8 border border-white/10 backdrop-blur-xl cursor-pointer group hover:border-emerald-400/30 transition-colors"
                     onClick={handleDemoClick}
                   >
                     <div className="flex items-center justify-between mb-6">
@@ -785,7 +784,7 @@ Expected Deliverables:
                       Click anywhere on the card to see the magic
                     </p>
                   </motion.div>
-                </Card3D>
+                </div>
               </motion.div>
 
               {/* Loading State */}
@@ -862,7 +861,7 @@ Expected Deliverables:
                 style={{ transformStyle: 'preserve-3d', backfaceVisibility: 'hidden' }}
                 className={demoState !== 'complete' ? 'pointer-events-none absolute inset-0' : ''}
               >
-                <Card3D>
+                <div>
                   <motion.div
                     initial={{ scale: 0.95 }}
                     animate={{ scale: 1 }}
@@ -931,7 +930,7 @@ Expected Deliverables:
                       </div>
                     </motion.div>
                   </motion.div>
-                </Card3D>
+                </div>
               </motion.div>
             </div>
 
