@@ -892,10 +892,10 @@ Design an interactive analytics dashboard with real-time data visualization.
                             }}
                             className={`flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium transition-all ${
                               colIdx === 0
-                                ? 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30'
+                                ? 'bg-amber-500/20 text-amber-400 hover:bg-amber-500/30'
                                 : colIdx === 1
                                   ? 'bg-blue-500/20 text-blue-400 hover:bg-blue-500/30'
-                                  : 'bg-purple-500/20 text-purple-400 hover:bg-purple-500/30'
+                                  : 'bg-green-500/20 text-green-400 hover:bg-green-500/30'
                             }`}
                           >
                             <Sparkles className="w-3 h-3" />
@@ -1005,10 +1005,10 @@ Design an interactive analytics dashboard with real-time data visualization.
                   <div
                     className={`glass-effect rounded-3xl p-12 border backdrop-blur-xl ${
                       selectedCard === 0
-                        ? 'border-emerald-500/30'
+                        ? 'border-amber-500/30'
                         : selectedCard === 1
                           ? 'border-blue-500/30'
-                          : 'border-purple-500/30'
+                          : 'border-green-500/30'
                     }`}
                   >
                     <div className="flex flex-col items-center justify-center py-8">
@@ -1020,10 +1020,10 @@ Design an interactive analytics dashboard with real-time data visualization.
                         <div
                           className={`w-16 h-16 rounded-full flex items-center justify-center ${
                             selectedCard === 0
-                              ? 'bg-gradient-to-r from-emerald-500 to-teal-500'
+                              ? 'bg-gradient-to-r from-amber-500 to-yellow-500'
                               : selectedCard === 1
                                 ? 'bg-gradient-to-r from-blue-500 to-cyan-500'
-                                : 'bg-gradient-to-r from-purple-500 to-pink-500'
+                                : 'bg-gradient-to-r from-green-500 to-emerald-500'
                           }`}
                         >
                           <Brain className="w-8 h-8 text-white" />
@@ -1035,10 +1035,10 @@ Design an interactive analytics dashboard with real-time data visualization.
                         animate={{ opacity: 1 }}
                         className={`text-2xl font-bold mb-3 bg-clip-text text-transparent pb-1 ${
                           selectedCard === 0
-                            ? 'bg-gradient-to-r from-emerald-400 to-teal-400'
+                            ? 'bg-gradient-to-r from-amber-400 to-yellow-400'
                             : selectedCard === 1
                               ? 'bg-gradient-to-r from-blue-400 to-cyan-400'
-                              : 'bg-gradient-to-r from-purple-400 to-pink-400'
+                              : 'bg-gradient-to-r from-green-400 to-emerald-400'
                         }`}
                       >
                         Generating AI Prompt...
@@ -1074,10 +1074,10 @@ Design an interactive analytics dashboard with real-time data visualization.
                             }}
                             className={`w-3 h-3 rounded-full ${
                               selectedCard === 0
-                                ? 'bg-emerald-400'
+                                ? 'bg-amber-400'
                                 : selectedCard === 1
                                   ? 'bg-blue-400'
-                                  : 'bg-purple-400'
+                                  : 'bg-green-400'
                             }`}
                           />
                         ))}
