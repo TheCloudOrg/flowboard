@@ -344,7 +344,7 @@ Expected Deliverables:
                 textShadow: '0 0 80px rgba(139, 92, 246, 0.5)',
               }}
             >
-              <span className="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent pb-2 inline-block">
                 Turn project ideas
                 <br />
                 into AI-ready prompts
@@ -614,7 +614,7 @@ Expected Deliverables:
       <AnimatedSection className="py-32 px-6 relative">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 pb-1 bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
               Managing AI-assisted projects is different
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
@@ -678,7 +678,7 @@ Expected Deliverables:
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-5xl md:text-6xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent pb-1 inline-block">
                 From Kanban card to AI prompt
               </span>
               <br />
@@ -794,7 +794,7 @@ Expected Deliverables:
       <AnimatedSection className="py-32 px-6 relative" id="features">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 pb-1 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
               Everything you need to build with AI
             </h2>
             <p className="text-xl text-gray-400">Powerful features for modern development teams</p>
@@ -876,7 +876,7 @@ Expected Deliverables:
       <AnimatedSection className="py-32 px-6 relative">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 pb-1 bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
               How we stack up
             </h2>
             <p className="text-xl text-gray-400">See why developers choose Flow Board</p>
@@ -977,7 +977,7 @@ Expected Deliverables:
       {/* Tech Stack */}
       <AnimatedSection className="py-32 px-6 relative">
         <div className="max-w-5xl mx-auto text-center">
-          <h2 className="text-5xl md:text-6xl font-bold mb-8 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+          <h2 className="text-5xl md:text-6xl font-bold mb-8 pb-1 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
             Built with modern tech
           </h2>
           <p className="text-xl text-gray-400 mb-12">The stack developers love</p>
@@ -990,9 +990,9 @@ Expected Deliverables:
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: idx * 0.05 }}
-                  className="glass-effect rounded-2xl p-6 border border-white/10 hover:border-emerald-400/30 transition-all backdrop-blur-xl group"
+                  className="glass-effect rounded-2xl p-6 border border-white/10 hover:border-emerald-400/30 transition-all backdrop-blur-xl group text-center"
                 >
-                  <div className="text-5xl mb-3 group-hover:scale-110 transition-transform">
+                  <div className="mb-3 group-hover:scale-110 transition-transform flex justify-center">
                     {tech.icon}
                   </div>
                   <div
@@ -1029,7 +1029,7 @@ Expected Deliverables:
       <AnimatedSection className="py-32 px-6 relative" id="pricing">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 pb-1 bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
               Simple, transparent pricing
             </h2>
             <p className="text-xl text-gray-400 max-w-2xl mx-auto">
@@ -1251,7 +1251,7 @@ Expected Deliverables:
             viewport={{ once: true }}
           >
             <h2 className="text-5xl md:text-7xl font-bold mb-8 leading-snug">
-              <span className="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent pb-2 inline-block">
                 Ready to build smarter
                 <br />
                 with AI?
@@ -1278,7 +1278,7 @@ Expected Deliverables:
                     href="/sign-up"
                     className="px-12 py-5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 rounded-xl font-bold text-xl transition-all transform hover:scale-105 shadow-2xl shadow-emerald-500/50"
                   >
-                    Start Free with GitHub
+                    Start Free Today
                   </Link>
                   <Link
                     href="/sign-up"
