@@ -18,6 +18,140 @@
   }
 }
 
+/* GPU-accelerated landing page animations */
+@keyframes float-orb-1 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(100px, -100px, 0) scale(1.2);
+  }
+}
+
+@keyframes float-orb-2 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1.1);
+  }
+  50% {
+    transform: translate3d(-80px, 80px, 0) scale(0.9);
+  }
+}
+
+@keyframes float-orb-3 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(60px, 60px, 0) scale(1.15);
+  }
+}
+
+@keyframes float-orb-4 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(0.95);
+  }
+  50% {
+    transform: translate3d(-90px, -60px, 0) scale(1.1);
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 30px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translate3d(-30px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translate3d(30px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Floating orb classes with will-change for GPU acceleration */
+.floating-orb {
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.floating-orb-1 {
+  animation: float-orb-1 25s ease-in-out infinite;
+}
+
+.floating-orb-2 {
+  animation: float-orb-2 30s ease-in-out infinite;
+  animation-delay: -5s;
+}
+
+.floating-orb-3 {
+  animation: float-orb-3 20s ease-in-out infinite;
+  animation-delay: -10s;
+}
+
+.floating-orb-4 {
+  animation: float-orb-4 35s ease-in-out infinite;
+  animation-delay: -15s;
+}
+
+/* Card 3D hover effect - pure CSS */
+.card-3d {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  transition: transform 0.3s ease-out;
+  will-change: transform;
+}
+
+.card-3d:hover {
+  transform: rotateX(-5deg) rotateY(5deg) scale(1.02);
+}
+
+/* Animated section - CSS reveal */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translate3d(0, 50px, 0);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  will-change: opacity, transform;
+}
+
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Entrance animations */
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out forwards;
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.8s ease-out forwards;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.8s ease-out forwards;
+}
+
 @layer utilities {
   /* Light mode glass effect */
   .light .glass-effect {

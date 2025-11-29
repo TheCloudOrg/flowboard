@@ -1,8 +1,8 @@
 'use client';
 
-import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useAuth } from '@clerk/nextjs';
 import {
   Sparkles,
@@ -24,101 +24,55 @@ import {
 } from 'lucide-react';
 import WaitlistModal from '@/components/WaitlistModal';
 
-// Floating orb component for background effects
-function FloatingOrb({ delay = 0, duration = 20, left = '10%', top = '20%' }: any) {
-  return (
-    <motion.div
-      className="absolute w-96 h-96 rounded-full blur-3xl opacity-20"
-      style={{
-        left,
-        top,
-        background: 'radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, transparent 70%)',
-      }}
-      animate={{
-        x: [0, 100, 0],
-        y: [0, -100, 0],
-        scale: [1, 1.2, 1],
-      }}
-      transition={{
-        duration,
-        repeat: Infinity,
-        delay,
-        ease: 'easeInOut',
-      }}
-    />
-  );
+// Pure CSS 3D Card component - no JS state tracking on mousemove
+function Card3D({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+  return <div className={`card-3d ${className}`}>{children}</div>;
 }
 
-// 3D Card component with tilt effect
-function Card3D({ children, className = '' }: any) {
-  const [rotateX, setRotateX] = useState(0);
-  const [rotateY, setRotateY] = useState(0);
+// CSS-based animated section with Intersection Observer
+function AnimatedSection({
+  children,
+  className = '',
+  id,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  id?: string;
+}) {
   const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    const rotateXValue = ((y - centerY) / centerY) * -10;
-    const rotateYValue = ((x - centerX) / centerX) * 10;
-    setRotateX(rotateXValue);
-    setRotateY(rotateYValue);
-  };
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect(); // Only trigger once
+        }
+      },
+      { threshold: 0.1, rootMargin: '-50px' }
+    );
 
-  const handleMouseLeave = () => {
-    setRotateX(0);
-    setRotateY(0);
-  };
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
 
-  return (
-    <motion.div
-      ref={ref}
-      className={className}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{
-        transformStyle: 'preserve-3d',
-        perspective: '1000px',
-      }}
-      animate={{
-        rotateX,
-        rotateY,
-      }}
-      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-// Animated section wrapper
-function AnimatedSection({ children, className = '' }: any) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <motion.div
+    <div
       ref={ref}
-      initial={{ opacity: 0, y: 50 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-      transition={{ duration: 0.8, ease: 'easeOut' }}
-      className={className}
+      id={id}
+      className={`animate-on-scroll ${isVisible ? 'visible' : ''} ${className}`}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
 
 export default function LandingPage() {
   const { isSignedIn } = useAuth();
-  const { scrollYProgress } = useScroll();
-  const scaleProgress = useTransform(scrollYProgress, [0, 0.5], [1, 0.8]);
-  const opacityProgress = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
-  const springScale = useSpring(scaleProgress, { stiffness: 100, damping: 30 });
-
   const [copiedPrompt, setCopiedPrompt] = useState(false);
   const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<'pro' | 'business'>('pro');
@@ -242,11 +196,39 @@ Expected Deliverables:
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 text-white overflow-hidden relative">
-      {/* Floating orbs for depth */}
-      <FloatingOrb left="5%" top="10%" duration={25} />
-      <FloatingOrb left="80%" top="30%" duration={30} delay={5} />
-      <FloatingOrb left="50%" top="60%" duration={20} delay={10} />
-      <FloatingOrb left="20%" top="80%" duration={35} delay={15} />
+      {/* Floating orbs - pure CSS animations for GPU acceleration */}
+      <div
+        className="absolute w-96 h-96 rounded-full blur-3xl opacity-20 floating-orb floating-orb-1"
+        style={{
+          left: '5%',
+          top: '10%',
+          background: 'radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, transparent 70%)',
+        }}
+      />
+      <div
+        className="absolute w-96 h-96 rounded-full blur-3xl opacity-20 floating-orb floating-orb-2"
+        style={{
+          left: '80%',
+          top: '30%',
+          background: 'radial-gradient(circle, rgba(236, 72, 153, 0.4) 0%, transparent 70%)',
+        }}
+      />
+      <div
+        className="absolute w-96 h-96 rounded-full blur-3xl opacity-20 floating-orb floating-orb-3"
+        style={{
+          left: '50%',
+          top: '60%',
+          background: 'radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, transparent 70%)',
+        }}
+      />
+      <div
+        className="absolute w-96 h-96 rounded-full blur-3xl opacity-20 floating-orb floating-orb-4"
+        style={{
+          left: '20%',
+          top: '80%',
+          background: 'radial-gradient(circle, rgba(6, 182, 212, 0.4) 0%, transparent 70%)',
+        }}
+      />
 
       {/* Grid overlay */}
       <div className="fixed inset-0 bg-[url('/grid.svg')] bg-center opacity-20 pointer-events-none" />
@@ -311,10 +293,7 @@ Expected Deliverables:
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 px-6 min-h-screen flex items-center">
         <div className="max-w-7xl mx-auto w-full">
-          <motion.div
-            style={{ scale: springScale, opacity: opacityProgress }}
-            className="text-center relative z-10"
-          >
+          <div className="text-center relative z-10">
             {/* Floating badge */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -412,7 +391,7 @@ Expected Deliverables:
                 Free to start
               </div>
             </motion.div>
-          </motion.div>
+          </div>
 
           {/* Hero visual - Animated demo */}
           <motion.div
@@ -666,7 +645,7 @@ Expected Deliverables:
       </AnimatedSection>
 
       {/* AI Demo Section */}
-      <AnimatedSection id="demo" className="py-32 px-6 relative">
+      <AnimatedSection className="py-32 px-6 relative" id="demo">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-5xl md:text-6xl font-bold mb-6">
@@ -1018,7 +997,7 @@ Expected Deliverables:
       </AnimatedSection>
 
       {/* Pricing Section */}
-      <AnimatedSection id="pricing" className="py-32 px-6 relative">
+      <AnimatedSection className="py-32 px-6 relative" id="pricing">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
