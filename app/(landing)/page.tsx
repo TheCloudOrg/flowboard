@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
 import Link from 'next/link';
 import { useRef, useState } from 'react';
+import { useAuth } from '@clerk/nextjs';
 import {
   Sparkles,
   Zap,
@@ -19,6 +20,7 @@ import {
   MessageSquare,
   X,
   Github,
+  LayoutDashboard,
 } from 'lucide-react';
 import WaitlistModal from '@/components/WaitlistModal';
 
@@ -111,6 +113,7 @@ function AnimatedSection({ children, className = '' }: any) {
 }
 
 export default function LandingPage() {
+  const { isSignedIn } = useAuth();
   const { scrollYProgress } = useScroll();
   const scaleProgress = useTransform(scrollYProgress, [0, 0.5], [1, 0.8]);
   const opacityProgress = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
@@ -275,18 +278,32 @@ Expected Deliverables:
             >
               <Github className="w-5 h-5" />
             </Link>
-            <Link
-              href="/sign-in"
-              className="px-4 py-2 text-gray-300 hover:text-white transition-colors"
-            >
-              Sign In
-            </Link>
-            <Link
-              href="/sign-up"
-              className="px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-lg font-medium transition-all transform hover:scale-105"
-            >
-              Start Free
-            </Link>
+            {isSignedIn ? (
+              // Logged in: Show Dashboard button
+              <Link
+                href="/board"
+                className="px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-lg font-medium transition-all transform hover:scale-105 flex items-center gap-2"
+              >
+                <LayoutDashboard className="w-4 h-4" />
+                Dashboard
+              </Link>
+            ) : (
+              // Logged out: Show Sign In and Start Free
+              <>
+                <Link
+                  href="/sign-in"
+                  className="px-4 py-2 text-gray-300 hover:text-white transition-colors"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/sign-up"
+                  className="px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-lg font-medium transition-all transform hover:scale-105"
+                >
+                  Start Free
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </motion.nav>
@@ -347,11 +364,20 @@ Expected Deliverables:
               className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
             >
               <Link
-                href="/sign-up"
+                href={isSignedIn ? '/board' : '/sign-up'}
                 className="group px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-xl font-semibold text-lg transition-all transform hover:scale-105 flex items-center gap-2 shadow-lg shadow-purple-500/50"
               >
-                Start Building with AI
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                {isSignedIn ? (
+                  <>
+                    <LayoutDashboard className="w-5 h-5" />
+                    Go to Dashboard
+                  </>
+                ) : (
+                  <>
+                    Start Building with AI
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </>
+                )}
               </Link>
               <Link
                 href="#demo"
@@ -1226,23 +1252,37 @@ Expected Deliverables:
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
-              <Link
-                href="/sign-up"
-                className="px-12 py-5 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-xl font-bold text-xl transition-all transform hover:scale-105 shadow-2xl shadow-purple-500/50"
-              >
-                Start Free with GitHub
-              </Link>
-              <Link
-                href="/sign-up"
-                className="px-12 py-5 glass-effect border border-white/20 hover:border-cyan-400/50 rounded-xl font-bold text-xl transition-all"
-              >
-                Sign up with Google
-              </Link>
+              {isSignedIn ? (
+                <Link
+                  href="/board"
+                  className="px-12 py-5 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-xl font-bold text-xl transition-all transform hover:scale-105 shadow-2xl shadow-purple-500/50 flex items-center gap-3"
+                >
+                  <LayoutDashboard className="w-6 h-6" />
+                  Go to Dashboard
+                </Link>
+              ) : (
+                <>
+                  <Link
+                    href="/sign-up"
+                    className="px-12 py-5 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-xl font-bold text-xl transition-all transform hover:scale-105 shadow-2xl shadow-purple-500/50"
+                  >
+                    Start Free with GitHub
+                  </Link>
+                  <Link
+                    href="/sign-up"
+                    className="px-12 py-5 glass-effect border border-white/20 hover:border-cyan-400/50 rounded-xl font-bold text-xl transition-all"
+                  >
+                    Sign up with Google
+                  </Link>
+                </>
+              )}
             </div>
 
-            <p className="text-gray-500 text-sm">
-              No credit card required • Free to start • Upgrade anytime
-            </p>
+            {!isSignedIn && (
+              <p className="text-gray-500 text-sm">
+                No credit card required • Free to start • Upgrade anytime
+              </p>
+            )}
           </motion.div>
         </div>
       </AnimatedSection>

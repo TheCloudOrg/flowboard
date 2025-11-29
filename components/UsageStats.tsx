@@ -77,7 +77,7 @@ function ProgressBar({ current, limit, percentage, label, icon, color }: Progres
         <div className="flex items-center gap-2">
           <span className="text-sm font-semibold dark:text-white light:text-gray-900">
             {current}
-            <span className="text-xs dark:text-gray-400 light:text-gray-500 font-normal">
+            <span className="text-xs dark:text-gray-400 light:text-gray-600 font-normal">
               {' '}
               / {limit === -1 ? '∞' : limit}
             </span>
@@ -91,7 +91,7 @@ function ProgressBar({ current, limit, percentage, label, icon, color }: Progres
       </div>
 
       {/* Progress Bar */}
-      <div className="relative h-2 dark:bg-white/5 light:bg-gray-200 rounded-full overflow-hidden">
+      <div className="relative h-2 dark:bg-white/5 light:bg-gray-300 rounded-full overflow-hidden border dark:border-transparent light:border-gray-400/20">
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${Math.min(percentage, 100)}%` }}
@@ -118,7 +118,7 @@ function ProgressBar({ current, limit, percentage, label, icon, color }: Progres
               ? 'text-red-400'
               : isNearLimit
                 ? 'text-yellow-400'
-                : 'dark:text-gray-400 light:text-gray-600'
+                : 'dark:text-gray-400 light:text-gray-700'
           }`}
         >
           {percentage}%
