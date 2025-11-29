@@ -21,6 +21,11 @@ import {
   X,
   Github,
   LayoutDashboard,
+  AlertTriangle,
+  Bot,
+  UsersRound,
+  Database,
+  Palette,
 } from 'lucide-react';
 import WaitlistModal from '@/components/WaitlistModal';
 
@@ -186,12 +191,36 @@ Expected Deliverables:
   ];
 
   const techStack = [
-    { icon: '⚛️', label: 'Next.js 14', color: 'from-blue-400 to-cyan-400' },
-    { icon: '📘', label: 'TypeScript', color: 'from-blue-500 to-indigo-500' },
-    { icon: '🎨', label: 'Tailwind CSS', color: 'from-cyan-400 to-blue-500' },
-    { icon: '🗄️', label: 'Supabase', color: 'from-green-400 to-emerald-500' },
-    { icon: '🔐', label: 'Clerk Auth', color: 'from-emerald-400 to-teal-400' },
-    { icon: '🤖', label: 'OpenAI API', color: 'from-green-500 to-teal-500' },
+    {
+      icon: <Terminal className="w-10 h-10" />,
+      label: 'Next.js 14',
+      color: 'from-blue-400 to-cyan-400',
+    },
+    {
+      icon: <Code2 className="w-10 h-10" />,
+      label: 'TypeScript',
+      color: 'from-blue-500 to-indigo-500',
+    },
+    {
+      icon: <Palette className="w-10 h-10" />,
+      label: 'Tailwind CSS',
+      color: 'from-cyan-400 to-blue-500',
+    },
+    {
+      icon: <Database className="w-10 h-10" />,
+      label: 'Supabase',
+      color: 'from-green-400 to-emerald-500',
+    },
+    {
+      icon: <Lock className="w-10 h-10" />,
+      label: 'Clerk Auth',
+      color: 'from-emerald-400 to-teal-400',
+    },
+    {
+      icon: <Brain className="w-10 h-10" />,
+      label: 'OpenAI API',
+      color: 'from-green-500 to-teal-500',
+    },
   ];
 
   return (
@@ -254,7 +283,7 @@ Expected Deliverables:
           </Link>
           <div className="flex items-center gap-4">
             <Link
-              href="https://github.com"
+              href="https://github.com/TheCloudOrg/flowboard"
               target="_blank"
               className="text-gray-400 hover:text-white transition-colors"
             >
@@ -310,7 +339,7 @@ Expected Deliverables:
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.8 }}
-              className="text-6xl md:text-8xl font-bold mb-6 leading-tight"
+              className="text-6xl md:text-8xl font-bold mb-6 leading-snug"
               style={{
                 textShadow: '0 0 80px rgba(139, 92, 246, 0.5)',
               }}
@@ -596,17 +625,17 @@ Expected Deliverables:
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                emoji: '😤',
+                icon: <AlertTriangle className="w-14 h-14 text-amber-400" />,
                 title: 'Vague Requirements',
                 desc: 'Your AI needs clear context and detailed specifications, not scattered notes across different tools.',
               },
               {
-                emoji: '🤖',
+                icon: <Bot className="w-14 h-14 text-emerald-400" />,
                 title: 'Prompt Friction',
                 desc: 'Constantly switching between PM tools and AI assistants breaks your flow and slows you down.',
               },
               {
-                emoji: '📊',
+                icon: <UsersRound className="w-14 h-14 text-cyan-400" />,
                 title: 'Team Misalignment',
                 desc: 'When using AI to build, everyone needs to see what the AI is creating and why.',
               },
@@ -619,7 +648,7 @@ Expected Deliverables:
                   transition={{ delay: idx * 0.15 }}
                   className="glass-effect rounded-3xl p-8 border border-white/10 text-center h-full backdrop-blur-xl hover:border-emerald-400/30 transition-all"
                 >
-                  <div className="text-6xl mb-6">{problem.emoji}</div>
+                  <div className="mb-6 flex justify-center">{problem.icon}</div>
                   <h3 className="text-2xl font-bold mb-4">{problem.title}</h3>
                   <p className="text-gray-400 leading-relaxed">{problem.desc}</p>
                 </motion.div>
@@ -762,7 +791,7 @@ Expected Deliverables:
       </AnimatedSection>
 
       {/* Features Grid */}
-      <AnimatedSection className="py-32 px-6 relative">
+      <AnimatedSection className="py-32 px-6 relative" id="features">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
@@ -978,7 +1007,7 @@ Expected Deliverables:
 
           <div className="flex flex-wrap justify-center gap-4">
             <Link
-              href="https://github.com"
+              href="https://github.com/TheCloudOrg/flowboard"
               target="_blank"
               className="px-6 py-3 glass-effect border border-white/20 hover:border-emerald-400/50 rounded-xl font-medium transition-all flex items-center gap-2 group"
             >
@@ -1025,6 +1054,7 @@ Expected Deliverables:
                 <div className="mb-8">
                   <div className="text-5xl font-bold text-white mb-2">$0</div>
                   <div className="text-gray-400">Forever free</div>
+                  <div className="text-sm text-gray-500 mt-1">&nbsp;</div>
                 </div>
 
                 <Link
@@ -1201,7 +1231,10 @@ Expected Deliverables:
           <div className="text-center mt-12">
             <p className="text-gray-400">
               Need more than 50 users?{' '}
-              <a href="#" className="text-emerald-400 hover:text-emerald-300 underline">
+              <a
+                href="mailto:hello@tryflowboard.com?subject=Enterprise%20Pricing"
+                className="text-emerald-400 hover:text-emerald-300 underline"
+              >
                 Contact us for Enterprise pricing
               </a>
             </p>
@@ -1217,7 +1250,7 @@ Expected Deliverables:
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-5xl md:text-7xl font-bold mb-8 leading-tight">
+            <h2 className="text-5xl md:text-7xl font-bold mb-8 leading-snug">
               <span className="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">
                 Ready to build smarter
                 <br />
@@ -1274,22 +1307,30 @@ Expected Deliverables:
               <h4 className="font-bold mb-4 text-white">Product</h4>
               <ul className="space-y-2 text-gray-400 text-sm">
                 <li>
-                  <a href="#" className="hover:text-emerald-400 transition-colors">
+                  <a href="#features" className="hover:text-emerald-400 transition-colors">
                     Features
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-emerald-400 transition-colors">
+                  <a href="#pricing" className="hover:text-emerald-400 transition-colors">
                     Pricing
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-emerald-400 transition-colors">
+                  <a
+                    href="https://github.com/TheCloudOrg/flowboard/issues"
+                    target="_blank"
+                    className="hover:text-emerald-400 transition-colors"
+                  >
                     Roadmap
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-emerald-400 transition-colors">
+                  <a
+                    href="https://github.com/TheCloudOrg/flowboard/releases"
+                    target="_blank"
+                    className="hover:text-emerald-400 transition-colors"
+                  >
                     Changelog
                   </a>
                 </li>
@@ -1299,22 +1340,38 @@ Expected Deliverables:
               <h4 className="font-bold mb-4 text-white">Resources</h4>
               <ul className="space-y-2 text-gray-400 text-sm">
                 <li>
-                  <a href="#" className="hover:text-emerald-400 transition-colors">
+                  <a
+                    href="https://github.com/TheCloudOrg/flowboard#readme"
+                    target="_blank"
+                    className="hover:text-emerald-400 transition-colors"
+                  >
                     Documentation
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-emerald-400 transition-colors">
+                  <a
+                    href="https://github.com/TheCloudOrg/flowboard#readme"
+                    target="_blank"
+                    className="hover:text-emerald-400 transition-colors"
+                  >
                     API Reference
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-emerald-400 transition-colors">
+                  <a
+                    href="https://github.com/TheCloudOrg/flowboard"
+                    target="_blank"
+                    className="hover:text-emerald-400 transition-colors"
+                  >
                     GitHub
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-emerald-400 transition-colors">
+                  <a
+                    href="https://github.com/TheCloudOrg/flowboard/discussions"
+                    target="_blank"
+                    className="hover:text-emerald-400 transition-colors"
+                  >
                     Community
                   </a>
                 </li>
@@ -1324,22 +1381,36 @@ Expected Deliverables:
               <h4 className="font-bold mb-4 text-white">Company</h4>
               <ul className="space-y-2 text-gray-400 text-sm">
                 <li>
-                  <a href="#" className="hover:text-emerald-400 transition-colors">
+                  <a
+                    href="https://github.com/TheCloudOrg"
+                    target="_blank"
+                    className="hover:text-emerald-400 transition-colors"
+                  >
                     About
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-emerald-400 transition-colors">
+                  <a
+                    href="https://github.com/TheCloudOrg/flowboard/discussions"
+                    target="_blank"
+                    className="hover:text-emerald-400 transition-colors"
+                  >
                     Blog
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-emerald-400 transition-colors">
+                  <a
+                    href="mailto:hello@tryflowboard.com?subject=Careers"
+                    className="hover:text-emerald-400 transition-colors"
+                  >
                     Careers
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-emerald-400 transition-colors">
+                  <a
+                    href="mailto:hello@tryflowboard.com"
+                    className="hover:text-emerald-400 transition-colors"
+                  >
                     Contact
                   </a>
                 </li>
@@ -1349,23 +1420,39 @@ Expected Deliverables:
               <h4 className="font-bold mb-4 text-white">Legal</h4>
               <ul className="space-y-2 text-gray-400 text-sm">
                 <li>
-                  <a href="#" className="hover:text-emerald-400 transition-colors">
+                  <a
+                    href="https://github.com/TheCloudOrg/flowboard/blob/main/PRIVACY.md"
+                    target="_blank"
+                    className="hover:text-emerald-400 transition-colors"
+                  >
                     Privacy
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-emerald-400 transition-colors">
+                  <a
+                    href="https://github.com/TheCloudOrg/flowboard/blob/main/TERMS.md"
+                    target="_blank"
+                    className="hover:text-emerald-400 transition-colors"
+                  >
                     Terms
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-emerald-400 transition-colors">
+                  <a
+                    href="https://github.com/TheCloudOrg/flowboard/security"
+                    target="_blank"
+                    className="hover:text-emerald-400 transition-colors"
+                  >
                     Security
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-emerald-400 transition-colors">
-                    MIT License
+                  <a
+                    href="https://github.com/TheCloudOrg/flowboard/blob/main/LICENSE"
+                    target="_blank"
+                    className="hover:text-emerald-400 transition-colors"
+                  >
+                    AGPL-3.0
                   </a>
                 </li>
               </ul>
@@ -1374,11 +1461,12 @@ Expected Deliverables:
 
           <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-gray-400 text-sm">
-              © 2025 Flow Board. Built with 💜 by developers, for developers.
+              © 2025 Flow Board. Built with <span className="text-emerald-400">♥</span> by
+              developers, for developers.
             </p>
             <div className="flex items-center gap-4">
               <a
-                href="https://github.com"
+                href="https://github.com/TheCloudOrg/flowboard"
                 target="_blank"
                 className="text-gray-400 hover:text-white transition-colors"
               >
