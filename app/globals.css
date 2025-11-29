@@ -12,9 +12,9 @@
     @apply bg-gradient-to-br from-gray-50 via-slate-50 to-zinc-100 text-gray-900;
   }
 
-  /* Dark mode - black with emerald tint gradient */
+  /* Dark mode - subtle dark gradient */
   .dark body {
-    @apply bg-gradient-to-br from-black via-zinc-900 to-emerald-950/50 text-white;
+    @apply bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-950 text-white;
   }
 }
 
