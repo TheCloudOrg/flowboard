@@ -3,7 +3,7 @@ import ForceDarkMode from '@/components/ForceDarkMode';
 
 export default function SignInPage() {
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-black via-zinc-950 to-emerald-950/30 flex items-center justify-center p-4 relative overflow-hidden">
       <ForceDarkMode />
       {/* Floating background orbs - subtle emerald/teal */}
       <div className="absolute w-96 h-96 rounded-full blur-3xl opacity-15 top-20 left-10 bg-gradient-radial from-emerald-500/30 to-transparent animate-pulse" />

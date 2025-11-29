@@ -195,7 +195,7 @@ Expected Deliverables:
   ];
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden relative">
+    <div className="min-h-screen bg-gradient-to-br from-black via-zinc-950 to-emerald-950/30 text-white overflow-hidden relative">
       {/* Floating orbs - subtle emerald/teal for depth */}
       <div
         className="absolute w-96 h-96 rounded-full blur-3xl opacity-15 floating-orb floating-orb-1"
