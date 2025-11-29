@@ -32,7 +32,7 @@ FlowBoard is a production-ready project management platform that helps teams org
 
 ### 🎨 User Experience
 
-- **Beautiful UI** - Modern glassmorphic design with purple/blue gradients
+- **Beautiful UI** - Modern glassmorphic design with emerald/teal gradients
 - **Responsive** - Optimized for desktop, tablet, and mobile
 - **Dark Theme** - Eye-friendly interface for extended work sessions
 - **Smooth Animations** - Powered by Framer Motion
@@ -73,8 +73,8 @@ FlowBoard is a production-ready project management platform that helps teams org
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/MyCloudOrg/projectManagementApp.git
-   cd projectManagementApp
+   git clone https://github.com/TheCloudOrg/FlowBoard.git
+   cd FlowBoard
    ```
 
 2. **Install dependencies:**
@@ -243,7 +243,7 @@ flowboard/
 
 ## License
 
-Copyright © 2025 MyCloudOrg
+Copyright © 2025 TheCloudOrg
 
 This program is free software: you can redistribute it and/or modify it under the terms of the **GNU Affero General Public License** as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
@@ -266,7 +266,7 @@ See the [LICENSE](LICENSE) file for complete terms.
 
 ## Trademark
 
-**FlowBoard™** is a trademark of MyCloudOrg. Unauthorized use of the FlowBoard name or logo is prohibited without express written permission.
+**FlowBoard™** is a trademark of TheCloudOrg. Unauthorized use of the FlowBoard name or logo is prohibited without express written permission.
 
 When forking or modifying this project:
 
@@ -298,9 +298,9 @@ We welcome contributions! Here's how to get involved:
 
 ## Support
 
-- **Documentation**: [https://github.com/MyCloudOrg/projectManagementApp/wiki](https://github.com/MyCloudOrg/projectManagementApp/wiki)
-- **Issues**: [https://github.com/MyCloudOrg/projectManagementApp/issues](https://github.com/MyCloudOrg/projectManagementApp/issues)
-- **Discussions**: [https://github.com/MyCloudOrg/projectManagementApp/discussions](https://github.com/MyCloudOrg/projectManagementApp/discussions)
+- **Documentation**: [https://github.com/TheCloudOrg/FlowBoard/wiki](https://github.com/TheCloudOrg/FlowBoard/wiki)
+- **Issues**: [https://github.com/TheCloudOrg/FlowBoard/issues](https://github.com/TheCloudOrg/FlowBoard/issues)
+- **Discussions**: [https://github.com/TheCloudOrg/FlowBoard/discussions](https://github.com/TheCloudOrg/FlowBoard/discussions)
 
 ---
 
@@ -329,6 +329,6 @@ Built with modern web technologies:
 
 ---
 
-**Made with precision by [MyCloudOrg](https://github.com/MyCloudOrg)**
+**Made with precision by [TheCloudOrg](https://github.com/TheCloudOrg)**
 
 _Organize smarter, ship faster._
