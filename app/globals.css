@@ -12,9 +12,9 @@
     @apply bg-gradient-to-br from-gray-50 via-slate-50 to-zinc-100 text-gray-900;
   }
 
-  /* Dark mode - pure black with subtle emerald tint */
+  /* Dark mode - black with emerald tint gradient */
   .dark body {
-    @apply bg-gradient-to-br from-black via-zinc-950 to-neutral-950 text-white;
+    @apply bg-gradient-to-br from-black via-zinc-900 to-emerald-950/50 text-white;
   }
 }
 
@@ -155,7 +155,7 @@
 @layer utilities {
   /* Light mode glass effect */
   .light .glass-effect {
-    @apply bg-white/70 backdrop-blur-lg border border-gray-200/50 shadow-sm;
+    @apply bg-white/90 backdrop-blur-lg border border-gray-300 shadow-md;
   }
 
   /* Dark mode glass effect */
@@ -165,7 +165,7 @@
 
   /* Light mode card gradient */
   .light .card-gradient {
-    @apply bg-gradient-to-br from-white/90 to-white/70;
+    @apply bg-white border border-gray-200 shadow-sm;
   }
 
   /* Dark mode card gradient */
