@@ -92,26 +92,133 @@ export default function LandingPage() {
 
   const demoCards = [
     {
-      title: 'Add user authentication',
-      description: 'Need OAuth support for Google and GitHub. Include password reset and 2FA.',
-      techStack: 'Next.js, TypeScript, Clerk, Supabase',
-      status: 'Backlog',
-      color: 'emerald',
+      title: 'Add User Auth',
+      description: 'Add OAuth support for Google and GitHub with password reset and 2FA.',
+      techStack: 'Next.js, Clerk',
+      date: '11/28/2025',
     },
     {
-      title: 'Build payment flow',
-      description: 'Integrate Stripe for subscriptions. Handle webhooks and billing portal.',
-      techStack: 'React, Stripe API, Node.js',
-      status: 'In Progress',
-      color: 'blue',
+      title: 'Build Payment Flow',
+      description: 'Integrate Stripe for subscriptions with webhook handling and billing portal.',
+      techStack: 'Stripe, Node.js',
+      date: '11/27/2025',
     },
     {
-      title: 'Create dashboard UI',
-      description: 'Design analytics dashboard with charts, metrics, and data tables.',
-      techStack: 'Next.js, Recharts, Tailwind CSS',
-      status: 'Review',
-      color: 'purple',
+      title: 'Create Dashboard',
+      description: 'Design analytics dashboard with interactive charts, metrics, and data tables.',
+      techStack: 'Recharts, Tailwind',
+      date: '11/26/2025',
     },
+  ];
+
+  // Unique prompts for each card
+  const demoPrompts = [
+    `# Prompt for Claude Code
+
+## Task: Implement User Authentication System
+
+### Objective:
+Create a secure user authentication system with modern OAuth support.
+
+### Implementation Steps:
+
+1. **OAuth Integration:**
+   - Implement Google OAuth 2.0 authentication
+   - Add GitHub OAuth provider
+   - Handle OAuth callbacks and token management
+
+2. **Password Reset Flow:**
+   - Email-based reset with secure tokens
+   - Token expiration (15 minutes)
+   - Rate limiting on reset requests
+
+3. **Two-Factor Authentication:**
+   - TOTP-based 2FA (Google Authenticator compatible)
+   - Backup codes generation
+   - Remember device option
+
+### Tech Stack: Next.js, Clerk Auth, Supabase
+
+### Deliverables:
+- Sign-in/sign-up pages with OAuth buttons
+- Protected route middleware
+- 2FA setup flow with QR code
+- Password reset email templates`,
+
+    `# Prompt for Claude Code
+
+## Task: Build Stripe Payment Integration
+
+### Objective:
+Implement a complete payment flow with Stripe for SaaS subscriptions.
+
+### Implementation Steps:
+
+1. **Subscription Plans:**
+   - Free, Pro ($19/mo), Business ($49/mo) tiers
+   - Monthly and annual billing options
+   - Usage-based pricing support
+
+2. **Checkout Flow:**
+   - Stripe Checkout integration
+   - Pricing table component
+   - Promo code support
+
+3. **Webhook Handling:**
+   - Payment success/failure events
+   - Subscription lifecycle events
+   - Invoice generation
+
+4. **Billing Portal:**
+   - Self-service plan management
+   - Payment method updates
+   - Invoice history
+
+### Tech Stack: Stripe API, Node.js, PostgreSQL
+
+### Deliverables:
+- Pricing page component
+- Checkout session API
+- Webhook handlers
+- Customer portal integration`,
+
+    `# Prompt for Claude Code
+
+## Task: Create Analytics Dashboard
+
+### Objective:
+Design an interactive analytics dashboard with real-time data visualization.
+
+### Implementation Steps:
+
+1. **Dashboard Layout:**
+   - Responsive grid system
+   - Collapsible sidebar navigation
+   - Dark/light mode support
+
+2. **Chart Components:**
+   - Line charts for trends
+   - Bar charts for comparisons
+   - Pie charts for distributions
+   - KPI cards with sparklines
+
+3. **Data Integration:**
+   - Real-time data fetching
+   - Date range filtering
+   - Export to CSV/PDF
+
+4. **Performance:**
+   - Lazy loading charts
+   - Data caching
+   - Optimistic updates
+
+### Tech Stack: Next.js, Recharts, Tailwind CSS
+
+### Deliverables:
+- Dashboard page component
+- Reusable chart components
+- Data fetching hooks
+- Filter/export functionality`,
   ];
 
   const handleCardClick = (index: number) => {
@@ -138,26 +245,8 @@ export default function LandingPage() {
     setDemoState('cards');
   };
 
-  const samplePrompt = `Create a user authentication system with the following requirements:
-
-1. Implement email/password authentication
-2. Add OAuth support for Google and GitHub
-3. Include password reset functionality
-4. Set up JWT token management
-5. Create user profile management
-6. Add two-factor authentication (2FA)
-
-Tech Stack: Next.js, TypeScript, Clerk Auth, Supabase
-
-Expected Deliverables:
-- Auth pages (sign-in, sign-up)
-- Protected routes middleware
-- User profile component
-- Session management
-- Security best practices implemented`;
-
   const handleCopyPrompt = () => {
-    navigator.clipboard.writeText(samplePrompt);
+    navigator.clipboard.writeText(demoPrompts[selectedCard] || '');
     setCopiedPrompt(true);
     setTimeout(() => setCopiedPrompt(false), 2000);
   };
@@ -747,7 +836,7 @@ Expected Deliverables:
 
             {/* Demo container */}
             <div className="relative" style={{ perspective: '1000px' }}>
-              {/* Small Cards View - Initial State */}
+              {/* Kanban Board View - Initial State */}
               <motion.div
                 animate={{
                   opacity: demoState === 'cards' ? 1 : 0,
@@ -756,75 +845,79 @@ Expected Deliverables:
                 transition={{ duration: 0.4, ease: 'easeInOut' }}
                 className={demoState !== 'cards' ? 'pointer-events-none absolute inset-0' : ''}
               >
+                {/* Kanban columns like actual app */}
                 <div className="grid md:grid-cols-3 gap-4">
-                  {demoCards.map((card, index) => (
+                  {['TODO', 'In Progress', 'Completed'].map((column, colIdx) => (
                     <motion.div
-                      key={index}
+                      key={column}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      onClick={() => handleCardClick(index)}
-                      className={`glass-effect rounded-2xl p-5 border cursor-pointer group transition-all hover:scale-[1.02] ${
-                        card.color === 'emerald'
-                          ? 'border-emerald-500/20 hover:border-emerald-400/50'
-                          : card.color === 'blue'
-                            ? 'border-blue-500/20 hover:border-blue-400/50'
-                            : 'border-purple-500/20 hover:border-purple-400/50'
-                      }`}
+                      transition={{ delay: colIdx * 0.1 }}
+                      className="glass-effect rounded-2xl p-4 border border-white/10"
                     >
-                      <div className="flex items-center justify-between mb-3">
-                        <span
-                          className={`text-xs px-2 py-1 rounded-full ${
-                            card.color === 'emerald'
-                              ? 'bg-emerald-500/20 text-emerald-400'
-                              : card.color === 'blue'
-                                ? 'bg-blue-500/20 text-blue-400'
-                                : 'bg-purple-500/20 text-purple-400'
+                      {/* Column header */}
+                      <div className="flex items-center gap-2 mb-4">
+                        <div
+                          className={`w-3 h-3 rounded-full ${
+                            colIdx === 0
+                              ? 'bg-amber-400'
+                              : colIdx === 1
+                                ? 'bg-blue-400'
+                                : 'bg-green-400'
                           }`}
-                        >
-                          {card.status}
+                        />
+                        <span className="font-semibold text-sm">{column}</span>
+                        <span className="text-xs text-gray-500 bg-white/10 px-2 py-0.5 rounded-full">
+                          1
                         </span>
                       </div>
 
-                      <h4 className="font-semibold text-white mb-2 group-hover:text-emerald-300 transition-colors">
-                        {card.title}
-                      </h4>
+                      {/* Card for each column - one card per column */}
+                      <motion.div
+                        onClick={() => handleCardClick(colIdx)}
+                        className="glass-effect card-gradient rounded-xl p-4 border border-white/5 hover:border-emerald-400/30 cursor-pointer transition-all group"
+                      >
+                        <h4 className="font-bold text-white mb-1 group-hover:text-emerald-300 transition-colors">
+                          {demoCards[colIdx]?.title}
+                        </h4>
+                        <p className="text-xs text-gray-500 mb-3">{demoCards[colIdx]?.techStack}</p>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-gray-400">{demoCards[colIdx]?.date}</span>
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleQuickGenerate(colIdx);
+                            }}
+                            className={`flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium transition-all ${
+                              colIdx === 0
+                                ? 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30'
+                                : colIdx === 1
+                                  ? 'bg-blue-500/20 text-blue-400 hover:bg-blue-500/30'
+                                  : 'bg-purple-500/20 text-purple-400 hover:bg-purple-500/30'
+                            }`}
+                          >
+                            <Sparkles className="w-3 h-3" />
+                            AI Prompt
+                          </motion.button>
+                        </div>
+                      </motion.div>
 
-                      <p className="text-xs text-gray-400 mb-3 line-clamp-2">{card.description}</p>
-
-                      <p className="text-xs text-gray-500 mb-4">{card.techStack}</p>
-
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs text-gray-500">Click to expand</span>
-                        <motion.button
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.95 }}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleQuickGenerate(index);
-                          }}
-                          className={`flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium transition-all ${
-                            card.color === 'emerald'
-                              ? 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30'
-                              : card.color === 'blue'
-                                ? 'bg-blue-500/20 text-blue-400 hover:bg-blue-500/30'
-                                : 'bg-purple-500/20 text-purple-400 hover:bg-purple-500/30'
-                          }`}
-                        >
-                          <Sparkles className="w-3 h-3" />
-                          AI Prompt
-                        </motion.button>
-                      </div>
+                      {/* Add Card button */}
+                      <button className="w-full mt-3 py-2 text-sm text-gray-500 border-2 border-dashed border-white/10 rounded-xl hover:border-white/20 hover:text-gray-400 transition-all flex items-center justify-center gap-1">
+                        <span className="text-lg">+</span> Add Card
+                      </button>
                     </motion.div>
                   ))}
                 </div>
 
                 <p className="text-center text-gray-500 text-sm mt-6">
-                  Click a card to expand, or use the AI button for instant generation
+                  Click the card or AI Prompt button to see the demo
                 </p>
               </motion.div>
 
-              {/* Expanded Card View */}
+              {/* Card Details Modal - Expanded View */}
               <motion.div
                 animate={{
                   opacity: demoState === 'expanded' ? 1 : 0,
@@ -833,37 +926,35 @@ Expected Deliverables:
                 transition={{ duration: 0.4, ease: 'easeInOut' }}
                 className={demoState !== 'expanded' ? 'pointer-events-none absolute inset-0' : ''}
               >
-                <div className="max-w-2xl mx-auto">
+                <div className="max-w-md mx-auto">
                   <motion.div
                     initial={{ y: 20 }}
                     animate={{ y: 0 }}
-                    className={`glass-effect rounded-3xl p-8 border backdrop-blur-xl ${
-                      demoCards[selectedCard]?.color === 'emerald'
-                        ? 'border-emerald-500/30'
-                        : demoCards[selectedCard]?.color === 'blue'
-                          ? 'border-blue-500/30'
-                          : 'border-purple-500/30'
-                    }`}
+                    className="glass-effect rounded-2xl p-6 border border-white/10 backdrop-blur-xl"
                   >
+                    {/* Modal header */}
                     <div className="flex items-center justify-between mb-6">
-                      <h3 className="text-xl font-bold">{demoCards[selectedCard]?.title}</h3>
-                      <div
-                        className={`px-3 py-1 rounded-full text-sm ${
-                          demoCards[selectedCard]?.color === 'emerald'
-                            ? 'bg-emerald-500/20 text-emerald-400'
-                            : demoCards[selectedCard]?.color === 'blue'
-                              ? 'bg-blue-500/20 text-blue-400'
-                              : 'bg-purple-500/20 text-purple-400'
-                        }`}
+                      <h3 className="text-xl font-bold">Card Details</h3>
+                      <button
+                        onClick={resetDemo}
+                        className="text-gray-400 hover:text-white transition-colors"
                       >
-                        {demoCards[selectedCard]?.status}
-                      </div>
+                        <X className="w-5 h-5" />
+                      </button>
                     </div>
 
+                    {/* Form fields like actual app */}
                     <div className="space-y-4 mb-6">
                       <div>
+                        <label className="text-sm text-gray-400 mb-2 block">Title</label>
+                        <div className="glass-effect rounded-lg p-3 border border-white/10">
+                          <p className="text-white">{demoCards[selectedCard]?.title}</p>
+                        </div>
+                      </div>
+
+                      <div>
                         <label className="text-sm text-gray-400 mb-2 block">Description</label>
-                        <div className="glass-effect rounded-lg p-3 border border-white/5">
+                        <div className="glass-effect rounded-lg p-3 border border-white/10">
                           <p className="text-gray-300 text-sm">
                             {demoCards[selectedCard]?.description}
                           </p>
@@ -872,10 +963,17 @@ Expected Deliverables:
 
                       <div>
                         <label className="text-sm text-gray-400 mb-2 block">Tech Stack</label>
-                        <div className="glass-effect rounded-lg p-3 border border-white/5">
+                        <div className="glass-effect rounded-lg p-3 border border-white/10">
                           <p className="text-gray-300 text-sm">
                             {demoCards[selectedCard]?.techStack}
                           </p>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="text-sm text-gray-400 mb-2 block">Last Updated</label>
+                        <div className="glass-effect rounded-lg p-3 border border-white/10">
+                          <p className="text-gray-300 text-sm">November 28, 2025 at 10:09 PM</p>
                         </div>
                       </div>
                     </div>
@@ -884,13 +982,7 @@ Expected Deliverables:
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={handleGenerateClick}
-                      className={`w-full py-4 rounded-xl font-semibold flex items-center justify-center gap-2 shadow-lg transition-shadow ${
-                        demoCards[selectedCard]?.color === 'emerald'
-                          ? 'bg-gradient-to-r from-emerald-500 to-teal-500 shadow-emerald-500/30 hover:shadow-emerald-500/50'
-                          : demoCards[selectedCard]?.color === 'blue'
-                            ? 'bg-gradient-to-r from-blue-500 to-cyan-500 shadow-blue-500/30 hover:shadow-blue-500/50'
-                            : 'bg-gradient-to-r from-purple-500 to-pink-500 shadow-purple-500/30 hover:shadow-purple-500/50'
-                      }`}
+                      className="w-full py-4 rounded-xl font-semibold flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-shadow"
                     >
                       <Sparkles className="w-5 h-5" />
                       Generate AI Prompt
@@ -912,9 +1004,9 @@ Expected Deliverables:
                 <div className="max-w-2xl mx-auto">
                   <div
                     className={`glass-effect rounded-3xl p-12 border backdrop-blur-xl ${
-                      demoCards[selectedCard]?.color === 'emerald'
+                      selectedCard === 0
                         ? 'border-emerald-500/30'
-                        : demoCards[selectedCard]?.color === 'blue'
+                        : selectedCard === 1
                           ? 'border-blue-500/30'
                           : 'border-purple-500/30'
                     }`}
@@ -927,14 +1019,14 @@ Expected Deliverables:
                       >
                         <div
                           className={`w-16 h-16 rounded-full flex items-center justify-center ${
-                            demoCards[selectedCard]?.color === 'emerald'
+                            selectedCard === 0
                               ? 'bg-gradient-to-r from-emerald-500 to-teal-500'
-                              : demoCards[selectedCard]?.color === 'blue'
+                              : selectedCard === 1
                                 ? 'bg-gradient-to-r from-blue-500 to-cyan-500'
                                 : 'bg-gradient-to-r from-purple-500 to-pink-500'
                           }`}
                         >
-                          <Loader2 className="w-8 h-8 text-white" />
+                          <Brain className="w-8 h-8 text-white" />
                         </div>
                       </motion.div>
 
@@ -942,9 +1034,9 @@ Expected Deliverables:
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         className={`text-2xl font-bold mb-3 bg-clip-text text-transparent pb-1 ${
-                          demoCards[selectedCard]?.color === 'emerald'
+                          selectedCard === 0
                             ? 'bg-gradient-to-r from-emerald-400 to-teal-400'
-                            : demoCards[selectedCard]?.color === 'blue'
+                            : selectedCard === 1
                               ? 'bg-gradient-to-r from-blue-400 to-cyan-400'
                               : 'bg-gradient-to-r from-purple-400 to-pink-400'
                         }`}
@@ -962,7 +1054,7 @@ Expected Deliverables:
                           transition={{ duration: 1.5, repeat: Infinity }}
                           className="flex items-center gap-2"
                         >
-                          <Brain className="w-5 h-5" />
+                          <Loader2 className="w-5 h-5 animate-spin" />
                           <span>Analyzing task requirements</span>
                         </motion.div>
                       </div>
@@ -981,9 +1073,9 @@ Expected Deliverables:
                               delay: i * 0.2,
                             }}
                             className={`w-3 h-3 rounded-full ${
-                              demoCards[selectedCard]?.color === 'emerald'
+                              selectedCard === 0
                                 ? 'bg-emerald-400'
-                                : demoCards[selectedCard]?.color === 'blue'
+                                : selectedCard === 1
                                   ? 'bg-blue-400'
                                   : 'bg-purple-400'
                             }`}
@@ -1061,7 +1153,9 @@ Expected Deliverables:
                       transition={{ delay: 0.3 }}
                       className="glass-effect rounded-lg p-4 border border-white/5 font-mono text-sm text-gray-300 max-h-64 overflow-y-auto"
                     >
-                      <pre className="whitespace-pre-wrap leading-relaxed">{samplePrompt}</pre>
+                      <pre className="whitespace-pre-wrap leading-relaxed">
+                        {demoPrompts[selectedCard]}
+                      </pre>
                     </motion.div>
 
                     <motion.div
