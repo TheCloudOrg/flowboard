@@ -9,12 +9,12 @@
 
   /* Light mode */
   .light body {
-    @apply bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 text-gray-900;
+    @apply bg-gradient-to-br from-gray-50 via-slate-50 to-zinc-100 text-gray-900;
   }
 
-  /* Dark mode */
+  /* Dark mode - pure black with subtle emerald tint */
   .dark body {
-    @apply bg-gradient-to-br from-dark-900 via-dark-800 to-primary-900 text-white;
+    @apply bg-gradient-to-br from-black via-zinc-950 to-neutral-950 text-white;
   }
 }
 

@@ -3,17 +3,17 @@ import ForceDarkMode from '@/components/ForceDarkMode';
 
 export default function SignInPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-black flex items-center justify-center p-4 relative overflow-hidden">
       <ForceDarkMode />
-      {/* Floating background orbs for visual effect */}
-      <div className="absolute w-96 h-96 rounded-full blur-3xl opacity-20 top-20 left-10 bg-gradient-radial from-purple-500/40 to-transparent animate-pulse" />
-      <div className="absolute w-96 h-96 rounded-full blur-3xl opacity-20 bottom-20 right-10 bg-gradient-radial from-pink-500/40 to-transparent animate-pulse delay-1000" />
+      {/* Floating background orbs - subtle emerald/teal */}
+      <div className="absolute w-96 h-96 rounded-full blur-3xl opacity-15 top-20 left-10 bg-gradient-radial from-emerald-500/30 to-transparent animate-pulse" />
+      <div className="absolute w-96 h-96 rounded-full blur-3xl opacity-15 bottom-20 right-10 bg-gradient-radial from-teal-500/30 to-transparent animate-pulse delay-1000" />
 
       <SignIn
         appearance={{
           elements: {
             rootBox: 'mx-auto',
-            card: 'bg-slate-900/80 backdrop-blur-xl shadow-2xl border border-white/10',
+            card: 'bg-zinc-900/80 backdrop-blur-xl shadow-2xl border border-white/10',
             headerTitle: 'text-white',
             headerSubtitle: 'text-gray-300',
             socialButtonsBlockButton:
@@ -22,16 +22,16 @@ export default function SignInPage() {
             dividerLine: 'bg-white/20',
             dividerText: 'text-gray-400',
             formButtonPrimary:
-              'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white',
+              'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white',
             formFieldLabel: 'text-gray-300',
             formFieldInput: 'bg-white/10 border-white/20 text-white placeholder:text-gray-500',
-            footerActionLink: 'text-purple-400 hover:text-purple-300',
+            footerActionLink: 'text-emerald-400 hover:text-emerald-300',
             identityPreviewText: 'text-white',
-            identityPreviewEditButton: 'text-purple-400',
+            identityPreviewEditButton: 'text-emerald-400',
             formHeaderTitle: 'text-white',
             formHeaderSubtitle: 'text-gray-300',
             otpCodeFieldInput: 'bg-white/10 border-white/20 text-white',
-            formResendCodeLink: 'text-purple-400 hover:text-purple-300',
+            formResendCodeLink: 'text-emerald-400 hover:text-emerald-300',
             footerActionText: 'text-gray-400',
             footer: 'hidden', // Hide Clerk branding footer
           },

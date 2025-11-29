@@ -107,7 +107,7 @@ Expected Deliverables:
       title: 'AI Prompt Generation',
       description:
         'Transform any task into a detailed, AI-ready prompt optimized for Claude Code, Cursor, and GitHub Copilot.',
-      gradient: 'from-purple-500 to-pink-500',
+      gradient: 'from-emerald-500 to-teal-500',
     },
     {
       icon: Sparkles,
@@ -134,14 +134,14 @@ Expected Deliverables:
       title: 'Secure & Reliable',
       description:
         'Clerk authentication with OAuth. Supabase backend with Row-Level Security. Your data is safe.',
-      gradient: 'from-red-500 to-pink-500',
+      gradient: 'from-rose-500 to-orange-500',
     },
     {
       icon: Code2,
       title: 'Developer-First',
       description:
         'Dark mode, GitHub OAuth, and a beautiful UI. Built by developers, for developers.',
-      gradient: 'from-indigo-500 to-purple-500',
+      gradient: 'from-slate-400 to-zinc-500',
     },
   ];
 
@@ -190,43 +190,43 @@ Expected Deliverables:
     { icon: '📘', label: 'TypeScript', color: 'from-blue-500 to-indigo-500' },
     { icon: '🎨', label: 'Tailwind CSS', color: 'from-cyan-400 to-blue-500' },
     { icon: '🗄️', label: 'Supabase', color: 'from-green-400 to-emerald-500' },
-    { icon: '🔐', label: 'Clerk Auth', color: 'from-purple-400 to-pink-400' },
+    { icon: '🔐', label: 'Clerk Auth', color: 'from-emerald-400 to-teal-400' },
     { icon: '🤖', label: 'OpenAI API', color: 'from-green-500 to-teal-500' },
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 text-white overflow-hidden relative">
-      {/* Floating orbs - pure CSS animations for GPU acceleration */}
+    <div className="min-h-screen bg-black text-white overflow-hidden relative">
+      {/* Floating orbs - subtle emerald/teal for depth */}
       <div
-        className="absolute w-96 h-96 rounded-full blur-3xl opacity-20 floating-orb floating-orb-1"
+        className="absolute w-96 h-96 rounded-full blur-3xl opacity-15 floating-orb floating-orb-1"
         style={{
           left: '5%',
           top: '10%',
-          background: 'radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(16, 185, 129, 0.3) 0%, transparent 70%)',
         }}
       />
       <div
-        className="absolute w-96 h-96 rounded-full blur-3xl opacity-20 floating-orb floating-orb-2"
+        className="absolute w-96 h-96 rounded-full blur-3xl opacity-15 floating-orb floating-orb-2"
         style={{
           left: '80%',
           top: '30%',
-          background: 'radial-gradient(circle, rgba(236, 72, 153, 0.4) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(45, 212, 191, 0.3) 0%, transparent 70%)',
         }}
       />
       <div
-        className="absolute w-96 h-96 rounded-full blur-3xl opacity-20 floating-orb floating-orb-3"
+        className="absolute w-96 h-96 rounded-full blur-3xl opacity-10 floating-orb floating-orb-3"
         style={{
           left: '50%',
           top: '60%',
-          background: 'radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, transparent 70%)',
         }}
       />
       <div
-        className="absolute w-96 h-96 rounded-full blur-3xl opacity-20 floating-orb floating-orb-4"
+        className="absolute w-96 h-96 rounded-full blur-3xl opacity-10 floating-orb floating-orb-4"
         style={{
           left: '20%',
           top: '80%',
-          background: 'radial-gradient(circle, rgba(6, 182, 212, 0.4) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(45, 212, 191, 0.25) 0%, transparent 70%)',
         }}
       />
 
@@ -237,18 +237,18 @@ Expected Deliverables:
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-slate-950/50 border-b border-white/5"
+        className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-black/80 border-b border-white/5"
       >
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 group">
             <motion.div
               whileHover={{ rotate: 180 }}
               transition={{ duration: 0.3 }}
-              className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center"
+              className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center"
             >
               <Sparkles className="w-5 h-5" />
             </motion.div>
-            <span className="text-xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+            <span className="text-xl font-bold bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">
               Flow Board
             </span>
           </Link>
@@ -264,7 +264,7 @@ Expected Deliverables:
               // Logged in: Show Dashboard button
               <Link
                 href="/board"
-                className="px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-lg font-medium transition-all transform hover:scale-105 flex items-center gap-2"
+                className="px-6 py-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 rounded-lg font-medium transition-all transform hover:scale-105 flex items-center gap-2"
               >
                 <LayoutDashboard className="w-4 h-4" />
                 Dashboard
@@ -280,7 +280,7 @@ Expected Deliverables:
                 </Link>
                 <Link
                   href="/sign-up"
-                  className="px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-lg font-medium transition-all transform hover:scale-105"
+                  className="px-6 py-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 rounded-lg font-medium transition-all transform hover:scale-105"
                 >
                   Start Free
                 </Link>
@@ -299,9 +299,9 @@ Expected Deliverables:
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-effect border border-purple-500/20 mb-8"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-effect border border-emerald-500/20 mb-8"
             >
-              <Sparkles className="w-4 h-4 text-purple-400" />
+              <Sparkles className="w-4 h-4 text-emerald-400" />
               <span className="text-sm text-gray-300">Built for the AI coding era</span>
             </motion.div>
 
@@ -315,7 +315,7 @@ Expected Deliverables:
                 textShadow: '0 0 80px rgba(139, 92, 246, 0.5)',
               }}
             >
-              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">
                 Turn project ideas
                 <br />
                 into AI-ready prompts
@@ -330,7 +330,7 @@ Expected Deliverables:
             >
               The project management tool for developers using AI assistants.
               <br />
-              <span className="text-purple-400 font-semibold">
+              <span className="text-emerald-400 font-semibold">
                 Organize work, then transform any task into detailed prompts for Claude Code.
               </span>
             </motion.p>
@@ -344,7 +344,7 @@ Expected Deliverables:
             >
               <Link
                 href={isSignedIn ? '/board' : '/sign-up'}
-                className="group px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-xl font-semibold text-lg transition-all transform hover:scale-105 flex items-center gap-2 shadow-lg shadow-purple-500/50"
+                className="group px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 rounded-xl font-semibold text-lg transition-all transform hover:scale-105 flex items-center gap-2 shadow-lg shadow-emerald-500/50"
               >
                 {isSignedIn ? (
                   <>
@@ -360,7 +360,7 @@ Expected Deliverables:
               </Link>
               <Link
                 href="#demo"
-                className="px-8 py-4 glass-effect border border-white/10 hover:border-purple-400/50 rounded-xl font-semibold text-lg transition-all flex items-center gap-2"
+                className="px-8 py-4 glass-effect border border-white/10 hover:border-emerald-400/50 rounded-xl font-semibold text-lg transition-all flex items-center gap-2"
               >
                 <Sparkles className="w-5 h-5" />
                 See AI in Action
@@ -402,11 +402,11 @@ Expected Deliverables:
           >
             <div className="relative max-w-5xl mx-auto">
               {/* Glow effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 blur-3xl rounded-3xl" />
+              <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 blur-3xl rounded-3xl" />
 
               {/* Main demo card */}
               <Card3D className="relative glass-effect rounded-3xl p-1 border border-white/10 shadow-2xl">
-                <div className="bg-gradient-to-br from-slate-900/90 to-purple-900/90 rounded-3xl p-8 backdrop-blur-xl">
+                <div className="bg-gradient-to-br from-zinc-900/95 to-neutral-900/95 rounded-3xl p-8 backdrop-blur-xl">
                   {/* Mock browser chrome */}
                   <div className="flex items-center gap-2 mb-6 pb-4 border-b border-white/10">
                     <div className="flex gap-2">
@@ -431,7 +431,7 @@ Expected Deliverables:
                           <div
                             className={`w-3 h-3 rounded-full ${
                               idx === 0
-                                ? 'bg-purple-400'
+                                ? 'bg-emerald-400'
                                 : idx === 1
                                   ? 'bg-blue-400'
                                   : 'bg-green-400'
@@ -445,7 +445,7 @@ Expected Deliverables:
                           <>
                             <motion.div
                               whileHover={{ scale: 1.02, y: -2 }}
-                              className="glass-effect card-gradient rounded-2xl p-4 mb-3 shadow-card hover:shadow-card-hover border border-white/5 hover:border-purple-400/30 transition-all duration-300 cursor-pointer group"
+                              className="glass-effect card-gradient rounded-2xl p-4 mb-3 shadow-card hover:shadow-card-hover border border-white/5 hover:border-emerald-400/30 transition-all duration-300 cursor-pointer group"
                             >
                               <h4 className="text-lg font-semibold text-white mb-2 pr-8">
                                 Add Auth System
@@ -469,7 +469,7 @@ Expected Deliverables:
                             </motion.div>
                             <motion.div
                               whileHover={{ scale: 1.02, y: -2 }}
-                              className="glass-effect card-gradient rounded-2xl p-4 mb-3 shadow-card hover:shadow-card-hover border border-white/5 hover:border-purple-400/30 transition-all duration-300 cursor-pointer group"
+                              className="glass-effect card-gradient rounded-2xl p-4 mb-3 shadow-card hover:shadow-card-hover border border-white/5 hover:border-emerald-400/30 transition-all duration-300 cursor-pointer group"
                             >
                               <h4 className="text-lg font-semibold text-white mb-2 pr-8">
                                 Payment Flow
@@ -585,7 +585,7 @@ Expected Deliverables:
       <AnimatedSection className="py-32 px-6 relative">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
               Managing AI-assisted projects is different
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
@@ -617,7 +617,7 @@ Expected Deliverables:
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: idx * 0.15 }}
-                  className="glass-effect rounded-3xl p-8 border border-white/10 text-center h-full backdrop-blur-xl hover:border-purple-400/30 transition-all"
+                  className="glass-effect rounded-3xl p-8 border border-white/10 text-center h-full backdrop-blur-xl hover:border-emerald-400/30 transition-all"
                 >
                   <div className="text-6xl mb-6">{problem.emoji}</div>
                   <h3 className="text-2xl font-bold mb-4">{problem.title}</h3>
@@ -635,10 +635,10 @@ Expected Deliverables:
           >
             <Link
               href="#demo"
-              className="inline-flex items-center gap-2 text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent hover:from-purple-300 hover:to-pink-300 transition-all group"
+              className="inline-flex items-center gap-2 text-3xl font-bold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent hover:from-emerald-300 hover:to-teal-300 transition-all group"
             >
               There&apos;s a better way
-              <ArrowRight className="w-8 h-8 text-purple-400 group-hover:translate-x-2 transition-transform" />
+              <ArrowRight className="w-8 h-8 text-emerald-400 group-hover:translate-x-2 transition-transform" />
             </Link>
           </motion.div>
         </div>
@@ -649,7 +649,7 @@ Expected Deliverables:
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-5xl md:text-6xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">
                 From Kanban card to AI prompt
               </span>
               <br />
@@ -672,7 +672,7 @@ Expected Deliverables:
               >
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-xl font-bold">Your Task Card</h3>
-                  <div className="px-3 py-1 rounded-full bg-purple-500/20 text-purple-400 text-sm">
+                  <div className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-sm">
                     Backlog
                   </div>
                 </div>
@@ -705,7 +705,7 @@ Expected Deliverables:
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full py-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl font-semibold flex items-center justify-center gap-2 shadow-lg shadow-purple-500/30"
+                  className="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-xl font-semibold flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/30"
                 >
                   <Sparkles className="w-5 h-5" />
                   Generate AI Prompt
@@ -765,7 +765,7 @@ Expected Deliverables:
       <AnimatedSection className="py-32 px-6 relative">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
               Everything you need to build with AI
             </h2>
             <p className="text-xl text-gray-400">Powerful features for modern development teams</p>
@@ -781,7 +781,7 @@ Expected Deliverables:
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: idx * 0.1 }}
-                    className="glass-effect rounded-3xl p-8 border border-white/10 hover:border-purple-400/30 transition-all h-full backdrop-blur-xl group"
+                    className="glass-effect rounded-3xl p-8 border border-white/10 hover:border-emerald-400/30 transition-all h-full backdrop-blur-xl group"
                   >
                     <div
                       className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}
@@ -860,7 +860,7 @@ Expected Deliverables:
                   <thead>
                     <tr className="border-b border-white/10">
                       <th className="text-left p-6 text-gray-400 font-semibold">Feature</th>
-                      <th className="text-left p-6 font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                      <th className="text-left p-6 font-bold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
                         Flow Board
                       </th>
                       <th className="text-left p-6 text-gray-400">Trello</th>
@@ -940,7 +940,7 @@ Expected Deliverables:
             Those are great tools for large enterprises.
             <br />
             But if you&apos;re building with AI?{' '}
-            <span className="text-purple-400 font-semibold">We&apos;ve got you covered.</span>
+            <span className="text-emerald-400 font-semibold">We&apos;ve got you covered.</span>
           </motion.p>
         </div>
       </AnimatedSection>
@@ -948,7 +948,7 @@ Expected Deliverables:
       {/* Tech Stack */}
       <AnimatedSection className="py-32 px-6 relative">
         <div className="max-w-5xl mx-auto text-center">
-          <h2 className="text-5xl md:text-6xl font-bold mb-8 bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+          <h2 className="text-5xl md:text-6xl font-bold mb-8 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
             Built with modern tech
           </h2>
           <p className="text-xl text-gray-400 mb-12">The stack developers love</p>
@@ -961,7 +961,7 @@ Expected Deliverables:
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: idx * 0.05 }}
-                  className="glass-effect rounded-2xl p-6 border border-white/10 hover:border-purple-400/30 transition-all backdrop-blur-xl group"
+                  className="glass-effect rounded-2xl p-6 border border-white/10 hover:border-emerald-400/30 transition-all backdrop-blur-xl group"
                 >
                   <div className="text-5xl mb-3 group-hover:scale-110 transition-transform">
                     {tech.icon}
@@ -980,7 +980,7 @@ Expected Deliverables:
             <Link
               href="https://github.com"
               target="_blank"
-              className="px-6 py-3 glass-effect border border-white/20 hover:border-purple-400/50 rounded-xl font-medium transition-all flex items-center gap-2 group"
+              className="px-6 py-3 glass-effect border border-white/20 hover:border-emerald-400/50 rounded-xl font-medium transition-all flex items-center gap-2 group"
             >
               <Github className="w-5 h-5 group-hover:rotate-12 transition-transform" />
               View Source
@@ -1029,7 +1029,7 @@ Expected Deliverables:
 
                 <Link
                   href="/sign-up"
-                  className="w-full py-3 px-6 glass-effect border border-white/20 hover:border-purple-400/50 rounded-xl font-semibold text-center transition-all mb-8 block"
+                  className="w-full py-3 px-6 glass-effect border border-white/20 hover:border-emerald-400/50 rounded-xl font-semibold text-center transition-all mb-8 block"
                 >
                   Get Started
                 </Link>
@@ -1070,10 +1070,10 @@ Expected Deliverables:
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.1 }}
-                className="glass-effect rounded-2xl p-8 border-2 border-purple-500/50 backdrop-blur-xl h-full flex flex-col relative"
+                className="glass-effect rounded-2xl p-8 border-2 border-emerald-500/50 backdrop-blur-xl h-full flex flex-col relative"
               >
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-1 rounded-full text-sm font-bold">
+                  <span className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-4 py-1 rounded-full text-sm font-bold">
                     Most Popular
                   </span>
                 </div>
@@ -1084,7 +1084,7 @@ Expected Deliverables:
                 </div>
 
                 <div className="mb-8">
-                  <div className="text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
+                  <div className="text-5xl font-bold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent mb-2">
                     $8
                   </div>
                   <div className="text-gray-400">per user/month, billed annually</div>
@@ -1096,36 +1096,36 @@ Expected Deliverables:
                     setSelectedPlan('pro');
                     setIsWaitlistOpen(true);
                   }}
-                  className="w-full py-3 px-6 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-xl font-semibold text-center transition-all mb-8 shadow-lg shadow-purple-500/50"
+                  className="w-full py-3 px-6 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 rounded-xl font-semibold text-center transition-all mb-8 shadow-lg shadow-emerald-500/50"
                 >
                   Join Waitlist
                 </button>
 
                 <ul className="space-y-3 flex-1">
                   <li className="flex items-start gap-3 text-gray-300">
-                    <CheckCircle className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
                     <span>Up to 10 users</span>
                   </li>
                   <li className="flex items-start gap-3 text-gray-300">
-                    <CheckCircle className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
                     <span>
                       <strong>Unlimited</strong> boards & cards
                     </span>
                   </li>
                   <li className="flex items-start gap-3 text-gray-300">
-                    <CheckCircle className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
                     <span>100 AI prompts/month</span>
                   </li>
                   <li className="flex items-start gap-3 text-gray-300">
-                    <CheckCircle className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
                     <span>Organization workspaces</span>
                   </li>
                   <li className="flex items-start gap-3 text-gray-300">
-                    <CheckCircle className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
                     <span>Drag-and-drop Kanban boards</span>
                   </li>
                   <li className="flex items-start gap-3 text-gray-300">
-                    <CheckCircle className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
                     <span>Priority support</span>
                   </li>
                 </ul>
@@ -1201,7 +1201,7 @@ Expected Deliverables:
           <div className="text-center mt-12">
             <p className="text-gray-400">
               Need more than 50 users?{' '}
-              <a href="#" className="text-purple-400 hover:text-purple-300 underline">
+              <a href="#" className="text-emerald-400 hover:text-emerald-300 underline">
                 Contact us for Enterprise pricing
               </a>
             </p>
@@ -1218,7 +1218,7 @@ Expected Deliverables:
             viewport={{ once: true }}
           >
             <h2 className="text-5xl md:text-7xl font-bold mb-8 leading-tight">
-              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">
                 Ready to build smarter
                 <br />
                 with AI?
@@ -1234,7 +1234,7 @@ Expected Deliverables:
               {isSignedIn ? (
                 <Link
                   href="/board"
-                  className="px-12 py-5 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-xl font-bold text-xl transition-all transform hover:scale-105 shadow-2xl shadow-purple-500/50 flex items-center gap-3"
+                  className="px-12 py-5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 rounded-xl font-bold text-xl transition-all transform hover:scale-105 shadow-2xl shadow-emerald-500/50 flex items-center gap-3"
                 >
                   <LayoutDashboard className="w-6 h-6" />
                   Go to Dashboard
@@ -1243,7 +1243,7 @@ Expected Deliverables:
                 <>
                   <Link
                     href="/sign-up"
-                    className="px-12 py-5 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-xl font-bold text-xl transition-all transform hover:scale-105 shadow-2xl shadow-purple-500/50"
+                    className="px-12 py-5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 rounded-xl font-bold text-xl transition-all transform hover:scale-105 shadow-2xl shadow-emerald-500/50"
                   >
                     Start Free with GitHub
                   </Link>
@@ -1274,22 +1274,22 @@ Expected Deliverables:
               <h4 className="font-bold mb-4 text-white">Product</h4>
               <ul className="space-y-2 text-gray-400 text-sm">
                 <li>
-                  <a href="#" className="hover:text-purple-400 transition-colors">
+                  <a href="#" className="hover:text-emerald-400 transition-colors">
                     Features
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-purple-400 transition-colors">
+                  <a href="#" className="hover:text-emerald-400 transition-colors">
                     Pricing
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-purple-400 transition-colors">
+                  <a href="#" className="hover:text-emerald-400 transition-colors">
                     Roadmap
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-purple-400 transition-colors">
+                  <a href="#" className="hover:text-emerald-400 transition-colors">
                     Changelog
                   </a>
                 </li>
@@ -1299,22 +1299,22 @@ Expected Deliverables:
               <h4 className="font-bold mb-4 text-white">Resources</h4>
               <ul className="space-y-2 text-gray-400 text-sm">
                 <li>
-                  <a href="#" className="hover:text-purple-400 transition-colors">
+                  <a href="#" className="hover:text-emerald-400 transition-colors">
                     Documentation
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-purple-400 transition-colors">
+                  <a href="#" className="hover:text-emerald-400 transition-colors">
                     API Reference
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-purple-400 transition-colors">
+                  <a href="#" className="hover:text-emerald-400 transition-colors">
                     GitHub
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-purple-400 transition-colors">
+                  <a href="#" className="hover:text-emerald-400 transition-colors">
                     Community
                   </a>
                 </li>
@@ -1324,22 +1324,22 @@ Expected Deliverables:
               <h4 className="font-bold mb-4 text-white">Company</h4>
               <ul className="space-y-2 text-gray-400 text-sm">
                 <li>
-                  <a href="#" className="hover:text-purple-400 transition-colors">
+                  <a href="#" className="hover:text-emerald-400 transition-colors">
                     About
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-purple-400 transition-colors">
+                  <a href="#" className="hover:text-emerald-400 transition-colors">
                     Blog
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-purple-400 transition-colors">
+                  <a href="#" className="hover:text-emerald-400 transition-colors">
                     Careers
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-purple-400 transition-colors">
+                  <a href="#" className="hover:text-emerald-400 transition-colors">
                     Contact
                   </a>
                 </li>
@@ -1349,22 +1349,22 @@ Expected Deliverables:
               <h4 className="font-bold mb-4 text-white">Legal</h4>
               <ul className="space-y-2 text-gray-400 text-sm">
                 <li>
-                  <a href="#" className="hover:text-purple-400 transition-colors">
+                  <a href="#" className="hover:text-emerald-400 transition-colors">
                     Privacy
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-purple-400 transition-colors">
+                  <a href="#" className="hover:text-emerald-400 transition-colors">
                     Terms
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-purple-400 transition-colors">
+                  <a href="#" className="hover:text-emerald-400 transition-colors">
                     Security
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-purple-400 transition-colors">
+                  <a href="#" className="hover:text-emerald-400 transition-colors">
                     MIT License
                   </a>
                 </li>
